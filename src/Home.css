@@ -1,0 +1,192 @@
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 120px 20px;
+  min-height: 100vh;
+  margin-top: 0;
+  position: relative;
+  overflow: hidden;
+  background-color: black;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  background: var(--muted-text);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+.hero h2 {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.hero-description {
+  max-width: 600px;
+  font-size: 1rem;
+  line-height: 1.8;
+  text-align: center;
+  color: var(--muted-text);
+  font-weight: 400;
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+.hero-buttons a {
+  font-family: "Syne", sans-serif;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all 0.4s ease;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hero-buttons .primary {
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    var(--accent),
+    var(--primary)
+  );
+  background-size: 200% 100%;
+  background-position: right center;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(226, 88, 34, 0.4);
+  transition: background-position 0.5s ease, transform 0.3s ease;
+}
+
+.hero-buttons .primary:hover {
+  background-position: left center;
+}
+
+.hero-buttons .secondary {
+  position: relative;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-buttons .secondary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--primary);
+  transition: left 0.4s ease;
+  z-index: -1;
+}
+
+.hero-buttons .secondary:hover::before {
+  left: 0;
+}
+
+.hero-buttons .secondary:hover {
+  color: #fff;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 36px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@media (max-width: 425px) {
+  .hero-buttons .secondary {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 1rem;
+  }
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero h1,
+.hero h2,
+.hero p,
+.hero-buttons {
+  position: relative;
+  z-index: 1;
+}
+
+.glow-text {
+  margin-top: 36px;
+}
+
+.mouse-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mouse {
+  width: 26px;
+  height: 42px;
+  border: 2px solid var(--primary);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+  opacity: 0.9;
+  box-shadow: 0 0 12px rgba(178, 34, 34, 0.3);
+}
+
+.wheel {
+  width: 4px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 4px;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+@media (max-width: 768px) {
+  .mouse,
+  .wheel,
+  .mouse-scroll {
+    display: none;
+  }
+}
