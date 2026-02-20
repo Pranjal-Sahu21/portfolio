@@ -79,8 +79,6 @@ A modern, interactive personal portfolio website built with React and powered by
 ```
 portfolio-website/
 ├── assets/                   # Images and static assets
-│   └── fonts/                # Font files
-│       └── downlink/         # Custom fonts
 │
 ├── src/
 │   ├── App.jsx              # Main app component
