@@ -10,6 +10,7 @@ import cheeType from "../assets/cheetype.png";
 import tasteGpt from "../assets/tastegpt.png";
 import skyLune from "../assets/skylune.png";
 import crexo from "../assets/crexo-image.png";
+import dummistore from "../assets/dummistore-image.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Projects() {
@@ -23,10 +24,16 @@ export default function Projects() {
       desc: "AI image generation platform powered by Clipdrop AI, with integrated Razorpay payments for credit-based generation.",
     },
     {
+      title: "DummiStore",
+      img: dummistore,
+      link: "https://dummistore.netlify.app",
+      desc: "Free product API with endpoints for all products, categories, and single items. No authentication needed.",
+    },
+    {
       title: "Voltmart",
       img: voltMart,
       link: "https://voltmart.netlify.app",
-      desc: "A quick-commerce web app with smooth navigation and persistent cart/orders/address storage.",
+      desc: "A quick-commerce web app (using DummiStore API) with persistent cart/orders/address storage.",
     },
     {
       title: "ResuScope",
@@ -45,12 +52,6 @@ export default function Projects() {
       img: tasteGpt,
       link: "https://tastegpt.netlify.app",
       desc: "Recommends a single recipe based on user-provided ingredients with dark/light mode integration.",
-    },
-    {
-      title: "SkyLune",
-      img: skyLune,
-      link: "https://skylune.netlify.app",
-      desc: "A simple weather app delivering current conditions and a 4-day forecast with live location tracking.",
     },
   ];
 

@@ -171,7 +171,7 @@ export default function Home() {
           transition={{ delay: 1 }}
         >
           <motion.a
-            href="https://drive.google.com/file/d/1CMSv1Cg0gPjXfKyosS8f44uEHATLAosC/view?usp=sharing"
+            href="https://drive.google.com/file/d/1X_yFJYKzOtKxhs3r_UY2gHyUHWFi0edP/view?usp=sharing"
             target="_blank"
             className="primary"
             download
