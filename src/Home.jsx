@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "./Home.css";
 
 export default function Home() {
+  const firstName = "PRANJAL".split("");
+  const lastName = "SAHU".split("");
+
   const canvasRef = useRef(null);
 
   const { scrollYProgress } = useScroll();
@@ -113,11 +116,7 @@ export default function Home() {
   }, []);
 
   return (
-    <motion.section
-      style={{ position: "relative", zIndex: 1, y, opacity }}
-      id="home"
-      className="hero sticky-hero"
-    >
+    <section className="heroFull" id="home">
       <canvas
         ref={canvasRef}
         style={{
@@ -131,69 +130,100 @@ export default function Home() {
         }}
       />
 
-      <motion.div
-        className="glass-panel"
-        style={{ position: "relative", zIndex: 1, y, opacity }}
-      >
-        <motion.h1
-          initial={{ opacity: 0, x: -100 }}
-          className="introduction"
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          Hi, I'm <span className="name">Pranjal</span>
-        </motion.h1>
-
-        <motion.h2
-          className="glow-text"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut", delay: 0.3 }}
-        >
-          A Frontend Developer
-        </motion.h2>
-
-        <motion.p
-          className="hero-description"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
-        >
-          I craft engaging, performant, and modern web experiences using the
-          latest technologies. With a passion for sleek design and smooth
-          animations, I turn ideas into interactive digital products.
-        </motion.p>
-
-        <motion.div
-          className="hero-buttons"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <motion.a
-            href="https://drive.google.com/file/d/1q5mTs7bpgy_7DQ4ctRGj9U4rFr3NLjMQ/view?usp=drive_link"
-            target="_blank"
-            className="primary"
-            download
-          >
-            Download CV
-          </motion.a>
-
-          <motion.a href="#contact" className="secondary">
-            Contact Me
-          </motion.a>
+      {/* NAME */}
+      <div className="heroFull-name">
+        {/* FIRST LINE */}
+        <motion.div className="heroFull-line">
+          {firstName.map((char, i) => (
+            <motion.span
+              key={i}
+              initial={{ y: 120, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                delay: i * 0.04,
+                type: "spring",
+                stiffness: 90,
+              }}
+              className="heroFull-letter"
+            >
+              {char}
+            </motion.span>
+          ))}
         </motion.div>
-      </motion.div>
-      <motion.div
-        className="mouse-scroll"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6 }}
+
+        {/* SECOND LINE */}
+        <motion.div className="heroFull-line">
+          {lastName.map((char, i) => (
+            <motion.span
+              key={i}
+              initial={{ y: 120, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                delay: 0.3 + i * 0.04, // slight delay after first line
+                type: "spring",
+                stiffness: 90,
+              }}
+              className="heroFull-letter"
+            >
+              {char}
+            </motion.span>
+          ))}
+        </motion.div>
+      </div>
+
+      <motion.h2
+        className="heroFull-role"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
       >
-        <div className="mouse">
-          <motion.span
-            className="wheel"
-            animate={{ y: [0, 10, 0] }}
+        Web Developer
+      </motion.h2>
+
+      {/* DESCRIPTION */}
+      <motion.p
+        className="heroFull-desc"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        Crafting fast, interactive, and visually engaging web experiences using
+        modern technologies and thoughtful design.
+      </motion.p>
+
+      {/* BUTTONS */}
+      <motion.div
+        className="heroFull-actions"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+      >
+        <a
+          href="https://drive.google.com/file/d/1q5mTs7bpgy_7DQ4ctRGj9U4rFr3NLjMQ/view"
+          target="_blank"
+          rel="noreferrer"
+          className="btn-primary"
+        >
+          Download CV
+        </a>
+
+        <a href="#contact" className="btn-secondary">
+          Contact Me
+        </a>
+      </motion.div>
+
+      <motion.div
+        className="scroll-indicator"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2 }}
+      >
+        <span className="scroll-text">Scroll</span>
+
+        <div className="scroll-line">
+          <motion.div
+            className="scroll-dot"
+            animate={{ y: [0, 12, 0] }}
             transition={{
               duration: 1.5,
               repeat: Infinity,
@@ -202,6 +232,6 @@ export default function Home() {
           />
         </div>
       </motion.div>
-    </motion.section>
+    </section>
   );
 }
