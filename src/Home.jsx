@@ -120,7 +120,7 @@ export default function Home() {
       <canvas
         ref={canvasRef}
         style={{
-          position: "absolute",
+          position: "fixed", // 🔥 key change
           top: 0,
           left: 0,
           width: "100%",
@@ -152,7 +152,7 @@ export default function Home() {
         </motion.div>
 
         {/* SECOND LINE */}
-        <motion.div className="heroFull-line">
+        <motion.div className="heroFull-line hero-title">
           {lastName.map((char, i) => (
             <motion.span
               key={i}
