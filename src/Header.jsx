@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./style.css";
+import "./Header.css";
 import logo from "../assets/apple-touch-icon.png";
+import { Menu, X } from "lucide-react";
+
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,6 +12,18 @@ export default function Header() {
   const [activeSection, setActiveSection] = useState("home");
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    setMenuOpen(false);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,79 +44,69 @@ export default function Header() {
       for (let section of sections) {
         const element = document.getElementById(section);
         if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetBottom = offsetTop + element.offsetHeight;
-          if (scrollPos >= offsetTop && scrollPos < offsetBottom) {
+          const top = element.offsetTop;
+          const bottom = top + element.offsetHeight;
+          if (scrollPos >= top && scrollPos < bottom) {
             setActiveSection(section);
             break;
           }
         }
       }
 
-      const homeSection = document.getElementById("home");
-      if (!homeSection) return;
-      setShowHeader(window.scrollY > homeSection.offsetHeight / 2);
+      const home = document.getElementById("home");
+      if (home) {
+        setShowHeader(window.scrollY > home.offsetHeight / 2);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  /* HEADER */
   const headerVariants = {
-    hidden: { y: -100, opacity: 0 },
+    hidden: { y: -80, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 80, damping: 20, duration: 0.5 },
+      transition: { type: "spring", stiffness: 80, damping: 20 },
     },
   };
 
+  /* DRAWER FROM LEFT */
   const drawerVariants = {
-    hidden: { scale: 0, opacity: 0, originX: 1, originY: 0 },
+    hidden: { x: "-100%" },
     visible: {
-      scale: 1,
-      opacity: 1,
-      originX: 1,
-      originY: 0,
+      x: 0,
       transition: {
         type: "spring",
-        stiffness: 200,
-        damping: 25,
+        stiffness: 120,
+        damping: 20,
+        staggerChildren: 0.08,
         when: "beforeChildren",
-        staggerChildren: 0.05,
-        staggerDirection: 1,
       },
     },
     exit: {
-      scale: 0,
-      opacity: 0,
-      originX: 1,
-      originY: 0,
+      x: "-100%",
       transition: {
         type: "spring",
-        stiffness: 200,
-        damping: 25,
-        when: "afterChildren",
+        stiffness: 120,
+        damping: 20,
         staggerChildren: 0.05,
         staggerDirection: -1,
       },
     },
   };
 
+  /* LINKS ANIMATION */
   const linkVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.8 },
+    hidden: { opacity: 0, x: -40 },
     visible: {
       opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { type: "spring", stiffness: 300, damping: 20 },
+      x: 0,
+      transition: { type: "spring", stiffness: 200, damping: 18 },
     },
-    exit: {
-      opacity: 0,
-      y: 20,
-      scale: 0.8,
-      transition: { type: "spring", stiffness: 300, damping: 20 },
-    },
+    exit: { opacity: 0, x: -40 },
   };
 
   const navLinks = [
@@ -117,46 +121,51 @@ export default function Header() {
     <AnimatePresence>
       {showHeader && (
         <motion.nav
+          className="navRoot"
           variants={headerVariants}
           initial="hidden"
           animate="visible"
           exit="hidden"
-          className="header-nav"
         >
-          <div className="logo">
-            <div className="logo-circle">
-              <img className="pranjal-logo" src={logo} alt="logo" />
-            </div>
-            <h3 className="name-header">Pranjal Sahu</h3>
+          {/* LOGO */}
+          <div className="navLogo">
+            <img src={logo} alt="logo" />
           </div>
 
+          {/* DESKTOP */}
           {isDesktop ? (
-            <ul className="nav-links">
+            <ul className="navDesktop">
               {navLinks.map((link) => (
                 <li key={link.id}>
-                  <a
-                    href={`#${link.id}`}
+                  <button
+                    onClick={() => scrollToSection(link.id)}
                     className={activeSection === link.id ? "active" : ""}
                   >
                     {link.label}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
           ) : (
             <>
+              {/* MOBILE MENU */}
+              <div className="navBurger" onClick={toggleMenu}>
+                {menuOpen ? <X size={20} /> : <Menu size={20} />}
+              </div>
+
               <AnimatePresence>
                 {menuOpen && (
                   <>
                     <motion.div
-                      className="nav-overlay"
+                      className="navOverlay"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       onClick={() => setMenuOpen(false)}
                     />
+
                     <motion.ul
-                      className="nav-drawer"
+                      className="navDrawer"
                       variants={drawerVariants}
                       initial="hidden"
                       animate="visible"
@@ -179,28 +188,6 @@ export default function Header() {
                   </>
                 )}
               </AnimatePresence>
-
-              <div className="menu" onClick={toggleMenu}>
-                <motion.div
-                  animate={
-                    menuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }
-                  }
-                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                  className="bar"
-                />
-                <motion.div
-                  animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className="bar"
-                />
-                <motion.div
-                  animate={
-                    menuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }
-                  }
-                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                  className="bar"
-                />
-              </div>
             </>
           )}
         </motion.nav>
