@@ -8,7 +8,6 @@ import voltMart from "../assets/voltmart.png";
 import resuscope from "../assets/ResuScope.png";
 import cheeType from "../assets/cheetype.png";
 import tasteGpt from "../assets/tastegpt.png";
-import skyLune from "../assets/skylune.png";
 import crexo from "../assets/crexo-image.png";
 import dummistore from "../assets/dummistore-image.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";

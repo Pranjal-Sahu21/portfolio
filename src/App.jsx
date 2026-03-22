@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import Home from "./Home";
 import Journey from "./Journey";
@@ -9,8 +9,13 @@ import Footer from "./Footer";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./style.css";
+import Loader from "./Loader";
+import { AnimatePresence } from "framer-motion";
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [showContent, setShowContent] = useState(false);
+
   const dot = document.querySelector(".cursor-dot");
   let targetX = window.innerWidth / 2;
   let targetY = window.innerHeight / 2;
@@ -64,7 +69,7 @@ export default function App() {
         dot.textContent = "🡕";
       }
     },
-    true
+    true,
   );
 
   document.addEventListener(
@@ -75,7 +80,7 @@ export default function App() {
         dot.textContent = "";
       }
     },
-    true
+    true,
   );
 
   document.addEventListener("mousemove", (e) => {
@@ -126,7 +131,7 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     sections.forEach((section) => observer.observe(section));
 
@@ -164,15 +169,30 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+
+    setTimeout(() => {
+      setShowContent(true);
+    }, 11000);
+  }, []);
   return (
     <>
-      <Header />
-      <Home />
-      <Journey />
-      <Skills />
-      <Projects />
-      <Contact />
-      <Footer />
+      <AnimatePresence>{loading && <Loader />}</AnimatePresence>
+
+      {showContent && (
+        <div>
+          <Header />
+          <Home />
+          <Journey />
+          <Skills />
+          <Projects />
+          <Contact />
+          <Footer />
+        </div>
+      )}
     </>
   );
 }

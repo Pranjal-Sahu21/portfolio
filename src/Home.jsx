@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import "./Home.css";
 
 export default function Home() {
