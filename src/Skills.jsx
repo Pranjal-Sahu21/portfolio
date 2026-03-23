@@ -8,24 +8,24 @@ import tailwindLogo from "../assets/tailwindcss-logo.png";
 import vanillaLogo from "../assets/js-logo.png";
 import reactLogo from "../assets/react-logo.png";
 import javaLogo from "../assets/java-logo.png";
-import pythonLogo from "../assets/python-logo.png";
 import mySqlLogo from "../assets/mysql-logo.png";
 import routerLogo from "../assets/react-router-logo.svg";
 import motionLogo from "../assets/framer-motion.svg"
 import mongoLogo from "../assets/mongodb-logo.png"
 import postmanLogo from "../assets/postman-logo.png"
+import typescriptLogo from '../assets/typescript-logo.webp'
 
 export default function Skills() {
   const allSkills = [
     { name: "HTML", img: htmlLogo },
     { name: "CSS", img: cssLogo },
     { name: "Tailwind CSS", img: tailwindLogo },
-    { name: "Vanilla JS", img: vanillaLogo },
+    { name: "JavaScript", img: vanillaLogo },
+    { name: "TypeScript", img: typescriptLogo },
     { name: "React.js", img: reactLogo },
     {name: "Framer motion", img: motionLogo},
     {name: "React router", img: routerLogo},
     { name: "Java", img: javaLogo },
-    { name: "Python", img: pythonLogo },
     { name: "MySQL", img: mySqlLogo },
     { name: "MongoDB", img: mongoLogo },
     { name: "Postman", img: postmanLogo },
@@ -98,7 +98,7 @@ export default function Skills() {
         {allSkills.map((s) => (
           <div className="skill-item" key={s.name}>
             <div className="skill-icon">
-              <img src={s.img} alt={s.name} className={s.img === motionLogo ? "motion-logo" : ""}/>
+              <img src={s.img} alt={s.name} className={s.img === motionLogo || s.img === typescriptLogo ? "motion-logo" : ""}/>
             </div>
             <p className="skill-name">{s.name}</p>
           </div>
