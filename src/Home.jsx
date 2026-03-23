@@ -1,14 +1,78 @@
 import { motion } from "framer-motion";
 import "./Home.css";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   const firstName = "PRANJAL".split("");
   const lastName = "SAHU".split("");
 
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    const numStars = 20;
+    const stars = [];
+    for (let i = 0; i < numStars; i++) {
+      const color = "rgba(200, 200, 200, ";
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.5 + 0.5,
+        opacity: Math.random(),
+        delta: Math.random() * 0.02 + 0.005,
+        color,
+      });
+    }
+
+    function drawScene() {
+      ctx.clearRect(0, 0, width, height);
+
+      stars.forEach((star) => {
+        star.opacity += star.delta;
+        if (star.opacity > 1 || star.opacity < 0) star.delta *= -1;
+
+        ctx.fillStyle = `${star.color}${Math.floor(star.opacity * 255)
+          .toString(16)
+          .padStart(2, "0")}`;
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(drawScene);
+    }
+
+    drawScene();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <section className="heroFull" id="home">
-
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
       {/* NAME */}
       <div className="heroFull-name">
         {/* FIRST LINE */}
