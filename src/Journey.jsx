@@ -7,7 +7,7 @@ export default function Journey() {
     {
       title: "National Institute Of Technology, Rourkela",
       details: ["B.Tech in Computer Science & Engineering", "(2024 - Present)"],
-      grade: ["CGPA - 8.48"],
+      grade: ["CGPA - 8.46"],
     },
     {
       title: "SAI International School, Bhubaneswar",

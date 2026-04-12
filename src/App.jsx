@@ -172,11 +172,11 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 10000);
+    }, 5000);
 
     setTimeout(() => {
       setShowContent(true);
-    }, 11000);
+    }, 6000);
   }, []);
   return (
     <>

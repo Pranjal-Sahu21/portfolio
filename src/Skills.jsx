@@ -10,10 +10,10 @@ import reactLogo from "../assets/react-logo.png";
 import javaLogo from "../assets/java-logo.png";
 import mySqlLogo from "../assets/mysql-logo.png";
 import routerLogo from "../assets/react-router-logo.svg";
-import motionLogo from "../assets/framer-motion.svg"
-import mongoLogo from "../assets/mongodb-logo.png"
-import postmanLogo from "../assets/postman-logo.png"
-import typescriptLogo from '../assets/typescript-logo.webp'
+import motionLogo from "../assets/framer-motion.svg";
+import mongoLogo from "../assets/mongodb-logo.png";
+import postmanLogo from "../assets/postman-logo.png";
+import typescriptLogo from "../assets/typescript-logo.webp";
 
 export default function Skills() {
   const allSkills = [
@@ -23,11 +23,16 @@ export default function Skills() {
     { name: "JavaScript", img: vanillaLogo },
     { name: "TypeScript", img: typescriptLogo },
     { name: "React.js", img: reactLogo },
-    {name: "Framer motion", img: motionLogo},
-    {name: "React router", img: routerLogo},
+    { name: "Framer motion", img: motionLogo },
+    { name: "React router", img: routerLogo },
     { name: "Java", img: javaLogo },
-    { name: "MySQL", img: mySqlLogo },
+    {
+      name: "PostgreSQL",
+      img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg",
+    },
     { name: "MongoDB", img: mongoLogo },
+    { name: "MySQL", img: mySqlLogo },
+    { name: "Prisma", img: "https://cdn.simpleicons.org/prisma/ffffff" },
     { name: "Postman", img: postmanLogo },
   ];
 
@@ -98,7 +103,15 @@ export default function Skills() {
         {allSkills.map((s) => (
           <div className="skill-item" key={s.name}>
             <div className="skill-icon">
-              <img src={s.img} alt={s.name} className={s.img === motionLogo || s.img === typescriptLogo ? "motion-logo" : ""}/>
+              <img
+                src={s.img}
+                alt={s.name}
+                className={
+                  s.img === motionLogo || s.img === typescriptLogo
+                    ? "motion-logo"
+                    : ""
+                }
+              />
             </div>
             <p className="skill-name">{s.name}</p>
           </div>

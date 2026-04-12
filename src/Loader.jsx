@@ -11,7 +11,7 @@ export default function Loader() {
     "Almost Ready...",
   ];
 
-  const displayTime = 2000;
+  const displayTime = 1000;
   const totalDuration = displayTime * steps.length;
 
   const [index, setIndex] = useState(0);
