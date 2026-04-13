@@ -31,7 +31,7 @@
 
 .loader-subtitle {
   font-family: "Syne", sans-serif;
-  font-size: clamp(1.5rem, 2vw, 3rem);
+  font-size: clamp(1rem, 1.5vw, 2.5rem);
   font-weight: lighter;
   color: var(--muted-text);
   margin-bottom: 2rem;
@@ -51,7 +51,7 @@
 
 .loader-bar {
   width: 260px;
-  height: 6px;
+  height: 3px;
   background: rgba(255, 255, 255, 0.1);
   margin-top: 30px;
   border-radius: 4px;

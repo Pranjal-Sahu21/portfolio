@@ -4,14 +4,11 @@ import "./Loader.css";
 
 export default function Loader() {
   const steps = [
-    "Initializing...",
-    "Loading Portfolio...",
-    "Fetching Projects...",
-    "Preparing Experience...",
-    "Almost Ready...",
+    "Preparing your experience...",
+    "Almost there...",
   ];
 
-  const displayTime = 1000;
+  const displayTime = 2000;
   const totalDuration = displayTime * steps.length;
 
   const [index, setIndex] = useState(0);
