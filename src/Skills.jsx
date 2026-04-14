@@ -53,15 +53,15 @@ export default function Skills() {
   const marqueeGroup1 = Array(repeatCount).fill(skillsGroup1).flat();
   const marqueeGroup2 = Array(repeatCount).fill(skillsGroup2).flat();
 
-  const [duration, setDuration] = useState(8);
+  const [duration, setDuration] = useState(20);
   const [marqueeWidth, setMarqueeWidth] = useState(0);
 
   useEffect(() => {
     const updateDuration = () => {
       const width = window.innerWidth;
-      if (width < 480) setDuration(5);
-      else if (width < 768) setDuration(6.5);
-      else setDuration(8);
+      if (width < 480) setDuration(12);
+      else if (width < 768) setDuration(16);
+      else setDuration(20);
     };
     updateDuration();
     window.addEventListener("resize", updateDuration);
