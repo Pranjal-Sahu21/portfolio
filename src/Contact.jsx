@@ -49,7 +49,7 @@ export default function Contact() {
 
 
   const inputClasses =
-    "w-full p-[14px_16px] border border-primary/30 rounded-lg bg-[#282828]/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)] outline-none focus:border-primary resize-none box-border";
+    "w-full p-[14px_16px] border border-primary/30 rounded-lg bg-[#181818]/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)] outline-none focus:border-primary resize-none box-border";
 
   const socialLinks = [
     { href: "https://www.instagram.com/prsahu_21/", icon: "fab fa-instagram", delay: "0s" },

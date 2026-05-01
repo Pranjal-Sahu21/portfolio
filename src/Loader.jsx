@@ -25,7 +25,7 @@ export default function Loader() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-full h-[100dvh] text-muted-text flex flex-col justify-center items-center z-[9999] overflow-hidden bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.05),transparent_40%),radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.03),transparent_50%),linear-gradient(135deg,#000,#090909,#131313)]"
+      className="fixed top-0 left-0 w-full h-[100dvh] text-muted-text flex flex-col justify-center items-center z-[9999] overflow-hidden bg-[#191919]"
       initial={{ y: 0 }}
       animate={{ y: 0 }}
       exit={{ y: "-100%" }}

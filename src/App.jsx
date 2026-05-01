@@ -171,18 +171,6 @@ export default function App() {
 
       {showContent && (
         <div className="min-h-screen w-full relative bg-black">
-          {/* Vercel Grid Background */}
-          <div
-            className="fixed inset-0 z-0 opacity-20 pointer-events-none"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px)
-              `,
-              backgroundSize: "60px 60px",
-            }}
-          />
-
           <div className="relative z-10">
             <Header />
             <Home />
