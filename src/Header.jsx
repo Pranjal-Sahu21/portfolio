@@ -1,27 +1,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./Header.css";
 import logo from "../assets/apple-touch-icon.png";
 import { Menu, X } from "lucide-react";
-
+import { useScrollToSection } from "./hooks/useScrollToSection";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 992);
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const scrollTo = useScrollToSection();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    el.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-
+  const handleNavClick = (id) => {
+    scrollTo(id);
     setMenuOpen(false);
   };
 
@@ -121,25 +114,29 @@ export default function Header() {
     <AnimatePresence>
       {showHeader && (
         <motion.nav
-          className="navRoot"
+          className="fixed top-0 left-0 w-full flex justify-between items-center px-[5vw] py-5 bg-[#121212]/60 backdrop-blur-md z-[1000] border-b border-primary/20"
           variants={headerVariants}
           initial="hidden"
           animate="visible"
           exit="hidden"
         >
           {/* LOGO */}
-          <div className="navLogo">
-            <img src={logo} alt="logo" />
+          <div className="flex items-center gap-3 font-syne font-bold">
+            <img 
+              src={logo} 
+              alt="logo" 
+              className="w-8 h-8 p-0.5 bg-primary rounded-full z-10 shadow-[0_0_10px_rgba(226,88,34,0.6),0_0_20px_rgba(226,88,34,0.4),0_0_40px_rgba(226,88,34,0.2)]" 
+            />
           </div>
 
           {/* DESKTOP */}
           {isDesktop ? (
-            <ul className="navDesktop">
+            <ul className="flex gap-8 list-none">
               {navLinks.map((link) => (
                 <li key={link.id}>
                   <button
-                    onClick={() => scrollToSection(link.id)}
-                    className={activeSection === link.id ? "active" : ""}
+                    onClick={() => handleNavClick(link.id)}
+                    className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-colors duration-300 hover:text-primary hover:bg-transparent cursor-pointer ${activeSection === link.id ? "text-primary" : "text-muted-text"}`}
                   >
                     {link.label}
                   </button>
@@ -149,7 +146,7 @@ export default function Header() {
           ) : (
             <>
               {/* MOBILE MENU */}
-              <div className="navBurger" onClick={toggleMenu}>
+              <div className="cursor-pointer text-light-text z-[1100] flex items-center justify-center" onClick={toggleMenu}>
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </div>
 
@@ -157,7 +154,7 @@ export default function Header() {
                 {menuOpen && (
                   <>
                     <motion.div
-                      className="navOverlay"
+                      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[900]"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -165,7 +162,7 @@ export default function Header() {
                     />
 
                     <motion.ul
-                      className="navDrawer"
+                      className="fixed top-0 left-0 h-screen w-full bg-black flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[1000]"
                       variants={drawerVariants}
                       initial="hidden"
                       animate="visible"
@@ -173,15 +170,12 @@ export default function Header() {
                     >
                       {navLinks.map((link) => (
                         <motion.li key={link.id} variants={linkVariants}>
-                          <a
-                            href={`#${link.id}`}
-                            onClick={() => setMenuOpen(false)}
-                            className={
-                              activeSection === link.id ? "active" : ""
-                            }
+                          <button
+                            onClick={() => handleNavClick(link.id)}
+                            className={`text-left bg-transparent border-none font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${activeSection === link.id ? "bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent" : "text-muted-text"}`}
                           >
                             {link.label}
-                          </a>
+                          </button>
                         </motion.li>
                       ))}
                     </motion.ul>

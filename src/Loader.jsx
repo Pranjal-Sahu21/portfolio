@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import "./Loader.css";
 
 export default function Loader() {
   const steps = [
@@ -26,7 +25,7 @@ export default function Loader() {
 
   return (
     <motion.div
-      className="loader"
+      className="fixed top-0 left-0 w-full h-[100dvh] text-muted-text flex flex-col justify-center items-center z-[9999] overflow-hidden bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.05),transparent_40%),radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.03),transparent_50%),linear-gradient(135deg,#000,#090909,#131313)]"
       initial={{ y: 0 }}
       animate={{ y: 0 }}
       exit={{ y: "-100%" }}
@@ -36,7 +35,7 @@ export default function Loader() {
         <AnimatePresence mode="wait">
           <motion.p
             key={steps[index]}
-            className="loader-subtitle"
+            className="font-syne text-[clamp(1.25rem,1.5vw,2.5rem)] font-light text-muted-text mb-8"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -47,9 +46,9 @@ export default function Loader() {
         </AnimatePresence>
       </div>
 
-      <div className="loader-bar">
+      <div className="w-[260px] h-[3px] mt-6 bg-white/10 mt-3 rounded overflow-hidden relative shadow-[0_0_10px_rgba(0,0,0,0.5)]">
         <motion.div
-          className="loader-progress"
+          className="h-full w-0 bg-[linear-gradient(90deg,var(--primary),var(--accent),var(--primary))] bg-[length:200%] animate-[roleGradient_2s_linear_infinite]"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{

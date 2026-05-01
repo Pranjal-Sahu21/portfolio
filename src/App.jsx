@@ -8,7 +8,7 @@ import Contact from "./Contact";
 import Footer from "./Footer";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
-import "./style.css";
+import "./index.css";
 import Loader from "./Loader";
 import { AnimatePresence } from "framer-motion";
 

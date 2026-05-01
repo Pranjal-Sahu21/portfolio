@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend:wght@100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Michroma&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Saira:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&family=Syne:wght@400..800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #e25822;
+  --color-accent: #b22222;
+  --color-bg: #121212;
+  --color-light-text: #f1f1f1;
+  --color-muted-text: #cccccc;
+  --color-card-bg: #2c2c2c;
+  --color-input-bg: #181818;
+  --font-syne: "Syne", sans-serif;
+  --font-space: "Space Grotesk", sans-serif;
+}
+
+@layer base {
+  :root {
+    --primary: #e25822;
+    --accent: #b22222;
+    --bg: #121212;
+    --light-text: #f1f1f1;
+    --muted-text: #cccccc;
+    --card-bg: #2c2c2c;
+    --input-bg: #181818;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--bg);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-light-text flex flex-col min-h-screen relative;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { @apply bg-primary rounded-lg; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-muted-text; }
+  
+  ::selection { background: var(--primary); color: rgb(41, 40, 40); }
+  ::-moz-selection { background: var(--primary); color: rgb(41, 40, 40); }
+
+  h3, p, input::placeholder, textarea::placeholder, input, textarea {
+    font-family: 'Space Grotesk', sans-serif !important;
+  }
+}
+
+@layer utilities {
+  .shimmer-text {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 50%, var(--primary) 100%);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 12px var(--accent);
+  }
+}
+
+/* Global Animations & Effects that are easier to keep as CSS */
+@keyframes shimmer { to { background-position: 200% center; } }
+@keyframes floaty { 
+  0%, 100% { transform: translateY(0); } 
+  50% { transform: translateY(-20px); } 
+}
+@keyframes floatyBtn { 
+  0%, 100% { transform: translateY(0); } 
+  50% { transform: translateY(-16px); } 
+}
+@keyframes logoPulse {
+  from { box-shadow: 0 0 5px var(--primary), 0 0 10px rgba(226, 88, 34, 0.3); }
+  to { box-shadow: 0 0 15px var(--primary), 0 0 30px rgba(226, 88, 34, 0.8); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Cursor Dot */
+.cursor-dot {
+  @apply fixed w-4 h-4 rounded-full flex items-center justify-center text-light-text whitespace-nowrap opacity-0 pointer-events-none z-[9999];
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  transition: width 0.4s ease, height 0.4s ease, border-radius 0.4s ease, background 0.4s ease, opacity 0.2s ease;
+  font-family: sans-serif;
+  user-select: none;
+}
+@media (hover: none) and (pointer: coarse), (max-width: 1024px) {
+  .cursor-dot { display: none; }
+}
+.cursor-dot.show { opacity: 1; }
+.cursor-dot.button {
+  @apply w-14 h-14 rounded-full font-extrabold text-4xl;
+  font-family: "Syne", sans-serif;
+}
+
+/* Forms autofill styling */
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset;
+  -webkit-text-fill-color: var(--light-text);
+  transition: background-color 5000s ease-in-out 0s;
+}
+input:-moz-autofill, textarea:-moz-autofill, select:-moz-autofill {
+  box-shadow: 0 0 0px 1000px var(--input-bg) inset;
+  -moz-text-fill-color: var(--light-text);
+}
+
+.slick-dots li button::before {
+  color: var(--primary) !important;
+  opacity: 0.4 !important;
+}
+.slick-dots li.slick-active button::before {
+  color: var(--primary) !important;
+  opacity: 1 !important;
+  text-shadow: 0 0 6px rgba(226, 88, 34, 0.7);
+}
+
+body {
+  background-color: black;
+}
