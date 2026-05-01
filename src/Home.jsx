@@ -1,77 +1,14 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
 
 export default function Home() {
   const firstName = "PRANJAL".split("");
   const lastName = "SAHU".split("");
 
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", handleResize);
-
-    const numStars = 22;
-    const stars = [];
-    for (let i = 0; i < numStars; i++) {
-      const color = "rgba(200, 200, 200, ";
-      stars.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        radius: Math.random() * 1.5 + 0.5,
-        opacity: Math.random(),
-        delta: Math.random() * 0.02 + 0.005,
-        color,
-      });
-    }
-
-    function drawScene() {
-      ctx.clearRect(0, 0, width, height);
-
-      stars.forEach((star) => {
-        star.opacity += star.delta;
-        if (star.opacity > 1 || star.opacity < 0) star.delta *= -1;
-
-        ctx.fillStyle = `${star.color}${Math.floor(star.opacity * 255)
-          .toString(16)
-          .padStart(2, "0")}`;
-
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      requestAnimationFrame(drawScene);
-    }
-
-    drawScene();
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
-    <section className="h-[100dvh] w-full text-light-text flex flex-col justify-center items-start px-[5vw] overflow-hidden" id="home">
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      />
+    <section
+      className="h-[100dvh] w-full text-light-text flex flex-col justify-center items-start px-[5vw] overflow-hidden"
+      id="home"
+    >
       {/* NAME */}
       <div className="font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap">
         {/* FIRST LINE */}
@@ -149,12 +86,12 @@ export default function Home() {
           Download CV
         </a>
 
-        <button 
-          onClick={() => scrollTo("contact")}
-          className="font-space font-medium tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center border border-primary text-primary bg-transparent cursor-pointer"
+        <a
+          href="#contact"
+          className="font-space font-medium tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center border border-primary text-primary bg-transparent"
         >
           Contact Me
-        </button>
+        </a>
       </motion.div>
 
       <motion.div
@@ -163,7 +100,9 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2 }}
       >
-        <span className="text-[0.75rem] tracking-[2px] uppercase text-muted-text">Scroll</span>
+        <span className="text-[0.75rem] tracking-[2px] uppercase text-muted-text">
+          Scroll
+        </span>
 
         <div className="w-[2px] h-[30px] md:h-[40px] bg-white/20 rounded-[10px] relative overflow-hidden">
           <motion.div

@@ -2,19 +2,24 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
 import { Menu, X } from "lucide-react";
-import { useScrollToSection } from "./hooks/useScrollToSection";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 992);
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const scrollTo = useScrollToSection();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const handleNavClick = (id) => {
-    scrollTo(id);
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
     setMenuOpen(false);
   };
 
@@ -135,7 +140,7 @@ export default function Header() {
               {navLinks.map((link) => (
                 <li key={link.id}>
                   <button
-                    onClick={() => handleNavClick(link.id)}
+                    onClick={() => scrollToSection(link.id)}
                     className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-colors duration-300 hover:text-primary hover:bg-transparent cursor-pointer ${activeSection === link.id ? "text-primary" : "text-muted-text"}`}
                   >
                     {link.label}
@@ -170,12 +175,13 @@ export default function Header() {
                     >
                       {navLinks.map((link) => (
                         <motion.li key={link.id} variants={linkVariants}>
-                          <button
-                            onClick={() => handleNavClick(link.id)}
-                            className={`text-left bg-transparent border-none font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${activeSection === link.id ? "bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent" : "text-muted-text"}`}
+                          <a
+                            href={`#${link.id}`}
+                            onClick={() => setMenuOpen(false)}
+                            className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${activeSection === link.id ? "bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent" : "text-muted-text"}`}
                           >
                             {link.label}
-                          </button>
+                          </a>
                         </motion.li>
                       ))}
                     </motion.ul>

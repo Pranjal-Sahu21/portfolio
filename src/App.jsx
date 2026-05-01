@@ -16,83 +16,70 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
-  const dot = document.querySelector(".cursor-dot");
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 2;
+  const dotRef = useRef(null);
 
-  let dotX = 0,
-    dotY = 0;
+  useEffect(() => {
+    const dot = document.querySelector(".cursor-dot");
+    if (!dot) return;
+    dotRef.current = dot;
 
-  const delay = 0.06;
-  const offsetX = -6;
-  const offsetY = -2;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let dotX = window.innerWidth / 2;
+    let dotY = window.innerHeight / 2;
 
-  window.addEventListener("load", () => {
-    dotX = window.innerWidth / 2;
-    dotY = window.innerHeight / 2;
-    dot.style.left = dotX + "px";
-    dot.style.top = dotY + "px";
-  });
+    const delay = 0.08;
+    const offsetX = -6;
+    const offsetY = -2;
 
-  window.addEventListener("scroll", () => {
-    dot.classList.remove("button");
-    dot.textContent = "";
-  });
+    const handleMouseMove = (e) => {
+      targetX = e.clientX + offsetX;
+      targetY = e.clientY + offsetY;
+      dot.classList.add("show");
 
-  window.addEventListener("mousemove", (e) => {
-    targetX = e.clientX + offsetX;
-    targetY = e.clientY + offsetY;
-    dot.classList.add("show");
-  });
-
-  window.addEventListener("mouseout", () => {
-    dot.classList.remove("show");
-  });
-
-  function follow() {
-    dotX += (targetX - dotX) * delay;
-    dotY += (targetY - dotY) * delay;
-
-    dot.style.left = dotX + "px";
-    dot.style.top = dotY + "px";
-
-    requestAnimationFrame(follow);
-  }
-
-  follow();
-
-  document.addEventListener(
-    "mouseenter",
-    (e) => {
-      if (e.target.closest(".project-card-3d")) {
-        dot.classList.add("button", "show");
+      const card = e.target.closest(".project-card-3d");
+      if (card) {
+        dot.classList.add("button");
         dot.textContent = "🡕";
-      }
-    },
-    true,
-  );
-
-  document.addEventListener(
-    "mouseleave",
-    (e) => {
-      if (e.target.closest(".project-card-3d")) {
-        dot.classList.remove("button");
+      } else {
+        dot.classList.remove("button", "scale-150");
         dot.textContent = "";
       }
-    },
-    true,
-  );
+    };
 
-  document.addEventListener("mousemove", (e) => {
-    const card = e.target.closest(".project-card-3d");
-    if (card) {
-      dot.classList.add("button");
-      dot.textContent = "🡕";
-    } else {
+    const handleMouseOut = () => {
+      dot.classList.remove("show");
+    };
+
+    const handleScroll = () => {
       dot.classList.remove("button");
       dot.textContent = "";
-    }
-  });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseout", handleMouseOut);
+    window.addEventListener("scroll", handleScroll);
+
+    let animationId;
+    const follow = () => {
+      dotX += (targetX - dotX) * delay;
+      dotY += (targetY - dotY) * delay;
+
+      dot.style.left = dotX + "px";
+      dot.style.top = dotY + "px";
+
+      animationId = requestAnimationFrame(follow);
+    };
+
+    follow();
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseout", handleMouseOut);
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(animationId);
+    };
+  }, [showContent]);
 
   const lenisRef = useRef(null);
 
@@ -183,14 +170,28 @@ export default function App() {
       <AnimatePresence>{loading && <Loader />}</AnimatePresence>
 
       {showContent && (
-        <div>
-          <Header />
-          <Home />
-          <Journey />
-          <Skills />
-          <Projects />
-          <Contact />
-          <Footer />
+        <div className="min-h-screen w-full relative bg-black">
+          {/* Vercel Grid Background */}
+          <div
+            className="fixed inset-0 z-0 opacity-20 pointer-events-none"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px)
+              `,
+              backgroundSize: "60px 60px",
+            }}
+          />
+
+          <div className="relative z-10">
+            <Header />
+            <Home />
+            <Journey />
+            <Skills />
+            <Projects />
+            <Contact />
+            <Footer />
+          </div>
         </div>
       )}
     </>

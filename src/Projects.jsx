@@ -127,7 +127,7 @@ export default function Projects() {
                 key={i}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-[0_0_80%] md:flex-[0_0_90%] max-w-[500px] h-auto aspect-[5/4] bg-[#181818]/90 rounded-2xl p-4 text-center text-white transform rotate-y-40 rotate-x-30 shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-transform duration-300 ml-[-84px] hover:cursor-none no-underline block"
+                className="flex-[0_0_80%] md:flex-[0_0_90%] max-w-[500px] h-auto aspect-[5/4] bg-[#181818]/90 rounded-2xl p-4 text-center text-white transform rotate-y-40 rotate-x-30 shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-transform duration-300 ml-[-84px] hover:cursor-none no-underline block project-card-3d"
                 style={{ transform: "rotateY(40deg) rotateX(30deg)" }}
               >
                 <img src={p.img} alt={p.title} className="w-full object-cover rounded-lg" />
@@ -148,7 +148,7 @@ export default function Projects() {
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full max-w-[480px] md:max-w-[320px] mx-auto h-[368px] sm:h-[390px] bg-[#181818]/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-[0_0_12px_rgba(0,0,0,0.6)]"
+                    className="block w-full max-w-[480px] md:max-w-[320px] mx-auto h-[368px] sm:h-[390px] bg-[#181818]/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-[0_0_12px_rgba(0,0,0,0.6)] project-card-3d"
                   >
                     <img src={p.img} alt={p.title} className="w-full h-[180px] object-cover rounded-xl" />
                     <h2 className="mt-6 text-lg font-syne font-bold shimmer-text">{p.title}</h2>
