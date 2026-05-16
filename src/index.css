@@ -3,8 +3,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #e25822;
-  --color-accent: #b22222;
+  --color-primary: #ffffff;
+  --color-accent: #d4d4d4;
   --color-bg: #121212;
   --color-light-text: #f1f1f1;
   --color-muted-text: #cccccc;
@@ -16,8 +16,8 @@
 
 @layer base {
   :root {
-    --primary: #e25822;
-    --accent: #b22222;
+    --primary: #ffffff;
+    --accent: #d4d4d4;
     --bg: #121212;
     --light-text: #f1f1f1;
     --muted-text: #cccccc;
@@ -51,6 +51,10 @@
   h3, p, input::placeholder, textarea::placeholder, input, textarea {
     font-family: 'Space Grotesk', sans-serif !important;
   }
+
+  img, svg, i[class*="fa-"] {
+    filter: grayscale(100%);
+  }
 }
 
 @layer utilities {
@@ -78,8 +82,8 @@
   50% { transform: translateY(-16px); } 
 }
 @keyframes logoPulse {
-  from { box-shadow: 0 0 5px var(--primary), 0 0 10px rgba(226, 88, 34, 0.3); }
-  to { box-shadow: 0 0 15px var(--primary), 0 0 30px rgba(226, 88, 34, 0.8); }
+  from { box-shadow: 0 0 5px var(--primary), 0 0 10px rgba(192, 192, 192, 0.3); }
+  to { box-shadow: 0 0 15px var(--primary), 0 0 30px rgba(192, 192, 192, 0.8); }
 }
 @keyframes popIn {
   0% { opacity: 0; transform: scale(0.8); }
@@ -88,8 +92,10 @@
 
 /* Cursor Dot */
 .cursor-dot {
-  @apply fixed w-4 h-4 rounded-full flex items-center justify-center text-white whitespace-nowrap opacity-0 pointer-events-none z-[9999];
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  @apply fixed w-4 h-4 rounded-full flex items-center justify-center text-black whitespace-nowrap opacity-0 pointer-events-none z-[9999];
+  background: #ffffff;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%) scale(1);
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
               height 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
               transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
@@ -97,7 +103,6 @@
               opacity 0.3s ease;
   font-family: sans-serif;
   user-select: none;
-  box-shadow: 0 0 15px rgba(226, 88, 34, 0.4);
 }
 @media (hover: none) and (pointer: coarse), (max-width: 1024px) {
   .cursor-dot { display: none; }
@@ -105,13 +110,12 @@
 .cursor-dot.show { opacity: 1; }
 .cursor-dot.button {
   @apply w-14 h-14 text-3xl font-extrabold;
-  transform: translate(-30%, -30%);
-  background-image: linear-gradient(135deg, #e25822, #b22222);
-  box-shadow: 0 0 25px rgba(226, 88, 34, 0.6);
+  transform: translate(-50%, -50%) scale(1);
+  background: #ffffff;
 }
 .cursor-dot.scale-150 {
-  transform: scale(2.5);
-  background-image: linear-gradient(135deg, #e25822, #b22222);
+  transform: translate(-50%, -50%) scale(2.5);
+  background: #ffffff;
   opacity: 0.8;
 }
 
@@ -133,7 +137,7 @@ input:-moz-autofill, textarea:-moz-autofill, select:-moz-autofill {
 .slick-dots li.slick-active button::before {
   color: var(--primary) !important;
   opacity: 1 !important;
-  text-shadow: 0 0 6px rgba(226, 88, 34, 0.7);
+  text-shadow: 0 0 6px rgba(192, 192, 192, 0.7);
 }
 
 body {

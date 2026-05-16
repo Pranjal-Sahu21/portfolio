@@ -49,7 +49,7 @@ export default function Contact() {
 
 
   const inputClasses =
-    "w-full p-[14px_16px] border border-primary/30 rounded-lg bg-[#181818]/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)] outline-none focus:border-primary resize-none box-border";
+    "w-full p-[14px_16px] border border-primary/10 rounded-lg bg-[#181818]/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)] outline-none focus:border-primary resize-none box-border";
 
   const socialLinks = [
     { href: "https://www.instagram.com/prsahu_21/", icon: "fab fa-instagram", delay: "0s" },
@@ -91,7 +91,7 @@ export default function Contact() {
             <input type="text" name="subject" placeholder="Subject" className={inputClasses} required />
             <textarea name="message" rows="5" placeholder="Message" className={inputClasses} required />
             <button
-              className="font-syne font-bold text-[1.05rem] py-[14px] px-[24px] bg-gradient-to-r from-primary to-accent text-white border-none rounded-lg cursor-pointer transition-all duration-300 shadow-[0_0_12px_rgba(226,88,34,0.5)] hover:shadow-[0_0_20px_rgba(226,88,34,0.8),0_0_35px_rgba(178,34,34,0.6)] active:scale-[0.95] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="font-syne font-bold text-[1.05rem] py-[14px] px-[24px] bg-gradient-to-r from-primary to-accent text-black border-none rounded-lg cursor-pointer transition-all duration-300 shadow-[0_0_12px_rgba(192,192,192,0.5)] hover:shadow-[0_0_20px_rgba(192,192,192,0.8),0_0_35px_rgba(136,136,136,0.6)] active:scale-[0.95] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
               disabled={isSubmitting}
             >

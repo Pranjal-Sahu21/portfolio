@@ -29,18 +29,23 @@ export default function App() {
     let dotY = window.innerHeight / 2;
 
     const delay = 0.08;
-    const offsetX = -6;
-    const offsetY = -2;
 
     const handleMouseMove = (e) => {
-      targetX = e.clientX + offsetX;
-      targetY = e.clientY + offsetY;
+      targetX = e.clientX;
+      targetY = e.clientY;
       dot.classList.add("show");
 
       const card = e.target.closest(".project-card-3d");
+      const clickable = e.target.closest("a, button, input[type='submit'], input[type='button'], .cursor-pointer");
+
       if (card) {
         dot.classList.add("button");
+        dot.classList.remove("scale-150");
         dot.textContent = "🡕";
+      } else if (clickable) {
+        dot.classList.add("scale-150");
+        dot.classList.remove("button");
+        dot.textContent = "";
       } else {
         dot.classList.remove("button", "scale-150");
         dot.textContent = "";

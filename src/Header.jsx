@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
 import { Menu, X } from "lucide-react";
+import { scrollToSection } from "./utils/scrollToSection";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,17 +12,7 @@ export default function Header() {
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    el.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-
-    setMenuOpen(false);
-  };
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -130,7 +121,7 @@ export default function Header() {
             <img 
               src={logo} 
               alt="logo" 
-              className="w-8 h-8 p-0.5 bg-primary rounded-full z-10 shadow-[0_0_10px_rgba(226,88,34,0.6),0_0_20px_rgba(226,88,34,0.4),0_0_40px_rgba(226,88,34,0.2)]" 
+              className="w-8 h-8 p-0.5 bg-primary rounded-full z-10 shadow-[0_0_10px_rgba(192,192,192,0.6),0_0_20px_rgba(192,192,192,0.4),0_0_40px_rgba(192,192,192,0.2)]" 
             />
           </div>
 
@@ -140,8 +131,8 @@ export default function Header() {
               {navLinks.map((link) => (
                 <li key={link.id}>
                   <button
-                    onClick={() => scrollToSection(link.id)}
-                    className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-colors duration-300 hover:text-primary hover:bg-transparent cursor-pointer ${activeSection === link.id ? "text-primary" : "text-muted-text"}`}
+                    onClick={() => scrollToSection(link.id, () => setMenuOpen(false))}
+                    className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-all duration-300 hover:text-white hover:bg-transparent cursor-pointer relative pb-1 ${activeSection === link.id ? "text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-white after:rounded-full drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]" : "text-[#666666]"}`}
                   >
                     {link.label}
                   </button>
@@ -177,8 +168,11 @@ export default function Header() {
                         <motion.li key={link.id} variants={linkVariants}>
                           <a
                             href={`#${link.id}`}
-                            onClick={() => setMenuOpen(false)}
-                            className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${activeSection === link.id ? "bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent" : "text-muted-text"}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              scrollToSection(link.id, () => setMenuOpen(false));
+                            }}
+                            className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-white relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-white after:mt-1.5 after:transition-[width] after:duration-300 ${activeSection === link.id ? "text-white pl-4 border-l-[3px] border-white drop-shadow-[0_0_12px_rgba(255,255,255,0.5)]" : "text-[#555555]"}`}
                           >
                             {link.label}
                           </a>
