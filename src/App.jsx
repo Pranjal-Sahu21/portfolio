@@ -6,6 +6,7 @@ import Skills from "./Skills";
 import Projects from "./Projects";
 import Contact from "./Contact";
 import Footer from "./Footer";
+import DotGrid from "./components/DotGrid/DotGrid";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./index.css";
@@ -176,6 +177,13 @@ export default function App() {
 
       {showContent && (
         <div className="min-h-screen w-full relative bg-black">
+          <div className="fixed inset-0 z-0 pointer-events-auto">
+            <DotGrid 
+              activeColor="#d6d4d4ff" 
+              baseColor="#333333" 
+              dotSize={2} 
+            />
+          </div>
           <div className="relative z-10">
             <Header />
             <Home />
