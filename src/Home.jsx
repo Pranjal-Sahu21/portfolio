@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Silk from "./components/Silk/Silk";
 import { scrollToSection } from "./utils/scrollToSection";
 
-export default function Home() {
+export default function Home({ showContent = true }) {
   const firstName = "PRANJAL".split("");
   const lastName = "SAHU".split("");
 
@@ -12,7 +12,7 @@ export default function Home() {
       id="home"
     >
       {/* Silk Background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 bg-[#272626]">
         <Silk
           color="#272626ff"
           speed={5}
@@ -20,7 +20,10 @@ export default function Home() {
           noiseIntensity={1.5}
         />
       </div>
-      {/* NAME */}
+
+      {showContent && (
+        <>
+          {/* NAME */}
       <div className="relative z-10 font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap">
         {/* FIRST LINE */}
         <motion.div className="flex">
@@ -131,6 +134,9 @@ export default function Home() {
           />
         </div>
       </motion.div>
+      
+        </>
+      )}
     </section>
   );
 }

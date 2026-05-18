@@ -175,26 +175,24 @@ export default function App() {
     <>
       <AnimatePresence>{loading && <Loader />}</AnimatePresence>
 
-      {showContent && (
-        <div className="min-h-screen w-full relative bg-black">
-          <div className="fixed inset-0 z-0 pointer-events-auto">
-            <DotGrid 
-              activeColor="#d6d4d4ff" 
-              baseColor="#333333" 
-              dotSize={2} 
-            />
-          </div>
-          <div className="relative z-10">
-            <Header />
-            <Home />
-            <Journey />
-            <Skills />
-            <Projects />
-            <Contact />
-            <Footer />
-          </div>
+      <div className={`min-h-screen w-full relative bg-black ${!showContent ? 'h-screen overflow-hidden' : ''}`}>
+        <div className="fixed inset-0 z-0 pointer-events-auto">
+          <DotGrid 
+            activeColor="#d6d4d4ff" 
+            baseColor="#333333" 
+            dotSize={2} 
+          />
         </div>
-      )}
+        <div className="relative z-10">
+          <Header />
+          <Home showContent={showContent} />
+          <Journey />
+          <Skills />
+          <Projects />
+          <Contact />
+          <Footer />
+        </div>
+      </div>
     </>
   );
 }
