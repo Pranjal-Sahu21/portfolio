@@ -111,7 +111,7 @@ export default function Projects() {
       id="projects"
       className="min-h-svh flex flex-col justify-center items-center py-30 px-5 overflow-hidden relative text-center"
     >
-      <motion.h1
+      <motion.h2
         ref={ref}
         className="shimmer-text font-syne font-bold mb-17 text-[clamp(2rem,4vw,3rem)]"
         initial={{ opacity: 0, y: 80 }}
@@ -123,7 +123,7 @@ export default function Projects() {
         }}
       >
         Featured Projects
-      </motion.h1>
+      </motion.h2>
 
       <div
         className="w-full mt-12 relative overflow-visible md:overflow-hidden perspective-[1500px] md:transform md:-rotate-5 before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-black before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-black after:to-transparent"
@@ -151,8 +151,9 @@ export default function Projects() {
               >
                 <img
                   src={p.img}
-                  alt={p.title}
+                  alt={`Screenshot of ${p.title} — ${p.desc}`}
                   className="w-full object-cover rounded-lg"
+                  loading="lazy"
                 />
                 <h2 className="mt-4 text-[1.4rem] font-syne font-bold shimmer-text">
                   {p.title}
@@ -179,8 +180,9 @@ export default function Projects() {
                   >
                     <img
                       src={p.img}
-                      alt={p.title}
+                      alt={`Screenshot of ${p.title} — ${p.desc}`}
                       className="w-full h-45 object-cover rounded-xl"
+                      loading="lazy"
                     />
                     <h2 className="mt-6 text-lg font-syne font-bold shimmer-text">
                       {p.title}

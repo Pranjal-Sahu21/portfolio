@@ -64,14 +64,14 @@ export default function Contact() {
       ref={ref}
     >
       {/* Heading — kept identical */}
-      <motion.h1
+      <motion.h2
         className="shimmer-text font-syne font-bold mb-[68px] text-[clamp(2rem,4vw,3rem)]"
         initial={{ opacity: 0, y: 80 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
         transition={{ type: "spring", stiffness: 50, damping: 20 }}
       >
         Let's work together
-      </motion.h1>
+      </motion.h2>
 
       {/* Two-column on desktop, stacked on mobile */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1px_1fr] gap-10 md:gap-12 w-full max-w-[1000px] items-start text-left">
@@ -86,10 +86,10 @@ export default function Contact() {
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
             transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
           >
-            <input type="text" name="name" placeholder="Your Name" className={inputClasses} required />
-            <input type="email" name="email" placeholder="Your Email" className={inputClasses} required />
-            <input type="text" name="subject" placeholder="Subject" className={inputClasses} required />
-            <textarea name="message" rows="5" placeholder="Message" className={inputClasses} required />
+            <input type="text" name="name" placeholder="Your Name" aria-label="Your name" className={inputClasses} required />
+            <input type="email" name="email" placeholder="Your Email" aria-label="Your email address" className={inputClasses} required />
+            <input type="text" name="subject" placeholder="Subject" aria-label="Message subject" className={inputClasses} required />
+            <textarea name="message" rows="5" placeholder="Message" aria-label="Your message" className={inputClasses} required />
             <button
               className="font-syne font-bold text-[1.05rem] py-[14px] px-[24px] bg-gradient-to-r from-primary to-accent text-black border-none rounded-lg cursor-pointer transition-all duration-300 shadow-[0_0_12px_rgba(192,192,192,0.5)] hover:shadow-[0_0_20px_rgba(192,192,192,0.8),0_0_35px_rgba(136,136,136,0.6)] active:scale-[0.95] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"

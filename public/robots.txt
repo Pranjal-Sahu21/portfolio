@@ -1,0 +1,7 @@
+# robots.txt for portfoliopranjalsahu.netlify.app
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://portfoliopranjalsahu.netlify.app/sitemap.xml

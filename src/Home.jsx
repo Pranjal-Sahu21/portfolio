@@ -24,9 +24,9 @@ export default function Home({ showContent = true }) {
       {showContent && (
         <>
           {/* NAME */}
-      <div className="relative z-10 font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap">
+      <h1 className="relative z-10 font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap">
         {/* FIRST LINE */}
-        <motion.div className="flex">
+        <motion.span className="flex" aria-label="Pranjal">
           {firstName.map((char, i) => (
             <motion.span
               key={i}
@@ -38,14 +38,15 @@ export default function Home({ showContent = true }) {
                 stiffness: 90,
               }}
               className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
+              aria-hidden="true"
             >
               {char}
             </motion.span>
           ))}
-        </motion.div>
+        </motion.span>
 
         {/* SECOND LINE */}
-        <motion.div className="flex font-syne font-bold">
+        <motion.span className="flex font-syne font-bold" aria-label="Sahu">
           {lastName.map((char, i) => (
             <motion.span
               key={i}
@@ -57,12 +58,14 @@ export default function Home({ showContent = true }) {
                 stiffness: 90,
               }}
               className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
+              aria-hidden="true"
             >
               {char}
             </motion.span>
           ))}
-        </motion.div>
-      </div>
+        </motion.span>
+        <span className="sr-only">Pranjal Sahu</span>
+      </h1>
 
       <motion.h2
         className="relative z-10 mt-7.5 font-space text-[0.9rem] tracking-[1.5px] uppercase bg-[linear-gradient(90deg,var(--primary),var(--accent),var(--primary))] bg-size-[200%_auto] bg-clip-text text-transparent animate-[roleGradient_2s_linear_infinite]"

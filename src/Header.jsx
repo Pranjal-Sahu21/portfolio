@@ -115,12 +115,14 @@ export default function Header() {
           initial="hidden"
           animate="visible"
           exit="hidden"
+          role="navigation"
+          aria-label="Main navigation"
         >
           {/* LOGO */}
           <div className="flex items-center gap-3 font-syne font-bold">
             <img 
               src={logo} 
-              alt="logo" 
+              alt="Pranjal Sahu — Home" 
               className="w-8 h-8 p-0.5 bg-primary rounded-full z-10 shadow-[0_0_10px_rgba(192,192,192,0.6),0_0_20px_rgba(192,192,192,0.4),0_0_40px_rgba(192,192,192,0.2)]" 
             />
           </div>
@@ -133,6 +135,7 @@ export default function Header() {
                   <button
                     onClick={() => scrollToSection(link.id, () => setMenuOpen(false))}
                     className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-all duration-300 hover:text-white hover:bg-transparent cursor-pointer relative pb-1 ${activeSection === link.id ? "text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-white after:rounded-full drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]" : "text-[#666666]"}`}
+                    {...(activeSection === link.id ? { "aria-current": "page" } : {})}
                   >
                     {link.label}
                   </button>

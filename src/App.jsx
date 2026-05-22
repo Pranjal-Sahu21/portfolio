@@ -185,11 +185,13 @@ export default function App() {
         </div>
         <div className="relative z-10">
           <Header />
-          <Home showContent={showContent} />
-          <Journey />
-          <Skills />
-          <Projects />
-          <Contact />
+          <main id="main-content">
+            <Home showContent={showContent} />
+            <Journey />
+            <Skills />
+            <Projects />
+            <Contact />
+          </main>
           <Footer />
         </div>
       </div>
