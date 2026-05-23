@@ -8,8 +8,8 @@ import vanillaLogo from "../assets/js-logo.png";
 import reactLogo from "../assets/react-logo.png";
 import javaLogo from "../assets/java-logo.png";
 import mySqlLogo from "../assets/mysql-logo.png";
-import routerLogo from "../assets/react-router-logo.svg";
-import motionLogo from "../assets/framer-motion.svg";
+import drizzleLogo from "../assets/drizzle-logo.png"
+import nextLogo from "../assets/next-js.png"
 import mongoLogo from "../assets/mongodb-logo.png";
 import postmanLogo from "../assets/postman-logo.png";
 import typescriptLogo from "../assets/typescript-logo.webp";
@@ -22,8 +22,7 @@ export default function Skills() {
     { name: "JavaScript", img: vanillaLogo },
     { name: "TypeScript", img: typescriptLogo },
     { name: "React.js", img: reactLogo },
-    { name: "Framer motion", img: motionLogo },
-    { name: "React router", img: routerLogo },
+    { name: "Next.js", img: nextLogo },
     { name: "Java", img: javaLogo },
     {
       name: "PostgreSQL",
@@ -32,6 +31,7 @@ export default function Skills() {
     { name: "MongoDB", img: mongoLogo },
     { name: "MySQL", img: mySqlLogo },
     { name: "Prisma", img: "https://cdn.simpleicons.org/prisma/ffffff" },
+    { name: "Drizzle", img: drizzleLogo },
     { name: "Postman", img: postmanLogo },
   ];
 
@@ -79,9 +79,8 @@ export default function Skills() {
   }, []);
 
   const getLogoScale = (img) => {
-    if (img === motionLogo || img === typescriptLogo) return "scale-75";
-    if (img === cssLogo) return "scale-[1.25]";
-    if (img === mySqlLogo || img === tailwindLogo) return "scale-110";
+    if (img === cssLogo || img == htmlLogo || img == nextLogo || img == vanillaLogo || img == javaLogo) return "scale-[1.25]";
+    if (img === mySqlLogo || img === tailwindLogo || img == drizzleLogo || img == postmanLogo || img == mongoLogo) return "scale-120";
     return "";
   };
 

@@ -95,7 +95,7 @@ export default function Home({ showContent = true }) {
         transition={{ delay: 0.8 }}
       >
         <a
-          href="https://drive.google.com/file/d/1jo0rPyhozU-3zV_zyaCFlklMrGaUedwF/view?usp=sharing"
+          href="https://drive.google.com/file/d/1F-si2fO7hcfAaoFkVtC_GNs2T3fJVMey/view?usp=drive_link"
           target="_blank"
           rel="noreferrer"
           className="font-space font-semibold tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center bg-linear-to-br from-primary to-accent text-black border-none shadow-[0_8px_25px_rgba(192,192,192,0.25)]"

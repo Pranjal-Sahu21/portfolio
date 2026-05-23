@@ -4,12 +4,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import voltMart from "../assets/voltmart.png";
-import resuscope from "../assets/ResuScope.png";
 import cheeType from "../assets/cheetype.png";
 import tasteGpt from "../assets/tastegpt.png";
 import crexo from "../assets/crexo-image.png";
 import dummistore from "../assets/dummistore-image.png";
 import genixor from "../assets/genixor-image.png";
+import devevent from "../assets/DevEvent.png"
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Projects() {
@@ -29,6 +29,12 @@ export default function Projects() {
       desc: "AI image generation platform powered by Clipdrop AI, with integrated Razorpay payments for credit-based generation.",
     },
     {
+      title: "DevEvent",
+      img: devevent,
+      link: "https://dev-events-bay.vercel.app",
+      desc: "A Next.js web app for booking spots (using your email) at registered developer events or creating new events.",
+    },
+    {
       title: "DummiStore",
       img: dummistore,
       link: "https://dummistore.netlify.app",
@@ -39,12 +45,6 @@ export default function Projects() {
       img: voltMart,
       link: "https://voltmart.netlify.app",
       desc: "A quick-commerce web app (using DummiStore API) with persistent cart/orders/address storage.",
-    },
-    {
-      title: "ResuScope",
-      img: resuscope,
-      link: "https://resuscope.netlify.app",
-      desc: "An AI-powered resume analyzer that evaluates resume-job fit and provides personalized improvement tips.",
     },
     {
       title: "CheeType",
