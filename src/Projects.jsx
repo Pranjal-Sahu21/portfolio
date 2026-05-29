@@ -10,6 +10,7 @@ import crexo from "../assets/crexo-image.png";
 import dummistore from "../assets/dummistore-image.png";
 import genixor from "../assets/genixor-image.png";
 import devevent from "../assets/DevEvent.png"
+import snip from "../assets/snip.png"
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Projects() {
@@ -27,6 +28,12 @@ export default function Projects() {
       img: crexo,
       link: "https://crexo.netlify.app",
       desc: "AI image generation platform powered by Clipdrop AI, with integrated Razorpay payments for credit-based generation.",
+    },
+    {
+      title: "Snip",
+      img: snip,
+      link: "https://snip-xi.vercel.app",
+      desc: "A modern URL shortener with Next.js, PostgreSQL, and Drizzle ORM featuring custom aliases, fast redirects, and sleek dashboards.",
     },
     {
       title: "DevEvent",
