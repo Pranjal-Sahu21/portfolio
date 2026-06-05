@@ -19,7 +19,8 @@ A modern, interactive personal portfolio website built with React and powered by
 - **🖱️ Custom Cursor** - Interactive custom cursor with hover effects on project cards
 - **⚡ Smooth Scrolling** - Lenis integration for butter-smooth scroll experience
 - **🎪 Project Showcase** - Carousel-based project display with live links and descriptions:
-  - Crexo - An image generation ai saas app
+  - Genixor - An AI website builder SaaS app
+  - Crexo - An image generation AI SaaS app
   - Voltmart - Quick-commerce web app
   - ResuScope - AI-powered resume analyzer
   - CheeType - Interactive typing test
