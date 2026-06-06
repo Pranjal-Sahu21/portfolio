@@ -25,7 +25,7 @@ A modern, interactive personal portfolio website built with React and powered by
   - ResuScope - AI-powered resume analyzer
   - CheeType - Interactive typing test
   - TasteGPT - Recipe recommendation engine
-  - SkyLune - Real-time weather application
+
 - **💼 Skills Section** - Interactive skill showcase with logos for:
   - **Frontend**: HTML, CSS, Tailwind CSS, Vanilla JS, React.js, Framer Motion, React Router
   - **Backend**: Java, Python
