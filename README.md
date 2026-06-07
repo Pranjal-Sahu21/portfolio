@@ -21,6 +21,8 @@ A modern, interactive personal portfolio website built with React and powered by
 - **🎪 Project Showcase** - Carousel-based project display with live links and descriptions:
   - Genixor - An AI website builder SaaS app
   - Crexo - An image generation AI SaaS app
+  - Snip - A modern URL shortener
+  - DevEvent - A developer event hub
   - Voltmart - Quick-commerce web app
   - ResuScope - AI-powered resume analyzer
   - CheeType - Interactive typing test
