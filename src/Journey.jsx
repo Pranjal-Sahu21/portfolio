@@ -69,10 +69,11 @@ export default function Journey() {
 
               <motion.div
                 ref={cardRef}
-                className={`relative w-[calc(100%-20px)] md:w-[49%] bg-input-bg/90 rounded-[10px] shadow-md text-left p-[15px] md:p-5 transition-transform duration-300 hover:scale-[1.02] ml-[24px] ${index % 2 === 0 ? "md:ml-0 md:self-start" : "md:ml-auto md:self-end"}`}
+                className={`relative w-[calc(100%-20px)] md:w-[49%] bg-input-bg/90 rounded-[10px] shadow-md text-left p-[15px] md:p-5 ml-[24px] ${index % 2 === 0 ? "md:ml-0 md:self-start" : "md:ml-auto md:self-end"}`}
                 variants={cardVariants(index)}
                 initial="hidden"
                 animate={isCardInView ? "visible" : "hidden"}
+                whileHover={{ scale: 1.02 }}
               >
                 <h3 className="font-syne font-medium text-[1.1rem] md:text-[1.25rem] xl:text-[1.2rem] mb-[15px] md:mb-6">{journey.title}</h3>
                 {journey.details.map((line, i) => (

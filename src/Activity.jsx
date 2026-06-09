@@ -175,6 +175,7 @@ export default function Activity() {
   const [leetcodeData, setLeetcodeData] = useState(null);
   const [leetcodeCalendar, setLeetcodeCalendar] = useState([]);
   const [leetcodeContest, setLeetcodeContest] = useState(null);
+  const [leetcodeBadges, setLeetcodeBadges] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -186,12 +187,13 @@ export default function Activity() {
         setLoading(true);
         setError(null);
 
-        // Check local cache (v3 forces cache refresh)
-        const cached = getCachedData("leetcode_stats_cache_v3");
+        // Check local cache (v4 forces cache refresh)
+        const cached = getCachedData("leetcode_stats_cache_v4");
         if (cached) {
           setLeetcodeData(cached.data);
           setLeetcodeCalendar(cached.calendar);
           setLeetcodeContest(cached.contest);
+          setLeetcodeBadges(cached.badges);
           setLoading(false);
           return;
         }
@@ -215,6 +217,19 @@ export default function Activity() {
           console.error("Contest rating fetch failed (optional):", e);
         }
 
+        // Optional fetch for badges details
+        let badgesData = null;
+        try {
+          const badgesRes = await fetch(
+            "https://alfa-leetcode-api.onrender.com/Pranjal_1619/badges",
+          );
+          if (badgesRes.ok) {
+            badgesData = await badgesRes.json();
+          }
+        } catch (e) {
+          console.error("Badges fetch failed (optional):", e);
+        }
+
         if (active) {
           let formattedCalendar = [];
           if (data.submissionCalendar) {
@@ -225,12 +240,14 @@ export default function Activity() {
           }
           setLeetcodeData(data);
           setLeetcodeContest(contestData);
+          setLeetcodeBadges(badgesData);
 
           // Cache results
-          setCachedData("leetcode_stats_cache_v3", {
+          setCachedData("leetcode_stats_cache_v4", {
             data,
             calendar: formattedCalendar,
             contest: contestData,
+            badges: badgesData,
           });
           setLoading(false);
         }
@@ -336,6 +353,9 @@ export default function Activity() {
           </span>
           <span className="block text-xs md:text-sm text-muted-text font-space uppercase tracking-wider mt-2.5">
             / {total}
+          </span>
+          <span className="block text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-space font-medium mt-2 leading-none">
+            beats 99.8%
           </span>
         </div>
       </div>
@@ -479,64 +499,60 @@ export default function Activity() {
           ) : (
             /* Content Display */
             <div className="flex flex-col gap-8">
-              {/* Heatmap Calendar */}
-              <div className="w-full flex flex-col gap-2">
-                <div className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2">
-                  <ActivityCalendar
-                    data={leetcodeCalendar}
-                    theme={explicitTheme}
-                    colorScheme={theme}
-                    blockSize={14}
-                    blockMargin={4}
-                    fontSize={14}
-                    showColorLegend={true}
-                  />
-                </div>
-              </div>
-
               {/* Stats Summary Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4">
                 {/* Circular Progress & Info */}
-                <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-8 xl:gap-10 bg-input-bg/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full">
+                <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-6 xl:gap-8 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
                   {renderCircularProgress(
                     leetcodeData.totalSolved || 0,
                     leetcodeData.totalQuestions || 0,
                   )}
-                  <div className="text-left font-space flex flex-row sm:flex-col flex-wrap gap-x-6 gap-y-4 justify-center sm:justify-start flex-shrink-0">
+                  <div className="text-left font-space grid grid-cols-2 gap-3 w-full sm:w-auto flex-shrink-0">
                     {leetcodeContest && leetcodeContest.userContestRanking && (
-                      <div className="border-l-[2px] sm:border-l-[3px] border-neutral-600 pl-3 sm:pl-5 py-0.5 sm:py-1">
-                        <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
+                      <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                        <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                           Contest Rating
                         </span>
-                        <span className="text-primary text-2xl font-bold font-syne flex items-baseline gap-1.5">
-                          {Math.round(leetcodeContest.userContestRanking.rating)}
-                          <span className="text-xs text-neutral-400 font-space font-normal">
-                            (Top {leetcodeContest.userContestRanking.topPercentage}%)
+                        <span className="text-primary text-lg sm:text-xl font-bold font-syne flex items-baseline gap-1">
+                          {Math.round(
+                            leetcodeContest.userContestRanking.rating,
+                          )}
+                          <span className="text-[9px] sm:text-[10px] text-neutral-400 font-space font-normal">
+                            (Top{" "}
+                            {leetcodeContest.userContestRanking.topPercentage}%)
                           </span>
                         </span>
                       </div>
                     )}
-                    <div className="border-l-[2px] sm:border-l-[3px] border-neutral-600 pl-3 sm:pl-5 py-0.5 sm:py-1">
-                      <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
+                    <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                      <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Reputation
                       </span>
-                      <span className="text-primary text-2xl font-bold font-syne">
+                      <span className="text-primary text-lg sm:text-xl font-bold font-syne">
                         {leetcodeData.reputation || 0}
                       </span>
                     </div>
-                    <div className="border-l-[2px] sm:border-l-[3px] border-neutral-600 pl-3 sm:pl-5 py-0.5 sm:py-1">
-                      <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
+                    <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                      <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Points
                       </span>
-                      <span className="text-primary text-2xl font-bold font-syne">
+                      <span className="text-primary text-lg sm:text-xl font-bold font-syne">
                         {leetcodeData.contributionPoint || 0}
+                      </span>
+                    </div>
+                    <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                      <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                        Badges
+                      </span>
+                      <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                        {leetcodeBadges?.badgesCount || 0}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Difficulty Bars */}
-                <div className="lg:col-span-6 flex flex-col gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full justify-center">
+                <div className="lg:col-span-6 flex flex-col gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full justify-center">
                   <div className="text-left font-space flex flex-col gap-6">
                     {/* Easy */}
                     <div>
@@ -615,6 +631,21 @@ export default function Activity() {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Heatmap Calendar */}
+              <div className="w-full flex flex-col gap-2">
+                <div className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2">
+                  <ActivityCalendar
+                    data={leetcodeCalendar}
+                    theme={explicitTheme}
+                    colorScheme={theme}
+                    blockSize={14}
+                    blockMargin={4}
+                    fontSize={14}
+                    showColorLegend={true}
+                  />
                 </div>
               </div>
             </div>
