@@ -41,12 +41,13 @@ function InnerApp() {
 
       const card = e.target.closest(".project-card-3d");
       const clickable = e.target.closest("a, button, input[type='submit'], input[type='button'], .cursor-pointer");
+      const isNav = e.target.closest(".nav-container") || e.target.closest("nav");
 
       if (card) {
         dot.classList.add("button");
         dot.classList.remove("scale-150");
         dot.textContent = "🡕";
-      } else if (clickable) {
+      } else if (clickable && !isNav) {
         dot.classList.add("scale-150");
         dot.classList.remove("button");
         dot.textContent = "";
@@ -191,7 +192,9 @@ function InnerApp() {
           />
         </div>
         <div className="relative z-10">
-          <Header />
+          <AnimatePresence>
+            {showContent && <Header />}
+          </AnimatePresence>
           <main id="main-content">
             <Home showContent={showContent} />
             <Journey />

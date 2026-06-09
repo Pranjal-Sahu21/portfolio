@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home, Briefcase, Wrench, FolderGit2, Activity, Mail } from "lucide-react";
 import { scrollToSection } from "./utils/scrollToSection";
 import { useTheme } from "./context/ThemeContext";
 import AnimatedThemeToggler from "./components/AnimatedThemeToggler";
@@ -59,6 +59,16 @@ export default function Header() {
     },
   };
 
+  /* DOCK (DESKTOP) */
+  const dockVariants = {
+    hidden: { x: 80, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 80, damping: 20 },
+    },
+  };
+
   /* DRAWER FROM LEFT */
   const drawerVariants = {
     hidden: { x: "-100%" },
@@ -96,74 +106,103 @@ export default function Header() {
   };
 
   const navLinks = [
-    { id: "home", label: "Home" },
-    { id: "journey", label: "Journey" },
-    { id: "skills", label: "Skills" },
-    { id: "projects", label: "Projects" },
-    { id: "activity", label: "Activity" },
-    { id: "contact", label: "Contact" },
+    { id: "home", label: "Home", icon: Home },
+    { id: "journey", label: "Journey", icon: Briefcase },
+    { id: "skills", label: "Skills", icon: Wrench },
+    { id: "projects", label: "Projects", icon: FolderGit2 },
+    { id: "activity", label: "Activity", icon: Activity },
+    { id: "contact", label: "Contact", icon: Mail },
   ];
 
   return (
     <>
-      {/* Outer Centering Wrapper for floating navbar */}
-      <div className="fixed top-4 left-0 w-full flex justify-center z-[9000] px-[5vw] pointer-events-none">
-        <motion.nav
-          className="w-full max-w-[1100px] flex justify-between items-center px-6 py-3 bg-bg/60 backdrop-blur-md border border-primary/20 rounded-full shadow-lg transition-colors duration-300 pointer-events-auto"
-          variants={headerVariants}
+      {isDesktop ? (
+        /* DESKTOP SIDE VERTICAL DOCK */
+        <motion.div
+          variants={dockVariants}
           initial="hidden"
           animate="visible"
-          exit="hidden"
-          role="navigation"
-          aria-label="Main navigation"
+          className="nav-container fixed right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 z-[9000] pointer-events-none"
         >
-          {/* LOGO */}
-          <div className="flex items-center gap-3 font-syne font-bold">
-            <img 
-              src={logo} 
-              alt="Pranjal Sahu — Home" 
-              className="w-8 h-8 p-0.5 bg-white border border-primary/20 rounded-full z-10 shadow-sm" 
-            />
+          {/* NAV DOCK */}
+          <div className="pointer-events-auto flex flex-col gap-2.5 p-2 bg-bg/60 border border-primary/20 backdrop-blur-md rounded-full shadow-lg items-center">
+            {navLinks.map((link) => {
+              const LinkIcon = link.icon;
+              const isActive = activeSection === link.id;
+              return (
+                <motion.button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  whileHover={{ scale: 1.25, x: -8 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className={`group relative flex items-center justify-center p-2.5 rounded-full transition-colors duration-300 cursor-pointer h-10 w-10 ${
+                    isActive
+                      ? "bg-primary/10 text-primary border border-primary/20 shadow-xs"
+                      : "bg-transparent text-muted-text hover:text-primary border border-transparent"
+                  }`}
+                  aria-label={link.label}
+                >
+                  {/* Tooltip */}
+                  <span className="absolute right-12 top-1/2 -translate-y-1/2 bg-bg/95 border border-primary/20 text-light-text font-space font-medium text-xs px-2.5 py-1.5 rounded-md shadow-md opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 origin-right whitespace-nowrap">
+                    {link.label}
+                  </span>
+
+                  <LinkIcon size={16} />
+                </motion.button>
+              );
+            })}
           </div>
 
-          {/* RIGHT SIDE CONTAINER FOR NAV & TOGGLE */}
-          <div className="flex items-center gap-6 md:gap-8">
-            {/* DESKTOP */}
-            {isDesktop ? (
-              <ul className="flex gap-8 list-none m-0 p-0">
-                {navLinks.map((link) => (
-                  <li key={link.id}>
-                    <button
-                      onClick={() => scrollToSection(link.id, () => setMenuOpen(false))}
-                      className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-all duration-300 hover:text-primary hover:bg-transparent cursor-pointer relative pb-1 ${
-                        activeSection === link.id
-                          ? "text-primary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary after:rounded-full"
-                          : "text-muted-text"
-                      }`}
-                      {...(activeSection === link.id ? { "aria-current": "page" } : {})}
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-
-            {/* THEME TOGGLE BUTTON */}
+          {/* THEME TOGGLER */}
+          <div className="pointer-events-auto relative group">
+            {/* Tooltip */}
+            <span className="absolute right-14 top-1/2 -translate-y-1/2 bg-bg/95 border border-primary/20 text-light-text font-space font-medium text-xs px-2.5 py-1.5 rounded-md shadow-md opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 origin-right whitespace-nowrap">
+              {theme === "dark" ? "Light mode" : "Dark mode"}
+            </span>
             <AnimatedThemeToggler
               theme={theme}
               onThemeChange={toggleTheme}
+              className="w-11 h-11 rounded-full bg-bg/60 border border-primary/20 backdrop-blur-md shadow-md flex items-center justify-center text-light-text hover:text-primary transition-colors cursor-pointer"
             />
+          </div>
+        </motion.div>
+      ) : (
+        /* MOBILE TOP FLOATING PILL NAVBAR */
+        <div className="fixed top-4 left-0 w-full flex justify-center z-[9000] px-[5vw] pointer-events-none">
+          <motion.nav
+            className="nav-container w-full max-w-[1100px] flex justify-between items-center px-6 py-3 bg-bg/60 backdrop-blur-md border border-primary/20 rounded-full shadow-lg transition-colors duration-300 pointer-events-auto"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            role="navigation"
+            aria-label="Main navigation"
+          >
+            {/* LOGO */}
+            <div className="flex items-center gap-3 font-syne font-bold">
+              <img 
+                src={logo} 
+                alt="Pranjal Sahu — Home" 
+                className="w-8 h-8 p-0.5 bg-white border border-primary/20 rounded-full z-10 shadow-sm" 
+              />
+            </div>
 
-            {/* MOBILE MENU TRIGGER */}
-            {!isDesktop && (
+            {/* RIGHT SIDE CONTAINER FOR NAV & TOGGLE */}
+            <div className="flex items-center gap-6 md:gap-8">
+              {/* THEME TOGGLE BUTTON */}
+              <AnimatedThemeToggler
+                theme={theme}
+                onThemeChange={toggleTheme}
+              />
+
+              {/* MOBILE MENU TRIGGER */}
               <div className="cursor-pointer text-light-text z-[9999] flex items-center justify-center" onClick={toggleMenu}>
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </div>
-            )}
-          </div>
-        </motion.nav>
-      </div>
+            </div>
+          </motion.nav>
+        </div>
+      )}
 
       {/* MOBILE DRAWER */}
       <AnimatePresence>
