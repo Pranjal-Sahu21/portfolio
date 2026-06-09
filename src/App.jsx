@@ -13,8 +13,10 @@ import "lenis/dist/lenis.css";
 import "./index.css";
 import Loader from "./Loader";
 import { AnimatePresence } from "framer-motion";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
-export default function App() {
+function InnerApp() {
+  const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
@@ -176,12 +178,16 @@ export default function App() {
     <>
       <AnimatePresence>{loading && <Loader />}</AnimatePresence>
 
-      <div className={`min-h-screen w-full relative bg-black ${!showContent ? 'h-screen overflow-hidden' : ''}`}>
+      <div className={`min-h-screen w-full relative bg-bg transition-colors duration-300 ${!showContent ? 'h-screen overflow-hidden' : ''}`}>
         <div className="fixed inset-0 z-0 pointer-events-auto">
           <DotGrid 
-            activeColor="#d6d4d4ff" 
-            baseColor="#333333" 
+            activeColor={theme === "dark" ? "#d6d4d4ff" : "#333333"} 
+            baseColor={theme === "dark" ? "#333333" : "#e5e5e5"} 
             dotSize={2} 
+            proximity={70}
+            shockRadius={100}
+            shockStrength={3}
+            speedTrigger={150}
           />
         </div>
         <div className="relative z-10">
@@ -198,5 +204,13 @@ export default function App() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <InnerApp />
+    </ThemeProvider>
   );
 }

@@ -49,7 +49,7 @@ export default function Contact() {
 
 
   const inputClasses =
-    "w-full p-[14px_16px] border border-primary/10 rounded-lg bg-[#181818]/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-[inset_0_0_8px_rgba(0,0,0,0.6)] outline-none focus:border-primary resize-none box-border";
+    "w-full p-[14px_16px] border border-primary/10 rounded-lg bg-input-bg/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-none outline-none focus:border-primary resize-none box-border";
 
   const socialLinks = [
     { href: "https://www.instagram.com/prsahu_21/", icon: "fab fa-instagram", delay: "0s" },
@@ -81,7 +81,7 @@ export default function Contact() {
           <motion.form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="flex flex-col gap-4 p-5 md:p-[30px] w-full bg-[#181818]/65 rounded-[14px] shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-shadow duration-200 hover:shadow-[0_0_18px_rgba(0,0,0,0.7)]"
+            className="flex flex-col gap-4 p-5 md:p-[30px] w-full bg-input-bg/65 rounded-[14px] shadow-md transition-shadow duration-200 hover:shadow-lg"
             initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
             transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
@@ -91,7 +91,7 @@ export default function Contact() {
             <input type="text" name="subject" placeholder="Subject" aria-label="Message subject" className={inputClasses} required />
             <textarea name="message" rows="5" placeholder="Message" aria-label="Your message" className={inputClasses} required />
             <button
-              className="font-syne font-bold text-[1.05rem] py-[14px] px-[24px] bg-gradient-to-r from-primary to-accent text-black border-none rounded-lg cursor-pointer transition-all duration-300 shadow-[0_0_12px_rgba(192,192,192,0.5)] hover:shadow-[0_0_20px_rgba(192,192,192,0.8),0_0_35px_rgba(136,136,136,0.6)] active:scale-[0.95] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="font-syne font-bold text-[1.05rem] py-[14px] px-[24px] bg-gradient-to-r from-primary to-accent text-bg border-none rounded-lg cursor-pointer transition-all duration-300 shadow-md active:scale-[0.95] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
               disabled={isSubmitting}
             >
@@ -106,8 +106,8 @@ export default function Contact() {
         )}
 
         {/* Divider — vertical on desktop, horizontal on mobile */}
-        <div className="hidden md:block w-px bg-white/10 self-stretch mx-2" />
-        <div className="block md:hidden h-px bg-white/10 w-full" />
+        <div className="hidden md:block w-px bg-primary/10 self-stretch mx-2" />
+        <div className="block md:hidden h-px bg-primary/10 w-full" />
 
         {/* RIGHT — Contact Details */}
         <motion.div
@@ -148,7 +148,7 @@ export default function Contact() {
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block h-px bg-white/10 w-full"></div>
+          <div className="hidden md:block h-px bg-primary/10 w-full"></div>
 
           {/* Social Icons */}
           <div className="text-center md:text-left -mt-6 md:mt-0">
@@ -179,7 +179,7 @@ export default function Contact() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-[999]"
+            className="fixed inset-0 bg-bg/75 backdrop-blur-md flex items-center justify-center z-[999]"
             onClick={() => setIsSuccess(false)}
           >
             <motion.div
@@ -187,7 +187,7 @@ export default function Contact() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="bg-[#181818]/90 p-8 w-[90%] max-w-[360px] text-center text-light-text rounded-[14px] shadow-[0_12px_40px_-8px_rgba(0,0,0,0.6)]"
+              className="bg-input-bg/95 p-8 w-[90%] max-w-[360px] text-center text-light-text rounded-[14px] shadow-lg"
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="mb-3 text-primary text-[1.25rem] font-semibold shimmer-text font-syne">Message Sent!</h2>

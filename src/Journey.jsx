@@ -55,7 +55,7 @@ export default function Journey() {
         My Journey
       </motion.h2>
 
-      <div className="relative flex flex-col gap-[40px] md:gap-[60px] w-full max-w-[1024px] mx-auto mt-6 before:content-[''] before:absolute before:left-[12px] md:before:left-1/2 before:-translate-x-0 md:before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-1 before:bg-card-bg before:rounded-sm" ref={timelineRef}>
+      <div className="relative flex flex-col gap-[40px] md:gap-[60px] w-full max-w-[1024px] mx-auto mt-6 before:content-[''] before:absolute before:left-[12px] md:before:left-1/2 before:-translate-x-0 md:before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-1 before:bg-primary/20 before:rounded-sm" ref={timelineRef}>
         {journeyData.map((journey, index) => {
           const cardRef = useRef(null);
           const isCardInView = useInView(cardRef, {
@@ -69,7 +69,7 @@ export default function Journey() {
 
               <motion.div
                 ref={cardRef}
-                className={`relative w-[calc(100%-20px)] md:w-[49%] bg-[#181818]/90 rounded-[10px] shadow-[0_0_10px_rgba(0,0,0,0.5)] text-left p-[15px] md:p-5 transition-transform duration-300 hover:scale-[1.02] ml-[24px] ${index % 2 === 0 ? "md:ml-0 md:self-start" : "md:ml-auto md:self-end"}`}
+                className={`relative w-[calc(100%-20px)] md:w-[49%] bg-input-bg/90 rounded-[10px] shadow-md text-left p-[15px] md:p-5 transition-transform duration-300 hover:scale-[1.02] ml-[24px] ${index % 2 === 0 ? "md:ml-0 md:self-start" : "md:ml-auto md:self-end"}`}
                 variants={cardVariants(index)}
                 initial="hidden"
                 animate={isCardInView ? "visible" : "hidden"}

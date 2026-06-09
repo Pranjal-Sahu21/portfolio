@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import Silk from "./components/Silk/Silk";
 import { scrollToSection } from "./utils/scrollToSection";
+import { useTheme } from "./context/ThemeContext";
 
 export default function Home({ showContent = true }) {
+  const { theme } = useTheme();
   const firstName = "PRANJAL".split("");
   const lastName = "SAHU".split("");
 
@@ -12,9 +14,9 @@ export default function Home({ showContent = true }) {
       id="home"
     >
       {/* Silk Background */}
-      <div className="absolute inset-0 z-0 bg-[#272626]">
+      <div className="absolute inset-0 z-0 bg-[var(--bg-silk)] transition-colors duration-300">
         <Silk
-          color="#272626ff"
+          color={theme === "dark" ? "#272626" : "#ffffff"}
           speed={5}
           scale={1}
           noiseIntensity={1.5}
@@ -37,7 +39,7 @@ export default function Home({ showContent = true }) {
                 type: "spring",
                 stiffness: 90,
               }}
-              className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
+              className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-none dark:drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
               aria-hidden="true"
             >
               {char}
@@ -57,7 +59,7 @@ export default function Home({ showContent = true }) {
                 type: "spring",
                 stiffness: 90,
               }}
-              className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
+              className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-none dark:drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
               aria-hidden="true"
             >
               {char}
@@ -98,7 +100,7 @@ export default function Home({ showContent = true }) {
           href="https://drive.google.com/file/d/1F-si2fO7hcfAaoFkVtC_GNs2T3fJVMey/view?usp=drive_link"
           target="_blank"
           rel="noreferrer"
-          className="font-space font-semibold tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center bg-linear-to-br from-primary to-accent text-black border-none shadow-[0_8px_25px_rgba(192,192,192,0.25)]"
+          className="font-space font-semibold tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center bg-linear-to-br from-primary to-accent text-bg border-none shadow-md"
         >
           Download CV
         </a>

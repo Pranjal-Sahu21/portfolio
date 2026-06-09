@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
 import { Menu, X } from "lucide-react";
 import { scrollToSection } from "./utils/scrollToSection";
+import { useTheme } from "./context/ThemeContext";
+import AnimatedThemeToggler from "./components/AnimatedThemeToggler";
 
 export default function Header() {
+  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 992);
-  const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -40,11 +42,6 @@ export default function Header() {
             break;
           }
         }
-      }
-
-      const home = document.getElementById("home");
-      if (home) {
-        setShowHeader(window.scrollY > home.offsetHeight / 2);
       }
     };
 
@@ -108,10 +105,8 @@ export default function Header() {
   ];
 
   return (
-    <AnimatePresence>
-      {showHeader && (
-        <motion.nav
-          className="fixed top-0 left-0 w-full flex justify-between items-center px-[5vw] py-5 bg-[#121212]/60 backdrop-blur-md z-[1000] border-b border-primary/20"
+    <motion.nav
+          className="fixed top-0 left-0 w-full flex justify-between items-center px-[5vw] py-5 bg-bg/60 backdrop-blur-md z-[1000] border-b border-primary/20 transition-colors duration-300"
           variants={headerVariants}
           initial="hidden"
           animate="visible"
@@ -124,72 +119,87 @@ export default function Header() {
             <img 
               src={logo} 
               alt="Pranjal Sahu — Home" 
-              className="w-8 h-8 p-0.5 bg-primary rounded-full z-10 shadow-[0_0_10px_rgba(192,192,192,0.6),0_0_20px_rgba(192,192,192,0.4),0_0_40px_rgba(192,192,192,0.2)]" 
+              className="w-8 h-8 p-0.5 bg-white border border-primary/20 rounded-full z-10 shadow-sm" 
             />
           </div>
 
-          {/* DESKTOP */}
-          {isDesktop ? (
-            <ul className="flex gap-8 list-none">
-              {navLinks.map((link) => (
-                <li key={link.id}>
-                  <button
-                    onClick={() => scrollToSection(link.id, () => setMenuOpen(false))}
-                    className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-all duration-300 hover:text-white hover:bg-transparent cursor-pointer relative pb-1 ${activeSection === link.id ? "text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-white after:rounded-full drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]" : "text-[#666666]"}`}
-                    {...(activeSection === link.id ? { "aria-current": "page" } : {})}
-                  >
-                    {link.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <>
-              {/* MOBILE MENU */}
+          {/* RIGHT SIDE CONTAINER FOR NAV & TOGGLE */}
+          <div className="flex items-center gap-6 md:gap-8">
+            {/* DESKTOP */}
+            {isDesktop ? (
+              <ul className="flex gap-8 list-none m-0 p-0">
+                {navLinks.map((link) => (
+                  <li key={link.id}>
+                    <button
+                      onClick={() => scrollToSection(link.id, () => setMenuOpen(false))}
+                      className={`no-underline bg-transparent font-syne text-[0.9rem] font-bold transition-all duration-300 hover:text-primary hover:bg-transparent cursor-pointer relative pb-1 ${
+                        activeSection === link.id
+                          ? "text-primary after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary after:rounded-full"
+                          : "text-muted-text"
+                      }`}
+                      {...(activeSection === link.id ? { "aria-current": "page" } : {})}
+                    >
+                      {link.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+
+            {/* THEME TOGGLE BUTTON */}
+            <AnimatedThemeToggler
+              theme={theme}
+              onThemeChange={toggleTheme}
+            />
+
+            {/* MOBILE MENU TRIGGER */}
+            {!isDesktop && (
               <div className="cursor-pointer text-light-text z-[1100] flex items-center justify-center" onClick={toggleMenu}>
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </div>
+            )}
+          </div>
 
-              <AnimatePresence>
-                {menuOpen && (
-                  <>
-                    <motion.div
-                      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[900]"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      onClick={() => setMenuOpen(false)}
-                    />
+          <AnimatePresence>
+            {menuOpen && !isDesktop && (
+              <>
+                <motion.div
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[900]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setMenuOpen(false)}
+                />
 
-                    <motion.ul
-                      className="fixed top-0 left-0 h-screen w-full bg-black flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[1000]"
-                      variants={drawerVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                    >
-                      {navLinks.map((link) => (
-                        <motion.li key={link.id} variants={linkVariants}>
-                          <a
-                            href={`#${link.id}`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              scrollToSection(link.id, () => setMenuOpen(false));
-                            }}
-                            className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-white relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-white after:mt-1.5 after:transition-[width] after:duration-300 ${activeSection === link.id ? "text-white pl-4 border-l-[3px] border-white drop-shadow-[0_0_12px_rgba(255,255,255,0.5)]" : "text-[#555555]"}`}
-                          >
-                            {link.label}
-                          </a>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
-                  </>
-                )}
-              </AnimatePresence>
-            </>
-          )}
+                <motion.ul
+                  className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[1000] transition-colors duration-300"
+                  variants={drawerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  {navLinks.map((link) => (
+                    <motion.li key={link.id} variants={linkVariants}>
+                      <a
+                        href={`#${link.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToSection(link.id, () => setMenuOpen(false));
+                        }}
+                        className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
+                          activeSection === link.id
+                            ? "text-primary pl-4 border-l-[3px] border-primary"
+                            : "text-[#555555]"
+                        }`}
+                      >
+                        {link.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </>
+            )}
+          </AnimatePresence>
         </motion.nav>
-      )}
-    </AnimatePresence>
   );
 }

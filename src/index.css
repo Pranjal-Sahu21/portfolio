@@ -3,13 +3,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #ffffff;
-  --color-accent: #d4d4d4;
-  --color-bg: #121212;
-  --color-light-text: #f1f1f1;
-  --color-muted-text: #cccccc;
-  --color-card-bg: #2c2c2c;
-  --color-input-bg: #181818;
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-light-text: var(--light-text);
+  --color-muted-text: var(--muted-text);
+  --color-card-bg: var(--card-bg);
+  --color-input-bg: var(--input-bg);
   --font-syne: "Syne", sans-serif;
   --font-space: "Space Grotesk", sans-serif;
 }
@@ -18,11 +18,23 @@
   :root {
     --primary: #ffffff;
     --accent: #d4d4d4;
-    --bg: #121212;
+    --bg: #000000;
     --light-text: #f1f1f1;
     --muted-text: #cccccc;
-    --card-bg: #2c2c2c;
+    --card-bg: #111111;
     --input-bg: #181818;
+    --bg-silk: #272626;
+  }
+
+  :root.light {
+    --primary: #000000;
+    --accent: #555555;
+    --bg: #ffffff;
+    --light-text: #121212;
+    --muted-text: #666666;
+    --card-bg: #f9f9f9;
+    --input-bg: #f0f0f0;
+    --bg-silk: #eeeeee;
   }
 
   * {
@@ -35,7 +47,7 @@
   }
 
   body {
-    @apply bg-bg text-light-text flex flex-col min-h-screen relative;
+    @apply bg-bg text-light-text flex flex-col min-h-screen relative transition-colors duration-300;
     background-size: cover !important;
     background-attachment: fixed !important;
   }
@@ -140,6 +152,19 @@ input:-moz-autofill, textarea:-moz-autofill, select:-moz-autofill {
   text-shadow: 0 0 6px rgba(192, 192, 192, 0.7);
 }
 
-body {
-  background-color: #000000;
+/* removed hardcoded body background */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Scoped to AnimatedThemeToggler — the toggler sets the data-attribute and the variable only during a theme toggle. */
+html[data-magicui-theme-vt="active"]::view-transition-group(root) {
+  animation-duration: var(--magicui-theme-toggle-vt-duration);
+}
+
+html[data-magicui-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--magicui-theme-vt-clip-from);
 }

@@ -2,8 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { GitHubCalendar } from "react-github-calendar";
 import { ActivityCalendar } from "react-activity-calendar";
+import { useTheme } from "./context/ThemeContext";
 
 export default function Activity() {
+  const { theme } = useTheme();
   const headingRef = useRef(null);
   const headingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
@@ -15,7 +17,7 @@ export default function Activity() {
 
   // Custom monochromatic theme fitting the website design
   const explicitTheme = {
-    light: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+    light: ["#ebedf0", "#cccccc", "#999999", "#555555", "#000000"],
     dark: ["#181818", "#333333", "#666666", "#999999", "#ffffff"],
   };
 
@@ -310,25 +312,26 @@ export default function Activity() {
             cx="100"
             cy="100"
             r={radius}
-            stroke="rgba(255, 255, 255, 0.05)"
+            stroke="currentColor"
             strokeWidth="12"
             fill="transparent"
+            className="text-primary/5"
           />
           <circle
             cx="100"
             cy="100"
             r={radius}
-            stroke="white"
+            stroke="currentColor"
             strokeWidth="12"
             fill="transparent"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
-            className="transition-all duration-1000 ease-out"
+            className="text-primary transition-all duration-1000 ease-out"
           />
         </svg>
         <div className="absolute text-center flex flex-col justify-center items-center">
-          <span className="text-4xl md:text-5xl font-bold font-syne text-white leading-none">
+          <span className="text-4xl md:text-5xl font-bold font-syne text-primary leading-none">
             {solved}
           </span>
           <span className="block text-xs md:text-sm text-muted-text font-space uppercase tracking-wider mt-2.5">
@@ -362,7 +365,7 @@ export default function Activity() {
           initial={{ opacity: 0, y: 50 }}
           animate={githubInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
-          className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+          className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
         >
           {/* GitHub Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-primary/10 pb-4">
@@ -372,20 +375,20 @@ export default function Activity() {
                   href="https://github.com/pranjal-sahu21"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-muted-text font-medium cursor-pointer transition-colors duration-200"
+                  className="text-primary hover:text-muted-text font-medium cursor-pointer transition-colors duration-200"
                 >
                   @pranjal-sahu21
                 </a>{" "}
                 on Github{" "}
                 <img
-                  src="https://cdn.simpleicons.org/github/ffffff"
+                  src={`https://cdn.simpleicons.org/github/${theme === "dark" ? "ffffff" : "000000"}`}
                   alt="GitHub"
                   className="w-3.5 h-3.5 object-contain opacity-90"
                 />
               </p>
             </div>
             <div className="text-left sm:text-right font-space">
-              <div className="text-2xl font-bold text-white">365 Days</div>
+              <div className="text-2xl font-bold text-primary">365 Days</div>
               <div className="text-xs text-muted-text uppercase tracking-wider">
                 Activity Window
               </div>
@@ -397,7 +400,7 @@ export default function Activity() {
             <GitHubCalendar
               username="pranjal-sahu21"
               theme={explicitTheme}
-              colorScheme="dark"
+              colorScheme={theme}
               blockSize={14}
               blockMargin={4}
               fontSize={14}
@@ -419,7 +422,7 @@ export default function Activity() {
             damping: 20,
             delay: 0.1,
           }}
-          className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+          className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
         >
           {/* LeetCode Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-primary/10 pb-4">
@@ -429,13 +432,13 @@ export default function Activity() {
                   href="https://leetcode.com/u/Pranjal_1619"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-muted-text font-medium cursor-pointer transition-colors duration-200"
+                  className="text-primary hover:text-muted-text font-medium cursor-pointer transition-colors duration-200"
                 >
                   @pranjal_1619
                 </a>{" "}
                 on LeetCode{" "}
                 <img
-                  src="https://cdn.simpleicons.org/leetcode/ffffff"
+                  src={`https://cdn.simpleicons.org/leetcode/${theme === "dark" ? "ffffff" : "000000"}`}
                   alt="LeetCode"
                   className="w-3.5 h-3.5 object-contain opacity-90"
                 />
@@ -443,7 +446,7 @@ export default function Activity() {
             </div>
             {!loading && !error && leetcodeData && (
               <div className="text-left sm:text-right font-space">
-                <div className="text-2xl font-bold text-white">
+                <div className="text-2xl font-bold text-primary">
                   #{leetcodeData.ranking?.toLocaleString() || "N/A"}
                 </div>
                 <div className="text-xs text-muted-text uppercase tracking-wider">
@@ -482,7 +485,7 @@ export default function Activity() {
                   <ActivityCalendar
                     data={leetcodeCalendar}
                     theme={explicitTheme}
-                    colorScheme="dark"
+                    colorScheme={theme}
                     blockSize={14}
                     blockMargin={4}
                     fontSize={14}
@@ -494,7 +497,7 @@ export default function Activity() {
               {/* Stats Summary Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4">
                 {/* Circular Progress & Info */}
-                <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-8 xl:gap-10 bg-[#181818]/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full">
+                <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-8 xl:gap-10 bg-input-bg/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full">
                   {renderCircularProgress(
                     leetcodeData.totalSolved || 0,
                     leetcodeData.totalQuestions || 0,
@@ -505,38 +508,35 @@ export default function Activity() {
                         <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
                           Contest Rating
                         </span>
-                        <span className="text-white text-2xl font-bold font-syne flex items-baseline gap-1.5">
-                          {Math.round(
-                            leetcodeContest.userContestRanking.rating,
-                          )}
+                        <span className="text-primary text-2xl font-bold font-syne flex items-baseline gap-1.5">
+                          {Math.round(leetcodeContest.userContestRanking.rating)}
                           <span className="text-xs text-neutral-400 font-space font-normal">
-                            (Top{" "}
-                            {leetcodeContest.userContestRanking.topPercentage}%)
+                            (Top {leetcodeContest.userContestRanking.topPercentage}%)
                           </span>
                         </span>
                       </div>
                     )}
                     <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
                       <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
-                        Points
+                        Reputation
                       </span>
-                      <span className="text-white text-2xl font-bold font-syne">
-                        {leetcodeData.contributionPoint || 0}
+                      <span className="text-primary text-2xl font-bold font-syne">
+                        {leetcodeData.reputation || 0}
                       </span>
                     </div>
                     <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
                       <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
-                        Reputation
+                        Points
                       </span>
-                      <span className="text-white text-2xl font-bold font-syne">
-                        {leetcodeData.reputation || 0}
+                      <span className="text-primary text-2xl font-bold font-syne">
+                        {leetcodeData.contributionPoint || 0}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Difficulty Bars */}
-                <div className="lg:col-span-6 flex flex-col gap-6 bg-[#181818]/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full justify-center">
+                <div className="lg:col-span-6 flex flex-col gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full justify-center">
                   <div className="text-left font-space flex flex-col gap-6">
                     {/* Easy */}
                     <div>
@@ -548,7 +548,7 @@ export default function Activity() {
                           {leetcodeData.easySolved} / {leetcodeData.totalEasy}
                         </span>
                       </div>
-                      <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-primary/5">
+                      <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
                         <div
                           className="bg-neutral-500 h-full rounded-full transition-all duration-1000"
                           style={{
@@ -575,9 +575,9 @@ export default function Activity() {
                           {leetcodeData.totalMedium}
                         </span>
                       </div>
-                      <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-primary/5">
+                      <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
                         <div
-                          className="bg-neutral-300 h-full rounded-full transition-all duration-1000"
+                          className="bg-neutral-600 dark:bg-neutral-300 h-full rounded-full transition-all duration-1000"
                           style={{
                             width: `${
                               leetcodeData.totalMedium > 0
@@ -594,14 +594,14 @@ export default function Activity() {
                     {/* Hard */}
                     <div>
                       <div className="flex justify-between text-base mb-2">
-                        <span className="text-white font-semibold">Hard</span>
+                        <span className="text-primary font-semibold">Hard</span>
                         <span className="text-muted-text font-medium">
                           {leetcodeData.hardSolved} / {leetcodeData.totalHard}
                         </span>
                       </div>
-                      <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-primary/5">
+                      <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
                         <div
-                          className="bg-white h-full rounded-full transition-all duration-1000"
+                          className="bg-primary h-full rounded-full transition-all duration-1000"
                           style={{
                             width: `${
                               leetcodeData.totalHard > 0

@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { useTheme } from "./context/ThemeContext";
 
 import htmlLogo from "../assets/html-logo.png";
 import cssLogo from "../assets/css-logo.png";
@@ -15,6 +16,7 @@ import postmanLogo from "../assets/postman-logo.png";
 import typescriptLogo from "../assets/typescript-logo.webp";
 
 export default function Skills() {
+  const { theme } = useTheme();
   const allSkills = [
     { name: "HTML", img: htmlLogo },
     { name: "CSS", img: cssLogo },
@@ -30,7 +32,7 @@ export default function Skills() {
     },
     { name: "MongoDB", img: mongoLogo },
     { name: "MySQL", img: mySqlLogo },
-    { name: "Prisma", img: "https://cdn.simpleicons.org/prisma/ffffff" },
+    { name: "Prisma", img: `https://cdn.simpleicons.org/prisma/${theme === "dark" ? "ffffff" : "000000"}` },
     { name: "Drizzle", img: drizzleLogo },
     { name: "Postman", img: postmanLogo },
   ];

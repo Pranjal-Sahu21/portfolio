@@ -57,13 +57,16 @@ void main() {
 
   tex.y += 0.03 * sin(8.0 * tex.x - tOffset);
 
-  float pattern = 0.6 +
-                  0.4 * sin(5.0 * (tex.x + tex.y +
+  float minPattern = uColor.r > 0.8 ? 0.93 : 0.6;
+  float ampPattern = uColor.r > 0.8 ? 0.07 : 0.4;
+  float pattern = minPattern +
+                  ampPattern * sin(5.0 * (tex.x + tex.y +
                                    cos(3.0 * tex.x + 5.0 * tex.y) +
                                    0.02 * tOffset) +
                            sin(20.0 * (tex.x + tex.y - 0.1 * tOffset)));
 
-  vec4 col = vec4(uColor, 1.0) * vec4(pattern) - rnd / 15.0 * uNoiseIntensity;
+  float noiseScale = uColor.r > 0.8 ? 0.2 : 1.0;
+  vec4 col = vec4(uColor, 1.0) * vec4(pattern) - (rnd / 15.0) * uNoiseIntensity * noiseScale;
   col.a = 1.0;
   gl_FragColor = col;
 }

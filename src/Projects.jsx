@@ -74,7 +74,7 @@ export default function Projects() {
   const NextArrow = ({ onClick }) => (
     <div
       onClick={onClick}
-      className="absolute top-1/2 -translate-y-1/2 z-10 w-10.5 h-10.5 flex items-center justify-center bg-card-bg rounded-full cursor-pointer shadow-[0_8px_20px_rgba(0,0,0,0.35)] transition-all duration-200 -right-2.5 md:right-1.5 text-primary"
+      className="absolute top-1/2 -translate-y-1/2 z-10 w-10.5 h-10.5 flex items-center justify-center bg-card-bg rounded-full cursor-pointer shadow-md transition-all duration-200 -right-2.5 md:right-1.5 text-primary"
     >
       <ChevronRight size={18} />
     </div>
@@ -83,7 +83,7 @@ export default function Projects() {
   const PrevArrow = ({ onClick }) => (
     <div
       onClick={onClick}
-      className="absolute top-1/2 -translate-y-1/2 z-10 w-10.5 h-10.5 flex items-center justify-center bg-card-bg rounded-full cursor-pointer shadow-[0_8px_20px_rgba(0,0,0,0.35)] transition-all duration-200 left-2.5 md:left-1.5 text-primary"
+      className="absolute top-1/2 -translate-y-1/2 z-10 w-10.5 h-10.5 flex items-center justify-center bg-card-bg rounded-full cursor-pointer shadow-md transition-all duration-200 left-2.5 md:left-1.5 text-primary"
     >
       <ChevronLeft size={18} />
     </div>
@@ -133,7 +133,7 @@ export default function Projects() {
       </motion.h2>
 
       <div
-        className="w-full mt-12 relative overflow-visible md:overflow-hidden perspective-[1500px] md:transform md:-rotate-5 before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-black before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-black after:to-transparent"
+        className="w-full mt-12 relative overflow-visible md:overflow-hidden perspective-[1500px] md:transform md:-rotate-5 before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-bg before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-bg after:to-transparent"
         viewport={{ once: true, amount: 0.3 }}
       >
         {/* DESKTOP MARQUEE */}
@@ -153,7 +153,7 @@ export default function Projects() {
                 key={i}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-[0_0_80%] md:flex-[0_0_90%] max-w-125 h-auto aspect-5/4 bg-input-bg/90 rounded-2xl p-4 text-center text-white transform rotate-y-40 rotate-x-30 shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-transform duration-300 -ml-21 hover:cursor-none no-underline block project-card-3d"
+                className="flex-[0_0_80%] md:flex-[0_0_90%] max-w-125 h-auto aspect-5/4 bg-input-bg/90 rounded-2xl p-4 text-center text-light-text transform rotate-y-40 rotate-x-30 shadow-md transition-transform duration-300 -ml-21 hover:cursor-none no-underline block project-card-3d"
                 style={{ transform: "rotateY(40deg) rotateX(30deg)" }}
               >
                 <img
@@ -183,7 +183,7 @@ export default function Projects() {
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full max-w-120 md:max-w-[320px] mx-auto h-86 sm:h-97.5 bg-input-bg/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-[0_0_12px_rgba(0,0,0,0.6)] project-card-3d"
+                    className="block w-full max-w-120 md:max-w-[320px] mx-auto h-86 sm:h-97.5 bg-input-bg/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d"
                   >
                     <img
                       src={p.img}

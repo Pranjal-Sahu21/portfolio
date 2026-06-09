@@ -25,7 +25,7 @@ export default function Loader() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-full h-[100dvh] text-muted-text flex flex-col justify-center items-center z-[9999] overflow-hidden bg-[#191919]"
+      className="fixed top-0 left-0 w-full h-[100dvh] text-muted-text flex flex-col justify-center items-center z-[9999] overflow-hidden bg-bg"
       initial={{ y: 0 }}
       animate={{ y: 0 }}
       exit={{ y: "-100%" }}
