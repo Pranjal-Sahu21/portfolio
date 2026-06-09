@@ -25,7 +25,7 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const sections = ["home", "journey", "skills", "projects", "contact"];
+    const sections = ["home", "journey", "skills", "projects", "activity", "contact"];
 
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 2;
@@ -103,6 +103,7 @@ export default function Header() {
     { id: "journey", label: "Journey" },
     { id: "skills", label: "Skills" },
     { id: "projects", label: "Projects" },
+    { id: "activity", label: "Activity" },
     { id: "contact", label: "Contact" },
   ];
 

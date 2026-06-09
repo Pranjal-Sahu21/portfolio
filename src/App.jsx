@@ -4,6 +4,7 @@ import Home from "./Home";
 import Journey from "./Journey";
 import Skills from "./Skills";
 import Projects from "./Projects";
+import Activity from "./Activity";
 import Contact from "./Contact";
 import Footer from "./Footer";
 import DotGrid from "./components/DotGrid/DotGrid";
@@ -190,6 +191,7 @@ export default function App() {
             <Journey />
             <Skills />
             <Projects />
+            <Activity />
             <Contact />
           </main>
           <Footer />
