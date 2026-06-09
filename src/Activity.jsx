@@ -502,9 +502,9 @@ export default function Activity() {
                     leetcodeData.totalSolved || 0,
                     leetcodeData.totalQuestions || 0,
                   )}
-                  <div className="text-left font-space flex flex-col gap-5 flex-shrink-0">
+                  <div className="text-left font-space flex flex-row sm:flex-col flex-wrap gap-x-6 gap-y-4 justify-center sm:justify-start flex-shrink-0">
                     {leetcodeContest && leetcodeContest.userContestRanking && (
-                      <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
+                      <div className="border-l-[2px] sm:border-l-[3px] border-neutral-600 pl-3 sm:pl-5 py-0.5 sm:py-1">
                         <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
                           Contest Rating
                         </span>
@@ -516,7 +516,7 @@ export default function Activity() {
                         </span>
                       </div>
                     )}
-                    <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
+                    <div className="border-l-[2px] sm:border-l-[3px] border-neutral-600 pl-3 sm:pl-5 py-0.5 sm:py-1">
                       <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
                         Reputation
                       </span>
@@ -524,7 +524,7 @@ export default function Activity() {
                         {leetcodeData.reputation || 0}
                       </span>
                     </div>
-                    <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
+                    <div className="border-l-[2px] sm:border-l-[3px] border-neutral-600 pl-3 sm:pl-5 py-0.5 sm:py-1">
                       <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
                         Points
                       </span>
@@ -541,7 +541,7 @@ export default function Activity() {
                     {/* Easy */}
                     <div>
                       <div className="flex justify-between text-base mb-2">
-                        <span className="text-neutral-400 font-semibold">
+                        <span className="text-neutral-500 dark:text-neutral-400 font-semibold">
                           Easy
                         </span>
                         <span className="text-muted-text font-medium">
@@ -567,7 +567,7 @@ export default function Activity() {
                     {/* Medium */}
                     <div>
                       <div className="flex justify-between text-base mb-2">
-                        <span className="text-neutral-300 font-semibold">
+                        <span className="text-neutral-600 dark:text-neutral-300 font-semibold">
                           Medium
                         </span>
                         <span className="text-muted-text font-medium">

@@ -105,8 +105,11 @@ export default function Header() {
   ];
 
   return (
-    <motion.nav
-          className="fixed top-0 left-0 w-full flex justify-between items-center px-[5vw] py-5 bg-bg/60 backdrop-blur-md z-[1000] border-b border-primary/20 transition-colors duration-300"
+    <>
+      {/* Outer Centering Wrapper for floating navbar */}
+      <div className="fixed top-4 left-0 w-full flex justify-center z-[9000] px-[5vw] pointer-events-none">
+        <motion.nav
+          className="w-full max-w-[1100px] flex justify-between items-center px-6 py-3 bg-bg/60 backdrop-blur-md border border-primary/20 rounded-full shadow-lg transition-colors duration-300 pointer-events-auto"
           variants={headerVariants}
           initial="hidden"
           animate="visible"
@@ -154,52 +157,55 @@ export default function Header() {
 
             {/* MOBILE MENU TRIGGER */}
             {!isDesktop && (
-              <div className="cursor-pointer text-light-text z-[1100] flex items-center justify-center" onClick={toggleMenu}>
+              <div className="cursor-pointer text-light-text z-[9999] flex items-center justify-center" onClick={toggleMenu}>
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </div>
             )}
           </div>
-
-          <AnimatePresence>
-            {menuOpen && !isDesktop && (
-              <>
-                <motion.div
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[900]"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setMenuOpen(false)}
-                />
-
-                <motion.ul
-                  className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[1000] transition-colors duration-300"
-                  variants={drawerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  {navLinks.map((link) => (
-                    <motion.li key={link.id} variants={linkVariants}>
-                      <a
-                        href={`#${link.id}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          scrollToSection(link.id, () => setMenuOpen(false));
-                        }}
-                        className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
-                          activeSection === link.id
-                            ? "text-primary pl-4 border-l-[3px] border-primary"
-                            : "text-[#555555]"
-                        }`}
-                      >
-                        {link.label}
-                      </a>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-              </>
-            )}
-          </AnimatePresence>
         </motion.nav>
+      </div>
+
+      {/* MOBILE DRAWER */}
+      <AnimatePresence>
+        {menuOpen && !isDesktop && (
+          <>
+            <motion.div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-900"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
+            />
+
+            <motion.ul
+              className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[1000] transition-colors duration-300"
+              variants={drawerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              {navLinks.map((link) => (
+                <motion.li key={link.id} variants={linkVariants}>
+                  <a
+                    href={`#${link.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(link.id, () => setMenuOpen(false));
+                    }}
+                    className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
+                      activeSection === link.id
+                        ? "text-primary pl-4 border-l-[3px] border-primary"
+                        : "text-[#555555]"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
