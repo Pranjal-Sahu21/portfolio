@@ -62,10 +62,17 @@ export default function Journey() {
             once: true,
             margin: "-30% 0px",
           });
+          const isActive = journey.details.some((d) =>
+            d.toLowerCase().includes("present")
+          );
 
           return (
             <div key={index} className="relative w-full">
-              <div className="absolute left-[4px] md:left-1/2 translate-x-0 md:-translate-x-1/2 w-5 h-5 bg-primary rounded-full border-4 border-bg z-10"></div>
+              <div className="absolute left-[4px] md:left-1/2 translate-x-0 md:-translate-x-1/2 w-5 h-5 bg-primary rounded-full border-4 border-bg z-10 flex items-center justify-center">
+                {isActive && (
+                  <span className="absolute h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
+                )}
+              </div>
 
               <motion.div
                 ref={cardRef}
@@ -85,9 +92,11 @@ export default function Journey() {
                   </p>
                 ))}
                 {journey.grade.map((line, i) => (
-                  <p className="mt-6 text-[0.8rem] md:text-[0.9rem] xl:text-[0.85rem]" key={i}>
-                    {line}
-                  </p>
+                  <div className="mt-4 flex" key={i}>
+                    <span className="bg-primary/10 text-primary border border-primary/20 text-[0.75rem] md:text-[0.8rem] font-space font-medium px-3 py-1 rounded-full shadow-xs">
+                      {line}
+                    </span>
+                  </div>
                 ))}
               </motion.div>
             </div>
