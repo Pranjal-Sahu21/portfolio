@@ -54,8 +54,8 @@ export default function Activity() {
         setGithubLoading(true);
         setGithubError(null);
 
-        // Check local cache (v3 forces cache refresh)
-        const cached = getCachedData("github_stats_cache_v3");
+        // Check local cache (v5 forces cache refresh)
+        const cached = getCachedData("github_stats_cache_v5");
         if (cached) {
           setGithubStats(cached);
           setGithubLoading(false);
@@ -64,49 +64,63 @@ export default function Activity() {
 
         const headers = { Accept: "application/vnd.github.v3+json" };
 
-        // Fetch stats in parallel
-        const [profileRes, reposRes, streakRes, commitsRes, prsRes] =
-          await Promise.all([
-            fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
-            fetch(
-              "https://api.github.com/users/pranjal-sahu21/repos?per_page=100",
-              { headers },
-            ),
-            fetch(
-              "https://streak-stats.demolab.com?user=pranjal-sahu21&type=json",
-            ),
-            fetch(
-              "https://api.github.com/search/commits?q=author:pranjal-sahu21",
-              { headers },
-            ),
-            fetch(
-              "https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr",
-              { headers },
-            ),
-          ]);
+        // Fetch stats in parallel using allSettled to prevent failures in one endpoint from breaking the whole request
+        const results = await Promise.allSettled([
+          fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
+          fetch(
+            "https://api.github.com/users/pranjal-sahu21/repos?per_page=100",
+            { headers },
+          ),
+          fetch(
+            "https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr",
+            { headers },
+          ),
+        ]);
 
-        // Graceful fallbacks for individual failures (e.g. search rate limits)
-        const profile = profileRes.ok
-          ? await profileRes.json()
-          : { public_repos: 0, followers: 0 };
-        const repos = reposRes.ok ? await reposRes.json() : [];
-        const streak = streakRes.ok
-          ? await streakRes.json()
-          : {
-              totalContributions: 0,
-              currentStreak: { length: 0 },
-              longestStreak: { length: 0 },
-            };
-        const commits = commitsRes.ok
-          ? await commitsRes.json()
-          : { total_count: 0 };
-        const prs = prsRes.ok ? await prsRes.json() : { total_count: 0 };
+        const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
+        const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
+        const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
 
-        // Process top languages
+        // Ensure we got at least one of the basic profile/repo responses
+        if ((!profileRes || !profileRes.ok) && (!reposRes || !reposRes.ok)) {
+          throw new Error("GitHub API rate limit exceeded or network request failed.");
+        }
+
+        // Graceful fallbacks for individual failures (e.g. search rate limits or network issues)
+        let profile = { public_repos: 0, followers: 0 };
+        if (profileRes && profileRes.ok) {
+          try {
+            profile = await profileRes.json();
+          } catch (e) {
+            console.error("Error parsing profile:", e);
+          }
+        }
+
+        let repos = [];
+        if (reposRes && reposRes.ok) {
+          try {
+            repos = await reposRes.json();
+          } catch (e) {
+            console.error("Error parsing repos:", e);
+          }
+        }
+
+        let prs = { total_count: 0 };
+        if (prsRes && prsRes.ok) {
+          try {
+            prs = await prsRes.json();
+          } catch (e) {
+            console.error("Error parsing prs:", e);
+          }
+        }
+
+        // Process top languages and star counts
+        let totalStars = 0;
         const langCounts = {};
         let totalReposWithLang = 0;
         if (Array.isArray(repos)) {
           repos.forEach((repo) => {
+            totalStars += repo.stargazers_count || 0;
             if (repo.language) {
               langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
               totalReposWithLang++;
@@ -124,12 +138,9 @@ export default function Activity() {
           }));
 
         const compiledStats = {
-          publicRepos: profile.public_repos || 0,
+          publicRepos: profile.public_repos || (Array.isArray(repos) ? repos.length : 0),
           followers: profile.followers || 0,
-          totalContributions: streak.totalContributions || 0,
-          currentStreak: streak.currentStreak?.length || 0,
-          longestStreak: streak.longestStreak?.length || 0,
-          commitsCount: commits.total_count || 0,
+          totalStars,
           prsCount: prs.total_count || 0,
           languages: sortedLanguages.slice(0, 4),
           otherLanguagesCount: sortedLanguages
@@ -151,7 +162,7 @@ export default function Activity() {
         }
 
         if (active) {
-          setCachedData("github_stats_cache_v3", compiledStats);
+          setCachedData("github_stats_cache_v5", compiledStats);
           setGithubStats(compiledStats);
           setGithubLoading(false);
         }
@@ -407,13 +418,117 @@ export default function Activity() {
                 />
               </p>
             </div>
-            <div className="text-left sm:text-right font-space">
-              <div className="text-2xl font-bold text-primary">365 Days</div>
-              <div className="text-xs text-muted-text uppercase tracking-wider">
-                Activity Window
+          </div>
+
+          {githubLoading ? (
+            /* Skeleton Loader */
+            <div className="animate-pulse flex flex-col gap-8 py-4">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4 mb-8">
+                <div className="lg:col-span-6 h-56 bg-primary/5 border border-primary/10 rounded-xl"></div>
+                <div className="lg:col-span-6 h-56 bg-primary/5 border border-primary/10 rounded-xl"></div>
               </div>
             </div>
-          </div>
+          ) : githubError ? (
+            /* Error Fallback */
+            <div className="text-center py-6 font-space text-red-400 text-sm">
+              Failed to load some GitHub statistics, rendering contribution calendar only.
+            </div>
+          ) : githubStats ? (
+            /* GitHub Stats Summary Grid */
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4 mb-8">
+              {/* Left Panel: Stats Cards */}
+              <div className="lg:col-span-6 flex flex-col items-center justify-center gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
+                <div className="grid grid-cols-2 gap-3 w-full">
+                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                    <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      Public Repos
+                    </span>
+                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      {githubStats.publicRepos}
+                    </span>
+                  </div>
+                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                    <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      Total Stars
+                    </span>
+                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      {githubStats.totalStars}
+                    </span>
+                  </div>
+                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                    <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      Pull Requests
+                    </span>
+                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      {githubStats.prsCount}
+                    </span>
+                  </div>
+                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                    <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      Followers
+                    </span>
+                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      {githubStats.followers}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Panel: Languages (Pie Chart) */}
+              <div className="lg:col-span-6 flex flex-col justify-center bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
+                <div className="text-left font-space flex flex-col gap-4">
+                  <h3 className="text-primary font-syne font-bold text-lg mb-2">Top Languages</h3>
+                  {(() => {
+                    const themeColors = theme === "dark" 
+                      ? ["#ffffff", "#a3a3a3", "#737373", "#404040", "#262626"] 
+                      : ["#000000", "#525252", "#8e8e8e", "#c2c2c2", "#e5e5e5"];
+                    
+                    let cumulativePercentage = 0;
+                    const gradientSegments = [];
+                    githubStats.languages.forEach((lang, index) => {
+                      const start = cumulativePercentage;
+                      cumulativePercentage += lang.percentage;
+                      const end = cumulativePercentage;
+                      const color = themeColors[index % themeColors.length];
+                      gradientSegments.push(`${color} ${start.toFixed(1)}% ${end.toFixed(1)}%`);
+                    });
+
+                    // Fallback to empty gray circle if no languages found
+                    const conicGradientStyle = {
+                      background: gradientSegments.length > 0 
+                        ? `conic-gradient(${gradientSegments.join(", ")})` 
+                        : "currentColor",
+                    };
+
+                    return (
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
+                        {/* Pie Chart */}
+                        <div 
+                          className={`w-32 h-32 rounded-full border border-primary/10 shadow-xs flex-shrink-0 ${gradientSegments.length === 0 ? "text-primary/10" : ""}`}
+                          style={conicGradientStyle}
+                        />
+                        {/* Legend */}
+                        <div className="flex flex-col gap-2 w-full">
+                          {githubStats.languages.map((lang, index) => {
+                            const color = themeColors[index % themeColors.length];
+                            return (
+                              <div key={lang.name} className="flex items-center gap-2 text-sm">
+                                <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                                <span className="text-primary font-semibold">{lang.name}</span>
+                                <span className="text-muted-text font-normal text-xs ml-auto whitespace-nowrap">
+                                  {lang.count} {lang.count === 1 ? "repo" : "repos"} ({lang.percentage.toFixed(1)}%)
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
+          ) : null}
 
           {/* GitHub Heatmap Grid */}
           <div className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8">
