@@ -1,5 +1,6 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
+import { Mail, Phone, MapPin, Instagram, Linkedin, Github, Send } from "lucide-react";
 
 export default function Contact() {
   const ref = useRef(null);
@@ -47,25 +48,21 @@ export default function Contact() {
     }
   };
 
-
-  const inputClasses =
-    "w-full p-[14px_16px] border border-primary/10 rounded-lg bg-input-bg/85 text-light-text text-[1rem] font-space transition-all duration-300 shadow-none outline-none focus:border-primary resize-none box-border";
-
   const socialLinks = [
-    { href: "https://www.instagram.com/prsahu_21/", icon: "fab fa-instagram", delay: "0s" },
-    { href: "https://www.linkedin.com/in/pranjal-sahu-/", icon: "fab fa-linkedin", delay: "0.2s" },
-    { href: "https://github.com/Pranjal-Sahu21", icon: "fab fa-github", delay: "0.4s" },
+    { href: "https://www.instagram.com/prsahu_21/", icon: Instagram },
+    { href: "https://www.linkedin.com/in/pranjal-sahu-/", icon: Linkedin },
+    { href: "https://github.com/Pranjal-Sahu21", icon: Github },
   ];
 
   return (
     <section
       id="contact"
-      className="min-h-[100svh] flex flex-col justify-center items-center py-[120px] px-5 overflow-hidden text-center"
+      className="min-h-[100svh] flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative"
       ref={ref}
     >
-      {/* Heading — kept identical */}
+      {/* Heading */}
       <motion.h2
-        className="shimmer-text font-syne font-bold mb-[68px] text-[clamp(2rem,4vw,3rem)]"
+        className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
         initial={{ opacity: 0, y: 80 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
         transition={{ type: "spring", stiffness: 50, damping: 20 }}
@@ -73,99 +70,179 @@ export default function Contact() {
         Let's work together
       </motion.h2>
 
-      {/* Two-column on desktop, stacked on mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_1px_1fr] gap-10 md:gap-12 w-full max-w-[1000px] items-start text-left">
-
-        {/* LEFT — Contact Form */}
-        {!isSuccess && (
-          <motion.form
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 w-full max-w-[1100px] items-stretch text-left px-4">
+        
+        {/* RIGHT (on desktop) — Contact Form */}
+        <motion.div
+          className="flex flex-col justify-between w-full lg:order-2 lg:py-8 lg:px-4 lg:h-full"
+          initial={{ opacity: 0, x: 50 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+          transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
+        >
+          <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="flex flex-col gap-4 p-5 md:p-[30px] w-full bg-input-bg/65 rounded-[14px] shadow-md transition-shadow duration-200 hover:shadow-lg"
-            initial={{ opacity: 0, x: -60 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
-            transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
+            className="flex flex-col justify-between gap-6 w-full h-full"
           >
-            <input type="text" name="name" placeholder="Your Name" aria-label="Your name" className={inputClasses} required />
-            <input type="email" name="email" placeholder="Your Email" aria-label="Your email address" className={inputClasses} required />
-            <input type="text" name="subject" placeholder="Subject" aria-label="Message subject" className={inputClasses} required />
-            <textarea name="message" rows="5" placeholder="Message" aria-label="Your message" className={inputClasses} required />
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="name" className="text-muted-text font-space text-[0.7rem] uppercase tracking-wider pl-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Your Name"
+                  className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none rounded-none"
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="email" className="text-muted-text font-space text-[0.7rem] uppercase tracking-wider pl-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Your Email"
+                  className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none rounded-none"
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="subject" className="text-muted-text font-space text-[0.7rem] uppercase tracking-wider pl-1">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  placeholder="Message Subject"
+                  className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none rounded-none"
+                  required
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="message" className="text-muted-text font-space text-[0.7rem] uppercase tracking-wider pl-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  placeholder="Type your message here..."
+                  className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none resize-none rounded-none"
+                  required
+                />
+              </div>
+            </div>
+
             <button
-              className="font-syne font-bold text-[1.05rem] py-[14px] px-[24px] bg-gradient-to-r from-primary to-accent text-bg border-none rounded-lg cursor-pointer transition-all duration-300 shadow-md active:scale-[0.95] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="font-syne font-bold text-sm sm:text-base py-3.5 px-6 bg-primary text-bg border-none rounded-xl cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 mt-4 disabled:opacity-50 disabled:cursor-not-allowed select-none shadow-xs"
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Sending..." : "Send Message"}
+              {isSubmitting ? (
+                "Sending..."
+              ) : (
+                <>
+                  Send Message
+                  <Send size={15} />
+                </>
+              )}
             </button>
             {errorMsg && (
-              <p className="font-space text-[0.85rem] text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3 text-center">
+              <p className="font-space text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-center mt-2 leading-relaxed">
                 {errorMsg}
               </p>
             )}
-          </motion.form>
-        )}
+          </form>
+        </motion.div>
 
-        {/* Divider — vertical on desktop, horizontal on mobile */}
-        <div className="hidden md:block w-px bg-primary/10 self-stretch mx-2" />
-        <div className="block md:hidden h-px bg-primary/10 w-full" />
-
-        {/* RIGHT — Contact Details */}
+        {/* LEFT (on desktop) — Contact Details */}
         <motion.div
-          className="flex flex-col gap-8 justify-center"
-          initial={{ opacity: 0, x: 60 }}
-          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
+          className="flex flex-col justify-between w-full lg:order-1 lg:p-8 lg:bg-input-bg/40 lg:border lg:border-primary/5 lg:rounded-2xl lg:shadow-md lg:h-full"
+          initial={{ opacity: 0, x: -50 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.2 }}
         >
-          {/* Tagline */}
-          <div>
-            <h2 className="hidden md:block font-syne font-semibold text-[1.4rem] text-light-text mb-2">Get in Touch</h2>
-            <p className="hidden md:block font-space text-muted-text text-[0.95rem] leading-[1.7]">
-              Have a project in mind, a question, or just want to say hi? Fill out the form and I'll get back to you as soon as possible.
-            </p>
+          <div className="flex flex-col gap-8 w-full">
+            {/* Tagline */}
+            <div className="hidden lg:flex flex-col gap-3.5">
+              <h3 className="font-syne font-bold text-2xl text-primary">Get in Touch</h3>
+              <p className="font-space text-muted-text text-sm leading-relaxed">
+                Have an idea, project, or open position? Drop a line and let's create something extraordinary together.
+              </p>
+            </div>
+
+            {/* Contact Info Items */}
+            <div className="hidden lg:flex flex-col gap-4">
+              <a 
+                href="mailto:sahupranjal1619@gmail.com" 
+                className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-primary/30 rounded-xl p-4 flex items-center gap-4 hover:border-primary/20 hover:border-l-primary hover:bg-primary/[0.06] dark:hover:bg-primary/[0.08] hover:-translate-y-0.5 hover:shadow-sm transition-all duration-300 group no-underline"
+              >
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-primary/5 border border-primary/10 text-primary transition-all duration-300 group-hover:scale-105 group-hover:bg-primary/10 shrink-0">
+                  <Mail size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Email</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none">sahupranjal1619@gmail.com</p>
+                </div>
+              </a>
+
+              <a 
+                href="tel:+918895596189" 
+                className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-primary/30 rounded-xl p-4 flex items-center gap-4 hover:border-primary/20 hover:border-l-primary hover:bg-primary/[0.06] dark:hover:bg-primary/[0.08] hover:-translate-y-0.5 hover:shadow-sm transition-all duration-300 group no-underline"
+              >
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-primary/5 border border-primary/10 text-primary transition-all duration-300 group-hover:scale-105 group-hover:bg-primary/10 shrink-0">
+                  <Phone size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Phone</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none">+91 88955 96189</p>
+                </div>
+              </a>
+
+              <a 
+                href="https://maps.google.com/?q=Rourkela,+Odisha,+India" 
+                target="_blank"
+                rel="noreferrer"
+                className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-primary/30 rounded-xl p-4 flex items-center gap-4 hover:border-primary/20 hover:border-l-primary hover:bg-primary/[0.06] dark:hover:bg-primary/[0.08] hover:-translate-y-0.5 hover:shadow-sm transition-all duration-300 group no-underline"
+              >
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-primary/5 border border-primary/10 text-primary transition-all duration-300 group-hover:scale-105 group-hover:bg-primary/10 shrink-0">
+                  <MapPin size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Location</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none">Rourkela, Odisha, India</p>
+                </div>
+              </a>
+            </div>
           </div>
-
-          {/* Contact Info Items */}
-          <div className="hidden md:flex flex-col gap-5">
-            <a href="mailto:sahupranjal1619@gmail.com" className="flex items-center gap-4 group no-underline">
-              <div className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110 shrink-0">
-                <i className="fas fa-envelope text-base"></i>
-              </div>
-              <div>
-                <p className="font-syne text-[0.75rem] text-muted-text uppercase tracking-widest mb-0.5">Email</p>
-                <p className="font-space text-light-text text-[0.95rem] group-hover:text-primary transition-colors duration-300">sahupranjal1619@gmail.com</p>
-              </div>
-            </a>
-
-            <a href="tel:+918895596189" className="flex items-center gap-4 group no-underline">
-              <div className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110 shrink-0">
-                <i className="fas fa-phone text-base"></i>
-              </div>
-              <div>
-                <p className="font-syne text-[0.75rem] text-muted-text uppercase tracking-widest mb-0.5">Phone</p>
-                <p className="font-space text-light-text text-[0.95rem] group-hover:text-primary transition-colors duration-300">+91 88955 96189</p>
-              </div>
-            </a>
-          </div>
-
-          {/* Divider */}
-          <div className="hidden md:block h-px bg-primary/10 w-full"></div>
 
           {/* Social Icons */}
-          <div className="text-center md:text-left -mt-6 md:mt-0">
-            <p className="font-syne text-[0.75rem] text-muted-text uppercase tracking-widest mb-4">Find me on</p>
-            <div className="flex gap-2 justify-center md:justify-start">
-              {socialLinks.map((s) => (
-                <a
-                  key={s.href}
-                  href={s.href}
-                  target={s.href.startsWith("tel") ? undefined : "_blank"}
-                  rel={s.href.startsWith("tel") ? undefined : "noreferrer"}
-                  style={{ animationDelay: s.delay }}
-                  className="flex items-center justify-center bg-transparent text-muted-text text-xl"
-                >
-                  <i className={`${s.icon} w-11 h-11 mt-3 hover:scale-110 transition-all duration-300 hover:text-primary`}></i>
-                </a>
-              ))}
+          <div className="flex flex-col gap-3 text-center lg:text-left mt-6 lg:mt-0">
+            <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none">Find me on</p>
+            <div className="flex gap-3 mt-1 justify-center lg:justify-start">
+              {socialLinks.map((s, idx) => {
+                const SocialIcon = s.icon;
+                return (
+                  <a
+                    key={idx}
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 text-muted-text hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 shadow-xs"
+                  >
+                    <SocialIcon size={20} />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </motion.div>
@@ -179,7 +256,7 @@ export default function Contact() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-bg/75 backdrop-blur-md flex items-center justify-center z-[999]"
+            className="fixed inset-0 bg-bg/75 backdrop-blur-md flex items-center justify-center z-[9999]"
             onClick={() => setIsSuccess(false)}
           >
             <motion.div
@@ -187,15 +264,18 @@ export default function Contact() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="bg-input-bg/95 p-8 w-[90%] max-w-[360px] text-center text-light-text rounded-[14px] shadow-lg"
+              className="bg-input-bg/95 border border-primary/10 p-8 w-[90%] max-w-[380px] text-center text-primary rounded-2xl shadow-xl flex flex-col items-center gap-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="mb-3 text-primary text-[1.25rem] font-semibold shimmer-text font-syne">Message Sent!</h2>
-              <p className="text-muted-text mb-6 text-[0.9rem] leading-[1.4] pt-4 font-space">
-                Thanks for reaching out — I'll get back to you soon.
+              <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 border border-primary/20 text-primary mb-2">
+                <Mail size={22} />
+              </div>
+              <h2 className="text-xl font-bold font-syne shimmer-text leading-none">Message Sent!</h2>
+              <p className="text-muted-text text-sm font-space leading-relaxed">
+                Thank you for reaching out. I have received your message and will get back to you shortly.
               </p>
               <button
-                className="font-space py-2.5 px-5 bg-transparent border border-primary text-light-text rounded-md cursor-pointer transition-all duration-200 text-[0.9rem] hover:bg-bg"
+                className="font-space py-2.5 px-6 bg-primary text-bg font-semibold rounded-xl cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all duration-200 text-sm mt-2 w-full"
                 onClick={() => setIsSuccess(false)}
               >
                 Close
