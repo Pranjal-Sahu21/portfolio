@@ -52,8 +52,8 @@ export default function Activity() {
         setGithubLoading(true);
         setGithubError(null);
 
-        // Check local cache
-        const cached = getCachedData("github_stats_cache");
+        // Check local cache (v3 forces cache refresh)
+        const cached = getCachedData("github_stats_cache_v3");
         if (cached) {
           setGithubStats(cached);
           setGithubLoading(false);
@@ -149,7 +149,7 @@ export default function Activity() {
         }
 
         if (active) {
-          setCachedData("github_stats_cache", compiledStats);
+          setCachedData("github_stats_cache_v3", compiledStats);
           setGithubStats(compiledStats);
           setGithubLoading(false);
         }
@@ -172,6 +172,7 @@ export default function Activity() {
   // --- LEETCODE STATS FETCHING ---
   const [leetcodeData, setLeetcodeData] = useState(null);
   const [leetcodeCalendar, setLeetcodeCalendar] = useState([]);
+  const [leetcodeContest, setLeetcodeContest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -183,11 +184,12 @@ export default function Activity() {
         setLoading(true);
         setError(null);
 
-        // Check local cache
-        const cached = getCachedData("leetcode_stats_cache");
+        // Check local cache (v3 forces cache refresh)
+        const cached = getCachedData("leetcode_stats_cache_v3");
         if (cached) {
           setLeetcodeData(cached.data);
           setLeetcodeCalendar(cached.calendar);
+          setLeetcodeContest(cached.contest);
           setLoading(false);
           return;
         }
@@ -198,6 +200,19 @@ export default function Activity() {
         if (!res.ok) throw new Error("Failed to fetch LeetCode data");
         const data = await res.json();
 
+        // Optional fetch for contest ranking details (from separate API wrapper)
+        let contestData = null;
+        try {
+          const contestRes = await fetch(
+            "https://alfa-leetcode-api.onrender.com/userContestRankingInfo/Pranjal_1619",
+          );
+          if (contestRes.ok) {
+            contestData = await contestRes.json();
+          }
+        } catch (e) {
+          console.error("Contest rating fetch failed (optional):", e);
+        }
+
         if (active) {
           let formattedCalendar = [];
           if (data.submissionCalendar) {
@@ -207,11 +222,13 @@ export default function Activity() {
             setLeetcodeCalendar(formattedCalendar);
           }
           setLeetcodeData(data);
+          setLeetcodeContest(contestData);
 
           // Cache results
-          setCachedData("leetcode_stats_cache", {
+          setCachedData("leetcode_stats_cache_v3", {
             data,
             calendar: formattedCalendar,
+            contest: contestData,
           });
           setLoading(false);
         }
@@ -278,31 +295,31 @@ export default function Activity() {
 
   // SVGs / Circular Progress calculations
   const renderCircularProgress = (solved, total) => {
-    const radius = 46;
+    const radius = 80;
     const circumference = 2 * Math.PI * radius;
     const percentage = total > 0 ? (solved / total) * 100 : 0;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
-      <div className="relative w-32 h-32 flex items-center justify-center flex-shrink-0">
+      <div className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0">
         <svg
           className="w-full h-full transform -rotate-90"
-          viewBox="0 0 128 128"
+          viewBox="0 0 200 200"
         >
           <circle
-            cx="64"
-            cy="64"
+            cx="100"
+            cy="100"
             r={radius}
             stroke="rgba(255, 255, 255, 0.05)"
-            strokeWidth="8"
+            strokeWidth="12"
             fill="transparent"
           />
           <circle
-            cx="64"
-            cy="64"
+            cx="100"
+            cy="100"
             r={radius}
             stroke="white"
-            strokeWidth="8"
+            strokeWidth="12"
             fill="transparent"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
@@ -311,10 +328,10 @@ export default function Activity() {
           />
         </svg>
         <div className="absolute text-center flex flex-col justify-center items-center">
-          <span className="text-2xl font-bold font-syne text-white leading-none">
+          <span className="text-4xl md:text-5xl font-bold font-syne text-white leading-none">
             {solved}
           </span>
-          <span className="block text-[10px] text-muted-text font-space uppercase tracking-wider mt-1.5">
+          <span className="block text-xs md:text-sm text-muted-text font-space uppercase tracking-wider mt-2.5">
             / {total}
           </span>
         </div>
@@ -477,45 +494,61 @@ export default function Activity() {
               {/* Stats Summary Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4">
                 {/* Circular Progress & Info */}
-                <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-6 xl:gap-8 bg-[#181818]/40 border border-primary/5 rounded-xl p-6 md:p-8 h-full">
+                <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-8 xl:gap-10 bg-[#181818]/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full">
                   {renderCircularProgress(
                     leetcodeData.totalSolved || 0,
                     leetcodeData.totalQuestions || 0,
                   )}
-                  <div className="text-left font-space flex flex-col gap-4 flex-shrink-0">
-                    <div className="border-l-2 border-neutral-600 pl-4 py-0.5">
-                      <span className="text-muted-text text-[11px] uppercase tracking-wider block leading-none mb-1">
-                        Reputation
-                      </span>
-                      <span className="text-white text-xl font-bold font-syne">
-                        {leetcodeData.reputation || 0}
-                      </span>
-                    </div>
-                    <div className="border-l-2 border-neutral-600 pl-4 py-0.5">
-                      <span className="text-muted-text text-[11px] uppercase tracking-wider block leading-none mb-1">
+                  <div className="text-left font-space flex flex-col gap-5 flex-shrink-0">
+                    {leetcodeContest && leetcodeContest.userContestRanking && (
+                      <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
+                        <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
+                          Contest Rating
+                        </span>
+                        <span className="text-white text-2xl font-bold font-syne flex items-baseline gap-1.5">
+                          {Math.round(
+                            leetcodeContest.userContestRanking.rating,
+                          )}
+                          <span className="text-xs text-neutral-400 font-space font-normal">
+                            (Top{" "}
+                            {leetcodeContest.userContestRanking.topPercentage}%)
+                          </span>
+                        </span>
+                      </div>
+                    )}
+                    <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
+                      <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
                         Points
                       </span>
-                      <span className="text-white text-xl font-bold font-syne">
+                      <span className="text-white text-2xl font-bold font-syne">
                         {leetcodeData.contributionPoint || 0}
+                      </span>
+                    </div>
+                    <div className="border-l-[3px] border-neutral-600 pl-5 py-1">
+                      <span className="text-muted-text text-xs uppercase tracking-wider block leading-none mb-1.5">
+                        Reputation
+                      </span>
+                      <span className="text-white text-2xl font-bold font-syne">
+                        {leetcodeData.reputation || 0}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Difficulty Bars */}
-                <div className="lg:col-span-7 flex flex-col gap-6 bg-[#181818]/40 border border-primary/5 rounded-xl p-6 h-full justify-center">
-                  <div className="text-left font-space">
+                <div className="lg:col-span-6 flex flex-col gap-6 bg-[#181818]/40 border border-primary/5 rounded-xl p-8 md:p-10 h-full justify-center">
+                  <div className="text-left font-space flex flex-col gap-6">
                     {/* Easy */}
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-1.5">
+                    <div>
+                      <div className="flex justify-between text-base mb-2">
                         <span className="text-neutral-400 font-semibold">
                           Easy
                         </span>
-                        <span className="text-muted-text">
+                        <span className="text-muted-text font-medium">
                           {leetcodeData.easySolved} / {leetcodeData.totalEasy}
                         </span>
                       </div>
-                      <div className="w-full bg-black h-2 rounded-full overflow-hidden border border-primary/5">
+                      <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-primary/5">
                         <div
                           className="bg-neutral-500 h-full rounded-full transition-all duration-1000"
                           style={{
@@ -532,17 +565,17 @@ export default function Activity() {
                     </div>
 
                     {/* Medium */}
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-1.5">
+                    <div>
+                      <div className="flex justify-between text-base mb-2">
                         <span className="text-neutral-300 font-semibold">
                           Medium
                         </span>
-                        <span className="text-muted-text">
+                        <span className="text-muted-text font-medium">
                           {leetcodeData.mediumSolved} /{" "}
                           {leetcodeData.totalMedium}
                         </span>
                       </div>
-                      <div className="w-full bg-black h-2 rounded-full overflow-hidden border border-primary/5">
+                      <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-primary/5">
                         <div
                           className="bg-neutral-300 h-full rounded-full transition-all duration-1000"
                           style={{
@@ -560,13 +593,13 @@ export default function Activity() {
 
                     {/* Hard */}
                     <div>
-                      <div className="flex justify-between text-sm mb-1.5">
+                      <div className="flex justify-between text-base mb-2">
                         <span className="text-white font-semibold">Hard</span>
-                        <span className="text-muted-text">
+                        <span className="text-muted-text font-medium">
                           {leetcodeData.hardSolved} / {leetcodeData.totalHard}
                         </span>
                       </div>
-                      <div className="w-full bg-black h-2 rounded-full overflow-hidden border border-primary/5">
+                      <div className="w-full bg-black h-3 rounded-full overflow-hidden border border-primary/5">
                         <div
                           className="bg-white h-full rounded-full transition-all duration-1000"
                           style={{
