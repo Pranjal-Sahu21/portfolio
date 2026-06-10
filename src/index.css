@@ -59,8 +59,8 @@
   ::-webkit-scrollbar-thumb { @apply bg-primary rounded-lg; }
   ::-webkit-scrollbar-thumb:hover { @apply bg-muted-text; }
   
-  ::selection { background: var(--primary); color: rgb(41, 40, 40); }
-  ::-moz-selection { background: var(--primary); color: rgb(41, 40, 40); }
+  ::selection { background: var(--primary); color: var(--bg); }
+  ::-moz-selection { background: var(--primary); color: var(--bg); }
 
   h3, p, input::placeholder, textarea::placeholder, input, textarea {
     font-family: 'Space Grotesk', sans-serif !important;
