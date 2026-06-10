@@ -352,11 +352,11 @@ function InnerApp() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 7800);
 
     setTimeout(() => {
       setShowContent(true);
-    }, 5000);
+    }, 8800);
   }, []);
   return (
     <>

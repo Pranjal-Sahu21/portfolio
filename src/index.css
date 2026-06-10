@@ -143,6 +143,16 @@
   animation: legSwingRight var(--run-speed, 0.4s) linear infinite;
 }
 
+/* Arms swinging animation */
+.avatar-arm.left {
+  transform-origin: 11px 20px;
+  animation: legSwingRight var(--run-speed, 0.4s) linear infinite;
+}
+.avatar-arm.right {
+  transform-origin: 29px 20px;
+  animation: legSwingLeft var(--run-speed, 0.4s) linear infinite;
+}
+
 @keyframes legSwingLeft {
   0%, 100% { transform: rotate(-25deg); }
   50% { transform: rotate(25deg); }
@@ -158,7 +168,7 @@
 }
 
 /* Idle state */
-.cursor-avatar.idle .avatar-leg {
+.cursor-avatar.idle .avatar-leg, .cursor-avatar.idle .avatar-arm {
   animation-play-state: paused;
   transform: none;
 }
@@ -234,14 +244,6 @@
   @apply opacity-100 scale-100;
 }
 
-/* Interactive States: clickable hovers */
-.cursor-avatar.hover-clickable .avatar-visor {
-  fill: var(--accent);
-}
-
-.cursor-avatar.hover-project .avatar-visor {
-  fill: var(--accent);
-}
 
 /* Forms autofill styling */
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
