@@ -196,9 +196,9 @@ export default function Header() {
               />
 
               {/* MOBILE MENU TRIGGER */}
-              <div className="cursor-pointer text-light-text z-[9999] flex items-center justify-center" onClick={toggleMenu}>
-                {menuOpen ? <X size={20} /> : <Menu size={20} />}
-              </div>
+              <button className="cursor-pointer text-light-text flex items-center justify-center p-2 border-none bg-transparent" onClick={toggleMenu} aria-label="Open menu">
+                <Menu size={20} />
+              </button>
             </div>
           </motion.nav>
         </div>
@@ -209,7 +209,7 @@ export default function Header() {
         {menuOpen && !isDesktop && (
           <>
             <motion.div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-900"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9200]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -217,12 +217,21 @@ export default function Header() {
             />
 
             <motion.ul
-              className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[1000] transition-colors duration-300"
+              className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[9500] transition-colors duration-300"
               variants={drawerVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
             >
+              {/* CLOSE BUTTON */}
+              <button 
+                className="absolute top-8 right-[8vw] cursor-pointer text-light-text hover:text-primary transition-colors duration-300 flex items-center justify-center p-2 border-none bg-transparent"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
+
               {navLinks.map((link) => (
                 <motion.li key={link.id} variants={linkVariants}>
                   <a

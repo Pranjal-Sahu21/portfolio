@@ -198,16 +198,6 @@ export default function Activity() {
         setLoading(true);
         setError(null);
 
-        // Check local cache (v4 forces cache refresh)
-        const cached = getCachedData("leetcode_stats_cache_v4");
-        if (cached) {
-          setLeetcodeData(cached.data);
-          setLeetcodeCalendar(cached.calendar);
-          setLeetcodeContest(cached.contest);
-          setLeetcodeBadges(cached.badges);
-          setLoading(false);
-          return;
-        }
 
         const res = await fetch(
           "https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619",
@@ -253,13 +243,6 @@ export default function Activity() {
           setLeetcodeContest(contestData);
           setLeetcodeBadges(badgesData);
 
-          // Cache results
-          setCachedData("leetcode_stats_cache_v4", {
-            data,
-            calendar: formattedCalendar,
-            contest: contestData,
-            badges: badgesData,
-          });
           setLoading(false);
         }
       } catch (err) {
