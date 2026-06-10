@@ -7,7 +7,6 @@ import Projects from "./Projects";
 import Activity from "./Activity";
 import Contact from "./Contact";
 import Footer from "./Footer";
-import DotGrid from "./components/DotGrid/DotGrid";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./index.css";
@@ -364,17 +363,7 @@ function InnerApp() {
       <AnimatePresence>{loading && <Loader />}</AnimatePresence>
 
       <div className={`min-h-screen w-full relative bg-bg transition-colors duration-300 ${!showContent ? 'h-screen overflow-hidden' : ''}`}>
-        <div className="fixed inset-0 z-0 pointer-events-auto">
-          <DotGrid 
-            activeColor={theme === "dark" ? "#d6d4d4ff" : "#333333"} 
-            baseColor={theme === "dark" ? "#333333" : "#e5e5e5"} 
-            dotSize={2} 
-            proximity={70}
-            shockRadius={100}
-            shockStrength={3}
-            speedTrigger={150}
-          />
-        </div>
+
         <div className="relative z-10">
           <AnimatePresence>
             {showContent && <Header />}
