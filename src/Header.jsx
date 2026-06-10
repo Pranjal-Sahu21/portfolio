@@ -141,12 +141,8 @@ export default function Header() {
                       : "bg-transparent text-muted-text hover:text-primary border border-transparent"
                   }`}
                   aria-label={link.label}
+                  data-section={link.id}
                 >
-                  {/* Tooltip */}
-                  <span className="absolute right-12 top-1/2 -translate-y-1/2 bg-bg/95 border border-primary/20 text-light-text font-space font-medium text-xs px-2.5 py-1.5 rounded-md shadow-md opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 origin-right whitespace-nowrap">
-                    {link.label}
-                  </span>
-
                   <LinkIcon size={16} />
                 </motion.button>
               );
@@ -154,11 +150,7 @@ export default function Header() {
           </div>
 
           {/* THEME TOGGLER */}
-          <div className="pointer-events-auto relative group">
-            {/* Tooltip */}
-            <span className="absolute right-14 top-1/2 -translate-y-1/2 bg-bg/95 border border-primary/20 text-light-text font-space font-medium text-xs px-2.5 py-1.5 rounded-md shadow-md opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 origin-right whitespace-nowrap">
-              {theme === "dark" ? "Light mode" : "Dark mode"}
-            </span>
+          <div className="pointer-events-auto relative group" data-section="theme">
             <AnimatedThemeToggler
               theme={theme}
               onThemeChange={toggleTheme}
@@ -236,6 +228,7 @@ export default function Header() {
                 <motion.li key={link.id} variants={linkVariants}>
                   <a
                     href={`#${link.id}`}
+                    data-section={link.id}
                     onClick={(e) => {
                       e.preventDefault();
                       scrollToSection(link.id, () => setMenuOpen(false));
