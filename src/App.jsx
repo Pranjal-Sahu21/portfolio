@@ -100,6 +100,7 @@ function InnerApp() {
       const card = e.target.closest(".project-card-3d");
       const clickable = e.target.closest("a, button, input[type='submit'], input[type='button'], .cursor-pointer");
       const isNav = e.target.closest(".nav-container") || e.target.closest("nav");
+      const hoverTextElem = e.target.closest("[data-hover-text]");
 
       if (card) {
         dot.classList.add("hover-project");
@@ -165,6 +166,8 @@ function InnerApp() {
             currentHoverText = `Go to ${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}`;
           }
         }
+      } else if (hoverTextElem) {
+        currentHoverText = hoverTextElem.getAttribute("data-hover-text");
       }
 
       updateSpeechBubble();

@@ -133,8 +133,7 @@ export default function Header() {
                 <motion.button
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
-                  whileHover={{ scale: 1.25, x: -8 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  whileHover={{ scale: 1.05 }}
                   className={`group relative flex items-center justify-center p-2.5 rounded-full transition-colors duration-300 cursor-pointer h-10 w-10 ${
                     isActive
                       ? "bg-primary/10 text-primary border border-primary/20 shadow-xs"

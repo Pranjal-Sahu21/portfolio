@@ -217,7 +217,7 @@
 
 /* Speech bubble styling */
 .avatar-speech {
-  @apply absolute bottom-full mb-2 left-[70%] bg-primary text-bg font-space text-[0.75rem] px-3 py-1.5 rounded-xl shadow-md opacity-0 scale-75 pointer-events-none transition-all duration-300 origin-bottom-left whitespace-nowrap;
+  @apply absolute bottom-full mb-2 left-[70%] bg-primary text-bg font-space text-[0.75rem] px-3 py-1.5 rounded-xl shadow-md opacity-0 scale-75 pointer-events-none transition-all duration-300 origin-bottom-left whitespace-normal w-max max-w-[180px] text-left;
   transform: translateZ(0);
 }
 .avatar-speech::after {

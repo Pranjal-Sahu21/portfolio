@@ -380,6 +380,7 @@ export default function Activity() {
           animate={githubInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
           className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
+          data-hover-text="These are my GitHub stats!"
         >
           {/* GitHub Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-primary/10 pb-4">
@@ -541,6 +542,7 @@ export default function Activity() {
             delay: 0.1,
           }}
           className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
+          data-hover-text="These are my LeetCode stats!"
         >
           {/* LeetCode Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-primary/10 pb-4">

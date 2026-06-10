@@ -7,16 +7,19 @@ export default function Journey() {
       title: "National Institute Of Technology, Rourkela",
       details: ["B.Tech in Computer Science & Engineering", "(2024 - Present)"],
       grade: ["CGPA - 8.61"],
+      hoverText: "I am currently studying Computer Science here!",
     },
     {
       title: "SAI International School, Bhubaneswar",
       details: ["12th Boards", "(2022 - 2024)"],
       grade: ["Grade: 92.2%"],
+      hoverText: "I completed my senior secondary schooling here!",
     },
     {
       title: "Vikash Convent School, Karanjia",
       details: ["10th Boards", "(2021 - 2022)"],
       grade: ["Grade: 96.2%"],
+      hoverText: "I did my matriculation schooling here!",
     },
   ];
 
@@ -81,6 +84,7 @@ export default function Journey() {
                 initial="hidden"
                 animate={isCardInView ? "visible" : "hidden"}
                 whileHover={{ scale: 1.02 }}
+                data-hover-text={journey.hoverText}
               >
                 <h3 className="font-syne font-medium text-[1.1rem] md:text-[1.25rem] xl:text-[1.2rem] mb-[15px] md:mb-6">{journey.title}</h3>
                 {journey.details.map((line, i) => (
@@ -91,13 +95,26 @@ export default function Journey() {
                     {line}
                   </p>
                 ))}
-                {journey.grade.map((line, i) => (
-                  <div className="mt-4 flex" key={i}>
-                    <span className="bg-primary/10 text-primary border border-primary/20 text-[0.75rem] md:text-[0.8rem] font-space font-medium px-3 py-1 rounded-full shadow-xs">
-                      {line}
-                    </span>
-                  </div>
-                ))}
+                {journey.grade.map((line, i) => {
+                  let funnyText = "Not bad, right?";
+                  if (line.includes("8.61")) {
+                    funnyText = "I know it's less, but CSE is hard!";
+                  } else if (line.includes("92.2%")) {
+                    funnyText = "Chemistry stole my marks!";
+                  } else if (line.includes("96.2%")) {
+                    funnyText = "My peak academic performance!";
+                  }
+                  return (
+                    <div className="mt-4 flex" key={i}>
+                      <span 
+                        className="bg-primary/10 text-primary border border-primary/20 text-[0.75rem] md:text-[0.8rem] font-space font-medium px-3 py-1 rounded-full shadow-xs cursor-help"
+                        data-hover-text={funnyText}
+                      >
+                        {line}
+                      </span>
+                    </div>
+                  );
+                })}
               </motion.div>
             </div>
           );

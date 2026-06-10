@@ -61,6 +61,32 @@ export default function Skills() {
     },
   ];
 
+  const getSkillHoverText = (name) => {
+    switch (name) {
+      case "React.js": return "React.js: writing HTML inside JS because why not?";
+      case "JavaScript": return "JavaScript: where 1 + '1' is '11' and [] + [] is ''.";
+      case "TypeScript": return "TypeScript: helping me find bugs before production does.";
+      case "Java": return "Java: public static void main(String[] args)... typing this is a workout.";
+      case "C++": return "C++: pointers still give me nightmares sometimes.";
+      case "Python": return "Python: import antigravity; (Go ahead, try it in your Python shell!)";
+      case "HTML": return "HTML: yes, it is a programming language (please don't fight me).";
+      case "CSS": return "CSS: centering a div is my core superpower.";
+      case "Tailwind CSS": return "Tailwind CSS: because writing index.css files is so last year.";
+      case "Next.js": return "Next.js: SSR, SSG, ISR... so many letters, but it's great.";
+      case "Node.js": return "Node.js: running JavaScript outside the browser since 2009.";
+      case "Express.js": return "Express.js: making server routing look simple.";
+      case "PostgreSQL": return "PostgreSQL: the database that never breaks under pressure.";
+      case "MySQL": return "MySQL: the classic database that just gets the job done.";
+      case "MongoDB": return "MongoDB: storing JSON files directly because schemas are overrated.";
+      case "Git": return "Git: commit -m 'fixed bugs' is my life story.";
+      case "Docker": return "Docker: 'But it worked on my machine!' 'Then we'll ship your machine!'";
+      case "Prisma": return "Prisma: making database queries look like clean TypeScript.";
+      case "Drizzle": return "Drizzle: type-safe SQL queries without the heavy overhead.";
+      case "Postman": return "Postman: where I spend hours waiting for a 200 OK.";
+      default: return `I have coding experience with ${name}!`;
+    }
+  };
+
   const headingRef = useRef(null);
   const headingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
@@ -100,6 +126,7 @@ export default function Skills() {
                     key={skill.name}
                     whileHover={{ scale: 1.03, x: 4 }}
                     className="flex items-center gap-3 bg-input-bg/40 border border-primary/5 hover:border-primary/20 rounded-xl px-4 py-2.5 sm:py-3 shadow-xs select-none transition-all duration-300 w-auto sm:w-full"
+                    data-hover-text={getSkillHoverText(skill.name)}
                   >
                     <img
                       src={skill.img}

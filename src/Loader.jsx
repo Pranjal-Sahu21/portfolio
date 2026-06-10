@@ -56,7 +56,7 @@ export default function Loader() {
           {bubbleText && (
             <motion.div 
               key={bubbleText}
-              className="absolute bottom-[95%] left-1/2 -translate-x-1/2 md:bottom-[90%] md:left-[55%] md:translate-x-0 mb-3 bg-primary text-bg font-space text-[0.9rem] px-4 py-2.5 rounded-xl shadow-md whitespace-nowrap z-10"
+              className="absolute bottom-[95%] left-1/2 -translate-x-1/2 md:bottom-[90%] md:left-[55%] md:translate-x-0 mb-3 bg-primary text-bg font-space text-[0.9rem] px-4 py-2.5 rounded-xl shadow-md whitespace-normal w-max max-w-[240px] sm:max-w-[320px] text-left z-10"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}

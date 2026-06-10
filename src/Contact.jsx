@@ -95,6 +95,7 @@ export default function Contact() {
                   name="name"
                   placeholder="Your Name"
                   className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none rounded-none"
+                  data-hover-text="What should I call you?"
                   required
                 />
               </div>
@@ -109,6 +110,7 @@ export default function Contact() {
                   name="email"
                   placeholder="Your Email"
                   className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none rounded-none"
+                  data-hover-text="Where can I write back to you?"
                   required
                 />
               </div>
@@ -123,6 +125,7 @@ export default function Contact() {
                   name="subject"
                   placeholder="Message Subject"
                   className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none rounded-none"
+                  data-hover-text="Subject: 'I want to hire you!' (highly recommended)"
                   required
                 />
               </div>
@@ -137,6 +140,7 @@ export default function Contact() {
                   rows="4"
                   placeholder="Type your message here..."
                   className="bg-transparent border-t-0 border-x-0 border-b border-primary/15 hover:border-primary/30 focus:border-primary px-1 py-3 text-primary text-sm font-space placeholder-neutral-500/70 transition-all duration-300 w-full outline-none resize-none rounded-none"
+                  data-hover-text="Write away! I'm all ears (or whatever is inside this helmet!)."
                   required
                 />
               </div>

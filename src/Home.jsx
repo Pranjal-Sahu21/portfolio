@@ -26,7 +26,10 @@ export default function Home({ showContent = true }) {
       {showContent && (
         <>
           {/* NAME */}
-      <h1 className="relative z-10 font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap">
+      <h1
+        className="relative z-10 font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap"
+        data-hover-text="That is my name!"
+      >
         {/* FIRST LINE */}
         <motion.span className="flex" aria-label="Pranjal">
           {firstName.map((char, i) => (
@@ -74,6 +77,7 @@ export default function Home({ showContent = true }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
+        data-hover-text="That is what I do!"
       >
         Web Developer
       </motion.h2>
@@ -84,6 +88,7 @@ export default function Home({ showContent = true }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
+        data-hover-text="I love building beautiful websites!"
       >
         Crafting fast, interactive, and visually engaging web experiences using
         modern technologies and thoughtful design.
