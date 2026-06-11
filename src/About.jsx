@@ -199,7 +199,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="min-h-[100dvh] flex flex-col justify-center items-center py-24 px-5 text-center relative overflow-hidden bg-bg"
+      className="min-h-screen flex flex-col justify-center items-center py-24 px-5 text-center relative overflow-hidden bg-bg"
     >
       <motion.h2
         ref={headingRef}

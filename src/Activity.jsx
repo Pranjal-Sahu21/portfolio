@@ -362,7 +362,7 @@ export default function Activity() {
   return (
     <section
       id="activity"
-      className="min-h-[100svh] flex flex-col justify-center items-center py-20 px-5 text-center relative overflow-hidden"
+      className="min-h-screen flex flex-col justify-center items-center py-20 px-5 text-center relative overflow-hidden"
     >
       {/* Title */}
       <motion.h2

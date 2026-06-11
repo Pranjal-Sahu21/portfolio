@@ -79,6 +79,11 @@
 
   img, svg, i[class*="fa-"] {
     filter: grayscale(100%);
+    transition: filter 0.35s ease;
+  }
+
+  .project-card-3d:hover img {
+    filter: grayscale(0%);
   }
 }
 

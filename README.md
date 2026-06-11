@@ -1,106 +1,94 @@
 # 🌟 Portfolio Website
 
-A modern, interactive personal portfolio website built with React and powered by cutting-edge web technologies. Features smooth animations, responsive design, and a beautiful UI to showcase your projects and skills.
+A premium, interactive personal portfolio website built with React, styled with Tailwind CSS v4, and powered by modern web technologies. Features a custom animated character cursor avatar, dynamic Canvas-based ASCII art rendering, live API-integrated stats with caching, and a responsive timeline dashboard.
 
-![React](https://img.shields.io/badge/-React-blue?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/-Vite-purple?logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/-Vite-646CFF?logo=vite&logoColor=white)
+![TailwindCSS v4](https://img.shields.io/badge/-TailwindCSS%20v4-38B2AC?logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/-Framer%20Motion-FF007F?logo=framer&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
 ---
 
-![Preview](https://i.postimg.cc/vB555gWZ/portfolio.png)
+## ✨ Key Features
+
+- **👾 Interactive Character Cursor Avatar**: 
+  - A custom SVG-designed developer character follows the mouse pointer, walks and rotates dynamically, and squashes on click.
+  - Equipped with context-aware dialogue bubbles that deliver humorous developer Easter eggs, timeline commentary, and custom responses when hovering over headers, stats cards, and contact fields. Bypasses click animations on interactive elements.
+- **🖼️ Canvas-Based Braille ASCII Art Portrait**:
+  - Dynamically draws high-DPI Braille character maps on an HTML5 `<canvas>` container, scaling perfectly as an image (`w-full h-auto`) to bypass browser minimum font size limitations and eliminate mobile horizontal scroll overflow.
+  - Dual-themed: renders a sketch-style sketch mapping shadows in Light Mode, and a Floyd-Steinberg dithered detail mapping highlights in Dark Mode.
+- **📊 Live API Statistics (GitHub & LeetCode)**:
+  - Fetches overall GitHub contributions and LeetCode questions solved from public APIs.
+  - Automatically rounds counts down to the nearest hundred (e.g. `800+`, `700+`) and implements local storage caching for 24 hours to prevent API rate-limiting.
+- **🛣️ Animated timeline road**:
+  - Displays academic milestones along a dashed center-line roadbed that stays light/dark theme-consistent.
+  - Features a custom Space Rover vehicle that wiggles on engine start, drives smoothly from the bottom to the top milestone pin upon scroll entrance, and parks cleanly.
+- **📱 Fluid Responsiveness & Navigation Drawer**:
+  - Optimized for mobile viewports using clamping formulas (`text-[clamp(1.6rem,5.5vw,2.4rem)]` and `gap-[2.2vh]`) to prevent layout overflow in drawer overlays.
+  - Replaced dynamic viewport heights (`dvh`/`svh`) with fixed `screen`/`min-h-screen` units to eliminate scroll-triggered page jumps and layout shifts on mobile browsers.
+- **🎨 Aesthetic Card Reveals**:
+  - Sleek hover animation on Projects cards that smoothly transitions screenshot mockups from grayscale to their original full colors.
 
 ---
 
-## ✨ Features
+## 📂 Project Showcase
 
-- **📱 Fully Responsive Design** - Optimized for desktop, tablet, and mobile devices with adaptive navigation
-- **🎨 Smooth Animations** - Framer Motion animations for engaging scroll effects and transitions
-- **🖱️ Custom Cursor** - Interactive custom cursor with hover effects on project cards
-- **⚡ Smooth Scrolling** - Lenis integration for butter-smooth scroll experience
-- **🎪 Project Showcase** - Carousel-based project display with live links and descriptions:
-  - Genixor - An AI website builder SaaS app
-  - Crexo - An image generation AI SaaS app
-  - Snip - A modern URL shortener
-  - DevEvent - A developer event hub
-  - Voltmart - Quick-commerce web app
-  - ResuScope - AI-powered resume analyzer
-  - CheeType - Interactive typing test
-  - TasteGPT - Recipe recommendation engine
-
-- **💼 Skills Section** - Interactive skill showcase with logos for:
-  - **Frontend**: HTML, CSS, Tailwind CSS, Vanilla JS, React.js, Framer Motion, React Router
-  - **Backend**: Java, Python
-  - **Databases**: MySQL, MongoDB
-  - **Tools**: Postman
-- **📧 Contact Form** - Functional contact form with Formspree integration
-- **🎯 Smooth Navigation** - Sticky header with smooth section scrolling
-- **🌙 Modern UI** - Clean, professional design with consistent styling
+- **Genixor** — AI-powered custom website generator utilizing prompt-enhancing models.
+- **Crexo** — AI image generation SaaS platform with integrated credits and payments.
+- **Snip** — Modern URL shortener utilizing Next.js, PostgreSQL, and Drizzle ORM.
+- **DevEvent** — Developer event hub for hosting and booking seats.
+- **DummiStore** — Free public developer product catalog API.
+- **Voltmart** — Quick-commerce client application connected to DummiStore.
+- **CheeType** — Interactive typing test measuring speed and accuracy.
+- **TasteGPT** — Recipe recommendation engine powered by OpenAI.
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Dependencies
 
-### Core Framework
-- **React** (^19.1.1) - UI library for building interactive interfaces
+### Core
+- **React** (v19.1.1)
+- **Vite** (v7.1.2) - Next-generation frontend tooling
+- **Tailwind CSS v4** (v4.2.4) - Utility-first styling engine
 
-### Frontend Tools & Libraries
-- **Vite** (^7.1.2) - Ultra-fast build tool and dev server
-- **Framer Motion** (^12.23.12) - Animation library for smooth transitions
-- **Lenis** (^1.3.11) - High-performance smooth scrolling library
-- **React Slick** (^0.31.0) - Carousel component for project showcase
-- **Lucide React** (^0.562.0) - Minimalist icon library
-
-### Form & Communication
-- **@formspree/react** (^3.0.0) - Form backend service
-
-### Development Tools
-- **ESLint** (^9.33.0) - Code quality and style enforcement
-- **Vite Plugin React** (^5.0.0) - React support for Vite
+### Libraries
+- **Framer Motion** (v12.23.12) - Advanced layout and spring physics animations
+- **Lenis** (v1.3.11) - Fluid smooth scrolling mechanics
+- **React Slick** (v0.31.0) - Carousel layout for portfolio showcases
+- **React GitHub/Activity Calendar** - Dynamic Git/LeetCode contribution maps
+- **Three.js & React Three Fiber** - WebGL integration support
 
 ---
 
-## 📦 Key Dependencies
-
-```json
-{
-  "@formspree/react": "^3.0.0",
-  "framer-motion": "^12.23.12",
-  "lenis": "^1.3.11",
-  "lucide-react": "^0.562.0",
-  "react": "^19.1.1",
-  "react-dom": "^19.1.1",
-  "react-slick": "^0.31.0",
-  "slick-carousel": "^1.8.1"
-}
-```
-
----
-
-## 📁 Project Structure
+## 📁 Folder Structure
 
 ```
-portfolio-website/
-├── assets/                   # Images and static assets
+portfolio-website-main/
+├── assets/                    # Text ASCII art assets & images
+│   ├── ascii_art_dark.txt     # Braille ASCII art mapping for Dark Mode
+│   ├── ascii_art_light.txt    # Braille ASCII art mapping for Light Mode
+│   └── Non-ASCII.png          # High-resolution source photo
+│
+├── public/                    # Sitemap, robots.txt, and static root files
 │
 ├── src/
-│   ├── App.jsx              # Main app component
-│   ├── Header.jsx           # Navigation header
-│   ├── Home.jsx             # Hero section
-│   ├── Journey.jsx          # Professional journey section
-│   ├── Skills.jsx           # Skills showcase
-│   ├── Projects.jsx         # Featured projects carousel
-│   ├── Contact.jsx          # Contact form
-│   ├── Footer.jsx           # Footer component
-│   ├── main.jsx             # React entry point
-│   ├── style.css            # Global styles
-│   └── Home.css             # Home section styles
+│   ├── components/            # UI components (Silk background, loader)
+│   ├── context/               # React Theme context provider
+│   ├── utils/                 # Layout utilities and scroll anchors
+│   ├── App.jsx                # Main layout assembly
+│   ├── About.jsx              # About me grid, statistics, and canvas ASCII
+│   ├── Journey.jsx            # Road-styled vertical timeline section
+│   ├── Skills.jsx             # Grid categorized skills dashboard
+│   ├── Projects.jsx           # Cards carousel & hover transitions
+│   ├── Activity.jsx           # LeetCode/GitHub graphs & cards
+│   ├── Contact.jsx            # Formspree email submission page
+│   ├── index.css              # Custom Tailwind directives & base styles
+│   └── main.jsx               # React virtual DOM bootstrap
 │
-├── index.html               # HTML entry point
-├── vite.config.js           # Vite configuration
-├── eslint.config.js         # ESLint rules
-├── package.json             # Project dependencies and scripts
-└── README.md                # This file
+├── index.html                 # Main entry point & SEO metadata
+├── vite.config.js             # Vite configuration
+└── package.json               # Package configurations & commands
 ```
 
 ---
@@ -111,155 +99,27 @@ portfolio-website/
 - **Node.js** (v18 or higher)
 - **npm** or **yarn** package manager
 
-### Installation
+### Installation & Run
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd portfolio-website
+   cd portfolio-website-main
    ```
 
 2. **Install dependencies**
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. **Start the development server**
    ```bash
    npm run dev
    ```
-   The site will be available at `http://localhost:5173`
+   Open `http://localhost:5173` in your browser.
 
----
-
-## 📝 Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start the development server with hot module reloading |
-| `npm run build` | Create an optimized production build |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint to check code quality |
-
----
-
-## 🔧 Development
-
-### Key Features Implementation
-
-**Smooth Scrolling**
-- Integrated with Lenis for premium scroll experience
-- Automatic scroll-to-section navigation
-
-**Animations**
-- Framer Motion for scroll-triggered animations
-- Custom cursor interactions on hover
-- Staggered animations for UI elements
-
-**Responsive Design**
-- Mobile-first approach
-- Breakpoints optimized for different devices
-- Adaptive navigation menu (sidebar on mobile, navbar on desktop)
-
-**Form Integration**
-- Formspree backend for contact form submissions
-- Success/error state management
-
----
-
-## 🎨 Customization
-
-### Colors & Typography
-Edit `src/style.css` and `src/Home.css` to customize:
-- Color schemes
-- Font families
-- Spacing and sizing
-
-### Projects
-Update project data in `src/Projects.jsx`:
-```jsx
-const projects = [
-  {
-    title: "Your Project",
-    img: projectImage,
-    link: "https://your-link.com",
-    desc: "Project description"
-  },
-  // Add more projects...
-];
-```
-
-### Skills
-Modify skills in `src/Skills.jsx`:
-```jsx
-const allSkills = [
-  { name: "Technology Name", img: logoImage },
-  // Add more skills...
-];
-```
-
----
-
-## 🚀 Deployment
-
-### Build for Production
-```bash
-npm run build
-```
-
-### Deploy to Netlify (Recommended)
-1. Push your code to GitHub
-2. Connect your repository to Netlify
-3. Set build command to `npm run build`
-4. Set publish directory to `dist`
-
-### Alternative Hosting
-- **Vercel** - Zero-config deployment
-- **GitHub Pages** - Free hosting for static sites
-- **AWS Amplify** - Full-featured deployment
-
----
-
-## 📞 Contact & Social
-
-The portfolio includes a functional contact form for direct inquiries. Contact details are integrated through:
-- **Formspree** for form submissions
-
----
-
-## 🛠️ Troubleshooting
-
-### Development server not starting
-```bash
-npm install
-npm run dev
-```
-
-### Build errors
-```bash
-npm cache clean --force
-rm -rf node_modules package-lock.json
-npm install
-npm run build
-```
-
-### Linting errors
-```bash
-npm run lint
-# Fix automatically fixable issues
-npm run lint -- --fix
-```
-
----
-
-**Technologies Used:**
-- [React](https://react.dev) - UI library
-- [Vite](https://vitejs.dev) - Build tool
-- [Framer Motion](https://www.framer.com/motion) - Animation library
-- [Lenis](https://lenis.studiofreight.com) - Smooth scrolling
-- [Formspree](https://formspree.io) - Form backend
-
----
-
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+   Deploy the generated `dist` folder to Netlify, Vercel, or AWS Amplify.

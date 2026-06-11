@@ -57,7 +57,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-[100svh] flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative"
+      className="min-h-screen flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative"
       ref={ref}
     >
       {/* Heading */}

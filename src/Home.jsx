@@ -10,7 +10,7 @@ export default function Home({ showContent = true }) {
 
   return (
     <section
-      className="h-dvh w-full text-light-text flex flex-col justify-center items-start px-[5vw] overflow-hidden relative"
+      className="h-screen w-full text-light-text flex flex-col justify-center items-start px-[5vw] overflow-hidden relative"
       id="home"
     >
       {/* Silk Background */}

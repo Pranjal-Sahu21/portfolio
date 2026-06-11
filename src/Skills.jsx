@@ -92,7 +92,7 @@ export default function Skills() {
   const headingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
   return (
-    <section id="skills" className="min-h-[100dvh] flex flex-col justify-center items-center py-20 px-5 text-center relative overflow-hidden">
+    <section id="skills" className="min-h-screen flex flex-col justify-center items-center py-20 px-5 text-center relative overflow-hidden">
       <motion.h2
         ref={headingRef}
         className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"

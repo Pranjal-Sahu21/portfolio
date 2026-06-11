@@ -63,7 +63,7 @@ export default function Journey() {
   });
 
   return (
-    <section id="journey" className="min-h-[100svh] flex flex-col justify-center items-center pt-[120px] pb-10 px-5 overflow-hidden relative text-center">
+    <section id="journey" className="min-h-screen flex flex-col justify-center items-center pt-[120px] pb-10 px-5 overflow-hidden relative text-center">
       <motion.h2
         ref={headingRef}
         initial={{ opacity: 0, y: 40 }}
