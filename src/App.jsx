@@ -36,7 +36,7 @@ function InnerApp() {
       "My head is turning!",
       "Whoa, dizzy dizzy!",
       "Hold on, I'm gonna barf!",
-      "Please stop the wheel!",
+      "I am not a fidget spinner!",
       "I'm spinning out of control!"
     ];
 
@@ -204,7 +204,11 @@ function InnerApp() {
       }, 500);
     };
 
-    const handleMouseDown = () => {
+    const handleMouseDown = (e) => {
+      // Don't react to click if the cursor is over clickable elements like a, button, etc.
+      const clickable = e.target.closest("a, button, input, textarea, .cursor-pointer");
+      if (clickable) return;
+
       dot.classList.add("clicking");
       currentClickText = clickDialogues[Math.floor(Math.random() * clickDialogues.length)];
       updateSpeechBubble();
