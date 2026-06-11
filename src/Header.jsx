@@ -179,7 +179,7 @@ export default function Header() {
             </div>
 
             {/* RIGHT SIDE CONTAINER FOR NAV & TOGGLE */}
-            <div className="flex items-center gap-6 md:gap-8">
+            <div className="flex items-center gap-1 sm:gap-3 md:gap-8">
               {/* THEME TOGGLE BUTTON */}
               <AnimatedThemeToggler
                 theme={theme}

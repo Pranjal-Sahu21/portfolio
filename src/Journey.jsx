@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { MapPin } from "lucide-react";
 
 export default function Journey() {
   const journeyData = [
@@ -26,7 +27,22 @@ export default function Journey() {
   const headingRef = useRef(null);
   const isHeadingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [isDriving, setIsDriving] = useState(false);
   const timelineRef = useRef(null);
+  const timelineInView = useInView(timelineRef, { once: true, amount: 0.1 });
+
+  useEffect(() => {
+    if (timelineInView) {
+      setHasAnimated(true);
+      setIsDriving(true);
+      const timer = setTimeout(() => {
+        setIsDriving(false);
+      }, 2500); // 2.5s matches transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [timelineInView]);
+
   const cardVariants = (index) => ({
     hidden: {
       opacity: 0,
@@ -58,7 +74,60 @@ export default function Journey() {
         My Journey
       </motion.h2>
 
-      <div className="relative flex flex-col gap-[40px] md:gap-[60px] w-full max-w-[1024px] mx-auto mt-6 before:content-[''] before:absolute before:left-[12px] md:before:left-1/2 before:-translate-x-0 md:before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-1 before:bg-primary/20 before:rounded-sm" ref={timelineRef}>
+      <div 
+        className="relative flex flex-col gap-[40px] md:gap-[60px] w-full max-w-[1024px] mx-auto mt-6 before:content-[''] before:absolute before:left-[14px] md:before:left-1/2 before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-4 before:bg-neutral-200 dark:before:bg-neutral-800 before:border before:border-primary/10 before:rounded-full after:content-[''] after:absolute after:left-[14px] md:after:left-1/2 after:-translate-x-1/2 after:top-0 after:bottom-0 after:w-0 after:border-l-[2px] after:border-dashed after:border-neutral-400 dark:after:border-neutral-600 after:opacity-80" 
+        ref={timelineRef}
+      >
+        {/* Animated Space Rover Car */}
+        <motion.div
+          className="absolute left-[14px] md:left-1/2 z-20 pointer-events-none"
+          initial={{ top: "100%" }}
+          animate={hasAnimated ? { top: "24px" } : { top: "100%" }}
+          transition={{
+            duration: 2.5,
+            ease: "easeInOut",
+          }}
+          style={{
+            x: "-50%",
+            y: "-50%",
+          }}
+        >
+          <svg
+            width="28"
+            height="36"
+            viewBox="0 0 32 40"
+            className={`text-primary fill-bg ${isDriving ? "animate-rover" : ""}`}
+            style={{ overflow: "visible" }}
+          >
+            {/* Wheels */}
+            <rect x="1" y="6" width="4" height="8" rx="1.5" fill="var(--primary)" stroke="var(--bg)" strokeWidth="1" />
+            <rect x="27" y="6" width="4" height="8" rx="1.5" fill="var(--primary)" stroke="var(--bg)" strokeWidth="1" />
+            <rect x="1" y="26" width="4" height="8" rx="1.5" fill="var(--primary)" stroke="var(--bg)" strokeWidth="1" />
+            <rect x="27" y="26" width="4" height="8" rx="1.5" fill="var(--primary)" stroke="var(--bg)" strokeWidth="1" />
+            
+            {/* Wheel Axles */}
+            <line x1="5" y1="10" x2="27" y2="10" stroke="var(--bg)" strokeWidth="2" />
+            <line x1="5" y1="30" x2="27" y2="30" stroke="var(--bg)" strokeWidth="2" />
+            
+            {/* Main Chassis */}
+            <rect x="5" y="4" width="22" height="32" rx="4" fill="var(--primary)" stroke="var(--bg)" strokeWidth="2" />
+            
+            {/* Cabin/Visor */}
+            <rect x="9" y="10" width="14" height="12" rx="2" fill="var(--bg)" stroke="var(--primary)" strokeWidth="1" />
+            <rect x="10" y="12" width="12" height="8" rx="1" fill="none" stroke="var(--primary)" strokeWidth="1.5" />
+            
+            {/* Astronaut head inside cabin */}
+            <circle cx="16" cy="16" r="3" fill="var(--primary)" stroke="var(--bg)" strokeWidth="1.5" />
+            <rect x="14" y="15" width="4" height="2" rx="0.5" fill="var(--bg)" />
+            
+            {/* Rear Spoiler / Solar Panel */}
+            <rect x="8" y="32" width="16" height="3" rx="1" fill="var(--primary)" stroke="var(--bg)" strokeWidth="1" />
+            
+            {/* Antenna */}
+            <line x1="22" y1="8" x2="24" y2="5" stroke="var(--bg)" strokeWidth="1.5" />
+            <circle cx="24" cy="5" r="1" fill="var(--bg)" />
+          </svg>
+        </motion.div>
         {journeyData.map((journey, index) => {
           const cardRef = useRef(null);
           const isCardInView = useInView(cardRef, {
@@ -71,9 +140,10 @@ export default function Journey() {
 
           return (
             <div key={index} className="relative w-full">
-              <div className="absolute left-[4px] md:left-1/2 translate-x-0 md:-translate-x-1/2 w-5 h-5 bg-primary rounded-full border-4 border-bg z-10 flex items-center justify-center">
+              <div className="absolute left-[14px] md:left-1/2 -translate-x-1/2 -translate-y-1/2 top-[24px] z-10 flex items-center justify-center w-8 h-8">
+                <MapPin size={22} className="text-primary fill-bg" />
                 {isActive && (
-                  <span className="absolute h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
+                  <span className="absolute w-6 h-6 rounded-full bg-primary opacity-40 animate-ping" />
                 )}
               </div>
 

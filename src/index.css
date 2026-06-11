@@ -18,14 +18,14 @@
 
 @layer base {
   :root {
-    --primary: #ffffff;
-    --accent: #d4d4d4;
-    --bg: #000000;
-    --light-text: #f1f1f1;
-    --muted-text: #cccccc;
-    --card-bg: #111111;
-    --input-bg: #181818;
-    --bg-silk: #272626;
+    --primary: #000000;
+    --accent: #555555;
+    --bg: #ffffff;
+    --light-text: #121212;
+    --muted-text: #666666;
+    --card-bg: #f9f9f9;
+    --input-bg: #f0f0f0;
+    --bg-silk: #eeeeee;
   }
 
   :root.light {
@@ -37,6 +37,17 @@
     --card-bg: #f9f9f9;
     --input-bg: #f0f0f0;
     --bg-silk: #eeeeee;
+  }
+
+  :root.dark {
+    --primary: #ffffff;
+    --accent: #d4d4d4;
+    --bg: #000000;
+    --light-text: #f1f1f1;
+    --muted-text: #cccccc;
+    --card-bg: #111111;
+    --input-bg: #181818;
+    --bg-silk: #272626;
   }
 
   * {
@@ -281,4 +292,13 @@ html[data-magicui-theme-vt="active"]::view-transition-group(root) {
 
 html[data-magicui-theme-vt="active"]::view-transition-new(root) {
   clip-path: var(--magicui-theme-vt-clip-from);
+}
+
+/* Animated space rover styling for Journey section */
+@keyframes roverEngine {
+  0%, 100% { transform: translateY(0px) scaleY(1); }
+  50% { transform: translateY(-1.5px) scaleY(0.96); }
+}
+.animate-rover {
+  animation: roverEngine 0.12s linear infinite;
 }

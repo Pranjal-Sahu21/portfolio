@@ -132,7 +132,7 @@ function InnerApp() {
           currentHoverText = "Let's get in touch";
         } else if (sectionId === "theme") {
           const isLight = document.documentElement.classList.contains("light");
-          currentHoverText = isLight ? "Switch to dark mode" : "Switch to light mode";
+          currentHoverText = isLight ? "Join the Dark Side..." : "Return to the Light Side...";
         }
       } else if (clickable) {
         const text = clickable.textContent.trim().toLowerCase();

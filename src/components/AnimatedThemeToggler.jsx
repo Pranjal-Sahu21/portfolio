@@ -178,7 +178,7 @@ export default function AnimatedThemeToggler({
         onThemeChange?.(newTheme ? "dark" : "light");
       } else {
         setInternalIsDark(newTheme);
-        localStorage.setItem("theme", newTheme ? "dark" : "light");
+        localStorage.setItem("portfolio_theme", newTheme ? "dark" : "light");
       }
     };
 

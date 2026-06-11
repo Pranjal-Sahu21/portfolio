@@ -314,7 +314,10 @@ export default function Activity() {
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
-      <div className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0">
+      <div 
+        className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0 cursor-help"
+        data-hover-text="Solved: That's a lot of questions. I should probably touch some grass."
+      >
         <svg
           className="w-full h-full transform -rotate-90"
           viewBox="0 0 200 200"
@@ -380,7 +383,6 @@ export default function Activity() {
           animate={githubInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
           className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
-          data-hover-text="These are my GitHub stats!"
         >
           {/* GitHub Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-primary/10 pb-4">
@@ -423,7 +425,10 @@ export default function Activity() {
               {/* Left Panel: Stats Cards */}
               <div className="lg:col-span-6 flex flex-col items-center justify-center gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
                 <div className="grid grid-cols-2 gap-3 w-full">
-                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                  <div 
+                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    data-hover-text="Public Repos: Where my half-finished projects go to sleep forever."
+                  >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Public Repos
                     </span>
@@ -431,7 +436,10 @@ export default function Activity() {
                       {githubStats.publicRepos}
                     </span>
                   </div>
-                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                  <div 
+                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    data-hover-text="Total Stars: My self-worth is directly proportional to this number."
+                  >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Total Stars
                     </span>
@@ -439,7 +447,10 @@ export default function Activity() {
                       {githubStats.totalStars}
                     </span>
                   </div>
-                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                  <div 
+                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    data-hover-text="Pull Requests: Merging code and praying nothing breaks."
+                  >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Pull Requests
                     </span>
@@ -447,7 +458,10 @@ export default function Activity() {
                       {githubStats.prsCount}
                     </span>
                   </div>
-                  <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space">
+                  <div 
+                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    data-hover-text="Followers: We could fit comfortably in a single Git commit."
+                  >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Followers
                     </span>
@@ -459,7 +473,10 @@ export default function Activity() {
               </div>
 
               {/* Right Panel: Languages (Pie Chart) */}
-              <div className="lg:col-span-6 flex flex-col justify-center bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
+              <div 
+                className="lg:col-span-6 flex flex-col justify-center bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full"
+                data-hover-text="Top Languages: JavaScript is my true love, but TypeScript keeps me sane!"
+              >
                 <div className="text-left font-space flex flex-col gap-4">
                   <h3 className="text-primary font-syne font-bold text-lg mb-2">Top Languages</h3>
                   {(() => {
@@ -515,7 +532,10 @@ export default function Activity() {
           ) : null}
 
           {/* GitHub Heatmap Grid */}
-          <div className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8">
+          <div 
+            className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8 cursor-help"
+            data-hover-text="GitHub calendar: The denser it gets, the less of a social life I have."
+          >
             <GitHubCalendar
               username="pranjal-sahu21"
               theme={explicitTheme}
@@ -542,7 +562,6 @@ export default function Activity() {
             delay: 0.1,
           }}
           className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
-          data-hover-text="These are my LeetCode stats!"
         >
           {/* LeetCode Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 border-b border-primary/10 pb-4">
@@ -609,7 +628,10 @@ export default function Activity() {
                   )}
                   <div className="text-left font-space grid grid-cols-2 gap-3 w-full sm:w-auto flex-shrink-0">
                     {leetcodeContest && leetcodeContest.userContestRanking && (
-                      <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                      <div 
+                        className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                        data-hover-text="Contest Rating: I only play when I feel brave enough to hurt my rating."
+                      >
                         <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                           Contest Rating
                         </span>
@@ -624,7 +646,10 @@ export default function Activity() {
                         </span>
                       </div>
                     )}
-                    <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                    <div 
+                      className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                      data-hover-text="Reputation: My digital clout on LeetCode."
+                    >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Reputation
                       </span>
@@ -632,7 +657,10 @@ export default function Activity() {
                         {leetcodeData.reputation || 0}
                       </span>
                     </div>
-                    <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                    <div 
+                      className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                      data-hover-text="Contribution: I get points for talking about code, which is nice."
+                    >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Points
                       </span>
@@ -640,7 +668,10 @@ export default function Activity() {
                         {leetcodeData.contributionPoint || 0}
                       </span>
                     </div>
-                    <div className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs">
+                    <div 
+                      className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                      data-hover-text="Badges: Shiny medals for sitting in front of a monitor too long."
+                    >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Badges
                       </span>
@@ -655,7 +686,10 @@ export default function Activity() {
                 <div className="lg:col-span-6 flex flex-col gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full justify-center">
                   <div className="text-left font-space flex flex-col gap-6">
                     {/* Easy */}
-                    <div>
+                    <div 
+                      className="cursor-help" 
+                      data-hover-text="Easy questions: where I feel like a programming genius!"
+                    >
                       <div className="flex justify-between text-base mb-2">
                         <span className="text-neutral-500 dark:text-neutral-400 font-semibold">
                           Easy
@@ -681,7 +715,10 @@ export default function Activity() {
                     </div>
 
                     {/* Medium */}
-                    <div>
+                    <div 
+                      className="cursor-help" 
+                      data-hover-text="Medium questions: where I spend 2 hours writing 10 lines of code."
+                    >
                       <div className="flex justify-between text-base mb-2">
                         <span className="text-neutral-600 dark:text-neutral-300 font-semibold">
                           Medium
@@ -708,7 +745,10 @@ export default function Activity() {
                     </div>
 
                     {/* Hard */}
-                    <div>
+                    <div 
+                      className="cursor-help" 
+                      data-hover-text="Hard questions? I read the question, say 'nope', and click 'solutions'."
+                    >
                       <div className="flex justify-between text-base mb-2">
                         <span className="text-primary font-semibold">Hard</span>
                         <span className="text-muted-text font-medium">
@@ -736,7 +776,10 @@ export default function Activity() {
 
               {/* Heatmap Calendar */}
               <div className="w-full flex flex-col gap-2">
-                <div className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2">
+                <div 
+                  className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 cursor-help"
+                  data-hover-text="LeetCode calendar: Visual proof that I solve problems for job interviews."
+                >
                   <ActivityCalendar
                     data={leetcodeCalendar}
                     theme={explicitTheme}

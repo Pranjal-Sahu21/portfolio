@@ -4,9 +4,9 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem("theme");
+    const saved = localStorage.getItem("portfolio_theme");
     if (saved) return saved;
-    return "dark"; // Default theme is dark
+    return "light"; // Default theme is light
   });
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const ThemeProvider = ({ children }) => {
       root.classList.add("dark");
       root.classList.remove("light");
     }
-    localStorage.setItem("theme", theme);
+    localStorage.setItem("portfolio_theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
