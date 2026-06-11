@@ -379,8 +379,8 @@ export default function Activity() {
         {/* 1. GITHUB CALENDAR CARD */}
         <motion.div
           ref={githubRef}
-          initial={{ opacity: 0, y: 50 }}
-          animate={githubInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
+          animate={githubInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 50, filter: "blur(8px)" }}
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
           className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
         >
@@ -551,9 +551,9 @@ export default function Activity() {
         {/* 2. LEETCODE DASHBOARD CARD */}
         <motion.div
           ref={leetcodeRef}
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
           animate={
-            leetcodeInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
+            leetcodeInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 50, filter: "blur(8px)" }
           }
           transition={{
             type: "spring",

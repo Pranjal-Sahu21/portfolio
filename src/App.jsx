@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import Home from "./Home";
+import About from "./About";
 import Journey from "./Journey";
 import Skills from "./Skills";
 import Projects from "./Projects";
@@ -120,6 +121,8 @@ function InnerApp() {
       if (sectionId) {
         if (sectionId === "home") {
           currentHoverText = "Back to the beginning";
+        } else if (sectionId === "about") {
+          currentHoverText = "Get to know me a bit better";
         } else if (sectionId === "journey") {
           currentHoverText = "Explore my coding journey";
         } else if (sectionId === "skills") {
@@ -377,6 +380,7 @@ function InnerApp() {
           </AnimatePresence>
           <main id="main-content">
             <Home showContent={showContent} />
+            <About />
             <Journey />
             <Skills />
             <Projects />

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
-import { Menu, X, Home, Briefcase, Wrench, FolderGit2, Activity, Mail } from "lucide-react";
+import { Menu, X, Home, User, Briefcase, Wrench, FolderGit2, Activity, Mail } from "lucide-react";
 import { scrollToSection } from "./utils/scrollToSection";
 import { useTheme } from "./context/ThemeContext";
 import AnimatedThemeToggler from "./components/AnimatedThemeToggler";
@@ -27,7 +27,7 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const sections = ["home", "journey", "skills", "projects", "activity", "contact"];
+    const sections = ["home", "about", "journey", "skills", "projects", "activity", "contact"];
 
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 2;
@@ -107,6 +107,7 @@ export default function Header() {
 
   const navLinks = [
     { id: "home", label: "Home", icon: Home },
+    { id: "about", label: "About", icon: User },
     { id: "journey", label: "Journey", icon: Briefcase },
     { id: "skills", label: "Skills", icon: Wrench },
     { id: "projects", label: "Projects", icon: FolderGit2 },
@@ -208,7 +209,7 @@ export default function Header() {
             />
 
             <motion.ul
-              className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[25px] list-none z-[9500] transition-colors duration-300"
+              className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[2.2vh] list-none z-[9500] transition-colors duration-300"
               variants={drawerVariants}
               initial="hidden"
               animate="visible"
@@ -232,7 +233,7 @@ export default function Header() {
                       e.preventDefault();
                       scrollToSection(link.id, () => setMenuOpen(false));
                     }}
-                    className={`font-syne font-extrabold text-[clamp(2.5rem,8vw,4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
+                    className={`font-syne font-extrabold text-[clamp(1.6rem,5.5vw,2.4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
                       activeSection === link.id
                         ? "text-primary pl-4 border-l-[3px] border-primary"
                         : "text-[#555555]"

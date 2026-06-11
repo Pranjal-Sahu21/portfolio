@@ -48,16 +48,19 @@ export default function Journey() {
       opacity: 0,
       x: index % 2 === 0 ? -100 : 100,
       y: 0,
+      filter: "blur(8px)",
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
+      filter: "blur(0px)",
       transition: {
         type: "spring",
         stiffness: 50,
         damping: 20,
         opacity: { duration: 0.8, ease: "easeInOut" },
+        filter: { duration: 0.6, ease: "easeOut" },
       },
     },
   });

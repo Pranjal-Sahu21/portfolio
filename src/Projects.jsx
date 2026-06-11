@@ -16,6 +16,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const containerRef = useRef(null);
+  const isContainerInView = useInView(containerRef, { once: true, amount: 0.15 });
   const projects = [
     {
       title: "Genixor",
@@ -128,9 +130,12 @@ export default function Projects() {
         Featured Projects
       </motion.h2>
 
-      <div
+      <motion.div
+        ref={containerRef}
         className="w-full mt-12 relative overflow-visible md:overflow-hidden perspective-[1500px] md:transform md:-rotate-5 before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-bg before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-bg after:to-transparent"
-        viewport={{ once: true, amount: 0.3 }}
+        initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
+        animate={isContainerInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 50, filter: "blur(8px)" }}
+        transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.15 }}
       >
         {/* DESKTOP MARQUEE */}
         {!isMobile && (
@@ -199,7 +204,7 @@ export default function Projects() {
             </Slider>
           </div>
         )}
-      </div>
+      </motion.div>
     </section>
   );
 }
