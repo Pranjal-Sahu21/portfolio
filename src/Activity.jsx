@@ -316,7 +316,7 @@ export default function Activity() {
     return (
       <div 
         className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0 cursor-help"
-        data-hover-text="Solved: That's a lot of questions. I should probably touch some grass."
+        data-hover-text="That's a lot of questions. I should probably touch some grass."
       >
         <svg
           className="w-full h-full transform -rotate-90"
@@ -427,7 +427,7 @@ export default function Activity() {
                 <div className="grid grid-cols-2 gap-3 w-full">
                   <div 
                     className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
-                    data-hover-text="Public Repos: Where my half-finished projects go to sleep forever."
+                    data-hover-text="Public Repos: where my half-finished projects go to sleep forever."
                   >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Public Repos
@@ -534,7 +534,7 @@ export default function Activity() {
           {/* GitHub Heatmap Grid */}
           <div 
             className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8 cursor-help"
-            data-hover-text="GitHub calendar: The denser it gets, the less of a social life I have."
+            data-hover-text="The denser it gets, the less of a social life I have."
           >
             <GitHubCalendar
               username="pranjal-sahu21"
@@ -630,7 +630,7 @@ export default function Activity() {
                     {leetcodeContest && leetcodeContest.userContestRanking && (
                       <div 
                         className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
-                        data-hover-text="Contest Rating: I only play when I feel brave enough to hurt my rating."
+                        data-hover-text="I only play when I feel brave enough to hurt my rating."
                       >
                         <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                           Contest Rating
@@ -648,7 +648,7 @@ export default function Activity() {
                     )}
                     <div 
                       className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
-                      data-hover-text="Reputation: My digital clout on LeetCode."
+                      data-hover-text="People read my solution, take the idea, and vanish in O(1) time."
                     >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Reputation
@@ -659,7 +659,7 @@ export default function Activity() {
                     </div>
                     <div 
                       className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
-                      data-hover-text="Contribution: I get points for talking about code, which is nice."
+                      data-hover-text="Saving points for a T-shirt my grandchildren will redeem."
                     >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Points
@@ -670,7 +670,7 @@ export default function Activity() {
                     </div>
                     <div 
                       className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
-                      data-hover-text="Badges: Shiny medals for sitting in front of a monitor too long."
+                      data-hover-text="Shiny medals for sitting in front of a monitor too long."
                     >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Badges
@@ -747,7 +747,7 @@ export default function Activity() {
                     {/* Hard */}
                     <div 
                       className="cursor-help" 
-                      data-hover-text="Hard questions? I read the question, say 'nope', and click 'solutions'."
+                      data-hover-text="Hard questions: where the last testcase always gives TLE (Time Limit Exceeded)."
                     >
                       <div className="flex justify-between text-base mb-2">
                         <span className="text-primary font-semibold">Hard</span>
@@ -778,7 +778,7 @@ export default function Activity() {
               <div className="w-full flex flex-col gap-2">
                 <div 
                   className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 cursor-help"
-                  data-hover-text="LeetCode calendar: Visual proof that I solve problems for job interviews."
+                  data-hover-text="A visual representation of me crying in O(N log N) time complexity."
                 >
                   <ActivityCalendar
                     data={leetcodeCalendar}

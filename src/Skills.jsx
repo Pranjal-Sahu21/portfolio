@@ -14,6 +14,7 @@ import nextLogo from "../assets/next-js.png";
 import mongoLogo from "../assets/mongodb-logo.png";
 import postmanLogo from "../assets/postman-logo.png";
 import typescriptLogo from "../assets/typescript-logo.webp";
+import clogo from "../assets/C.svg"
 
 export default function Skills() {
   const { theme } = useTheme();
@@ -25,7 +26,7 @@ export default function Skills() {
         { name: "JavaScript", img: vanillaLogo },
         { name: "TypeScript", img: typescriptLogo },
         { name: "Java", img: javaLogo },
-        { name: "C++", img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" },
+        { name: "C", img: clogo },
         { name: "Python", img: "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" },
       ],
     },
@@ -67,7 +68,7 @@ export default function Skills() {
       case "JavaScript": return "JavaScript: where 1 + '1' is '11' and [] + [] is ''.";
       case "TypeScript": return "TypeScript: helping me find bugs before production does.";
       case "Java": return "Java: public static void main(String[] args)... typing this is a workout.";
-      case "C++": return "C++: pointers still give me nightmares sometimes.";
+      case "C": return "C: pointers still give me nightmares sometimes.";
       case "Python": return "Python: import antigravity; (Go ahead, try it in your Python shell!)";
       case "HTML": return "HTML: yes, it is a programming language (please don't fight me).";
       case "CSS": return "CSS: centering a div is my core superpower.";
