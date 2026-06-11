@@ -63,9 +63,9 @@ export default function Contact() {
       {/* Heading */}
       <motion.h2
         className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 80 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
-        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+        animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         Let's work together
       </motion.h2>

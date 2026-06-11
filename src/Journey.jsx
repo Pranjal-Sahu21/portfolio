@@ -66,9 +66,9 @@ export default function Journey() {
     <section id="journey" className="min-h-[100svh] flex flex-col justify-center items-center pt-[120px] pb-10 px-5 overflow-hidden relative text-center">
       <motion.h2
         ref={headingRef}
-        initial={{ opacity: 0, y: 80 }}
-        animate={isHeadingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
-        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+        animate={isHeadingInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         className="shimmer-text mb-[68px] font-syne font-bold text-[clamp(2rem,4vw,3rem)]"
       >
         My Journey
