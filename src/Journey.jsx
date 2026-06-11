@@ -48,19 +48,16 @@ export default function Journey() {
       opacity: 0,
       x: index % 2 === 0 ? -100 : 100,
       y: 0,
-      filter: "blur(8px)",
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
-      filter: "blur(0px)",
       transition: {
         type: "spring",
         stiffness: 50,
         damping: 20,
         opacity: { duration: 0.8, ease: "easeInOut" },
-        filter: { duration: 0.6, ease: "easeOut" },
       },
     },
   });
@@ -69,8 +66,8 @@ export default function Journey() {
     <section id="journey" className="min-h-[100svh] flex flex-col justify-center items-center pt-[120px] pb-10 px-5 overflow-hidden relative text-center">
       <motion.h2
         ref={headingRef}
-        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-        animate={isHeadingInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isHeadingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="shimmer-text mb-[68px] font-syne font-bold text-[clamp(2rem,4vw,3rem)]"
       >

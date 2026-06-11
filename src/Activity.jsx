@@ -368,8 +368,8 @@ export default function Activity() {
       <motion.h2
         ref={headingRef}
         className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-        animate={headingInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         Coding Activity
@@ -379,8 +379,8 @@ export default function Activity() {
         {/* 1. GITHUB CALENDAR CARD */}
         <motion.div
           ref={githubRef}
-          initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
-          animate={githubInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 50, filter: "blur(8px)" }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={githubInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
           className="w-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-6 md:p-8 shadow-md"
         >
@@ -551,9 +551,9 @@ export default function Activity() {
         {/* 2. LEETCODE DASHBOARD CARD */}
         <motion.div
           ref={leetcodeRef}
-          initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
+          initial={{ opacity: 0, y: 50 }}
           animate={
-            leetcodeInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 50, filter: "blur(8px)" }
+            leetcodeInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
           }
           transition={{
             type: "spring",

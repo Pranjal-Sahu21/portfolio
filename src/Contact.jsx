@@ -63,8 +63,8 @@ export default function Contact() {
       {/* Heading */}
       <motion.h2
         className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-        animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         Let's work together
@@ -75,8 +75,8 @@ export default function Contact() {
         {/* RIGHT (on desktop) — Contact Form */}
         <motion.div
           className="flex flex-col justify-between w-full lg:order-2 lg:py-8 lg:px-4 lg:h-full"
-          initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
-          animate={isInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: 50, filter: "blur(8px)" }}
+          initial={{ opacity: 0, x: 50 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
         >
           <form
@@ -171,8 +171,8 @@ export default function Contact() {
         {/* LEFT (on desktop) — Contact Details */}
         <motion.div
           className="flex flex-col justify-between w-full lg:order-1 lg:p-8 lg:bg-input-bg/40 lg:border lg:border-primary/5 lg:rounded-2xl lg:shadow-md lg:h-full"
-          initial={{ opacity: 0, x: -50, filter: "blur(8px)" }}
-          animate={isInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: -50, filter: "blur(8px)" }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.2 }}
         >
           <div className="flex flex-col gap-8 w-full">

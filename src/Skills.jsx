@@ -96,8 +96,8 @@ export default function Skills() {
       <motion.h2
         ref={headingRef}
         className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-        animate={headingInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         Skills & Expertise
@@ -112,8 +112,8 @@ export default function Skills() {
             <motion.div
               ref={categoryRef}
               key={category.title}
-              initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-              animate={isCategoryInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isCategoryInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
               transition={{ type: "spring", stiffness: 50, damping: 20, delay: idx * 0.1 }}
               className="flex flex-col gap-4"
             >

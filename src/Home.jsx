@@ -35,8 +35,8 @@ export default function Home({ showContent = true }) {
           {firstName.map((char, i) => (
             <motion.span
               key={i}
-              initial={{ y: 120, opacity: 0, filter: "blur(10px)" }}
-              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+              initial={{ y: 120, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
               transition={{
                 delay: i * 0.04,
                 type: "spring",
@@ -55,8 +55,8 @@ export default function Home({ showContent = true }) {
           {lastName.map((char, i) => (
             <motion.span
               key={i}
-              initial={{ y: 120, opacity: 0, filter: "blur(10px)" }}
-              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+              initial={{ y: 120, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
               transition={{
                 delay: 0.3 + i * 0.04, 
                 type: "spring",
@@ -74,8 +74,8 @@ export default function Home({ showContent = true }) {
 
       <motion.h2
         className="relative z-10 mt-7.5 font-space text-[0.9rem] tracking-[1.5px] uppercase bg-[linear-gradient(90deg,var(--primary),var(--accent),var(--primary))] bg-size-[200%_auto] bg-clip-text text-transparent animate-[roleGradient_2s_linear_infinite]"
-        initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
         data-hover-text="That is what I do!"
       >
@@ -85,8 +85,8 @@ export default function Home({ showContent = true }) {
       {/* DESCRIPTION */}
       <motion.p
         className="relative z-10 mt-5 max-w-125 font-space text-[1rem] leading-[1.7] text-muted-text"
-        initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
         data-hover-text="I love building beautiful websites!"
       >

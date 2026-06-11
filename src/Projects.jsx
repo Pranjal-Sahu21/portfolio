@@ -123,8 +123,8 @@ export default function Projects() {
       <motion.h2
         ref={ref}
         className="shimmer-text font-syne font-bold mb-17 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-        animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         Featured Projects
@@ -133,8 +133,8 @@ export default function Projects() {
       <motion.div
         ref={containerRef}
         className="w-full mt-12 relative overflow-visible md:overflow-hidden perspective-[1500px] md:transform md:-rotate-5 before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-bg before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-bg after:to-transparent"
-        initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
-        animate={isContainerInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 50, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={isContainerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
         transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.15 }}
       >
         {/* DESKTOP MARQUEE */}

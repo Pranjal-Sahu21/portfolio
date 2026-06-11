@@ -204,8 +204,8 @@ export default function About() {
       <motion.h2
         ref={headingRef}
         className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-        animate={isHeadingInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 40, filter: "blur(8px)" }}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isHeadingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         About Me
@@ -218,8 +218,8 @@ export default function About() {
         {/* Left Column: Portrait ASCII Art */}
         <motion.div
           className="md:col-span-5 flex justify-center items-center w-full"
-          initial={{ opacity: 0, x: -50, filter: "blur(8px)" }}
-          animate={isContentInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: -50, filter: "blur(8px)" }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={isContentInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
         >
           <div
@@ -233,8 +233,8 @@ export default function About() {
         {/* Right Column: Bio & Counter Stats */}
         <motion.div
           className="md:col-span-7 flex flex-col justify-start md:justify-between gap-6 md:gap-0 w-full py-1 md:h-full"
-          initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
-          animate={isContentInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: 50, filter: "blur(8px)" }}
+          initial={{ opacity: 0, x: 50 }}
+          animate={isContentInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
           transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
         >
           {/* Bio paragraph */}
