@@ -11,15 +11,15 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 992);
   const [activeSection, setActiveSection] = useState("home");
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
-
-  
 
   useEffect(() => {
     const handleResize = () => {
       const desktop = window.innerWidth > 992;
       setIsDesktop(desktop);
+      setScreenHeight(window.innerHeight);
       if (desktop) setMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
@@ -49,13 +49,99 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* HEADER */
-  const headerVariants = {
-    hidden: { y: -80, opacity: 0 },
-    visible: {
+  /* NAVBAR EXPANSION (MOBILE) */
+  const navbarVariants = {
+    hidden: {
+      y: -80,
+      opacity: 0,
+      top: "16px",
+      left: "5vw",
+      right: "5vw",
+      height: 56,
+      borderRadius: "28px",
+      padding: "12px 24px",
+      borderWidth: "1px",
+      borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
+      backgroundColor: theme === "dark" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)",
+    },
+    collapsed: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 80, damping: 20 },
+      top: "16px",
+      left: "5vw",
+      right: "5vw",
+      height: 56,
+      borderRadius: "28px",
+      padding: "12px 24px",
+      borderWidth: "1px",
+      borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
+      backgroundColor: theme === "dark" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)",
+      transition: {
+        type: "spring",
+        stiffness: 120,
+        damping: 22,
+      }
+    },
+    expanded: {
+      y: 0,
+      opacity: 1,
+      top: "16px",
+      left: "5vw",
+      right: "5vw",
+      height: screenHeight - 32,
+      borderRadius: "24px",
+      padding: "16px 24px 32px 24px",
+      borderWidth: "1px",
+      borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
+      backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
+      transition: {
+        type: "spring",
+        stiffness: 120,
+        damping: 22,
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      }
+    }
+  };
+
+  /* LINKS CONTAINER DISPLAY-BASED ANIMATION */
+  const containerVariants = {
+    hidden: {
+      opacity: 0,
+      display: "none",
+    },
+    collapsed: {
+      opacity: 0,
+      display: "none",
+      pointerEvents: "none",
+      transition: {
+        opacity: { duration: 0.15 },
+      }
+    },
+    expanded: {
+      opacity: 1,
+      display: "flex",
+      pointerEvents: "auto",
+      transition: {
+        opacity: { duration: 0.3 },
+        staggerChildren: 0.08,
+        delayChildren: 0.15,
+      }
+    }
+  };
+
+  /* LINKS ANIMATION */
+  const linkVariants = {
+    hidden: { opacity: 0, x: -40 },
+    collapsed: { 
+      opacity: 0, 
+      x: 0,
+      transition: { duration: 0.15 }
+    },
+    expanded: {
+      opacity: 1,
+      x: 0,
+      transition: { type: "spring", stiffness: 150, damping: 18 },
     },
   };
 
@@ -67,42 +153,6 @@ export default function Header() {
       opacity: 1,
       transition: { type: "spring", stiffness: 80, damping: 20 },
     },
-  };
-
-  /* DRAWER FROM LEFT */
-  const drawerVariants = {
-    hidden: { x: "-100%" },
-    visible: {
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 120,
-        damping: 20,
-        staggerChildren: 0.08,
-        when: "beforeChildren",
-      },
-    },
-    exit: {
-      x: "-100%",
-      transition: {
-        type: "spring",
-        stiffness: 120,
-        damping: 20,
-        staggerChildren: 0.05,
-        staggerDirection: -1,
-      },
-    },
-  };
-
-  /* LINKS ANIMATION */
-  const linkVariants = {
-    hidden: { opacity: 0, x: -40 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { type: "spring", stiffness: 200, damping: 18 },
-    },
-    exit: { opacity: 0, x: -40 },
   };
 
   const navLinks = [
@@ -159,71 +209,64 @@ export default function Header() {
           </div>
         </motion.div>
       ) : (
-        /* MOBILE TOP FLOATING PILL NAVBAR */
-        <div className="fixed top-4 left-0 w-full flex justify-center z-[9000] px-[5vw] pointer-events-none">
+        /* MOBILE TOP FLOATING PILL NAVBAR THAT EXPANDS INTO FULLSCREEN */
+        <>
+          {/* BACKGROUND BLUR OVERLAY */}
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9200]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setMenuOpen(false)}
+              />
+            )}
+          </AnimatePresence>
+
           <motion.nav
-            className="nav-container w-full max-w-[1100px] flex justify-between items-center px-6 py-3 bg-bg/60 backdrop-blur-md border border-primary/20 rounded-full shadow-lg transition-colors duration-300 pointer-events-auto"
-            variants={headerVariants}
+            variants={navbarVariants}
             initial="hidden"
-            animate="visible"
-            exit="hidden"
+            animate={menuOpen ? "expanded" : "collapsed"}
+            className="fixed backdrop-blur-md shadow-lg pointer-events-auto z-[9500] flex flex-col overflow-hidden"
             role="navigation"
             aria-label="Main navigation"
           >
-            {/* LOGO */}
-            <div className="flex items-center gap-3 font-syne font-bold">
-              <img 
-                src={logo} 
-                alt="Pranjal Sahu — Home" 
-                className="w-8 h-8 p-0.5 bg-white border border-primary/20 rounded-full z-10 shadow-sm" 
-              />
+            {/* HEADER ROW */}
+            <div className="flex justify-between items-center w-full h-8 shrink-0">
+              {/* LOGO */}
+              <div className="flex items-center gap-3 font-syne font-bold">
+                <img 
+                  src={logo} 
+                  alt="Pranjal Sahu — Home" 
+                  className="w-8 h-8 p-0.5 bg-white border border-primary/20 rounded-full shadow-sm" 
+                />
+              </div>
+
+              {/* RIGHT SIDE CONTAINER FOR TOGGLE & MENU/CLOSE */}
+              <div className="flex items-center gap-3">
+                {/* THEME TOGGLE BUTTON */}
+                <AnimatedThemeToggler
+                  theme={theme}
+                  onThemeChange={toggleTheme}
+                />
+
+                {/* MOBILE MENU TRIGGER */}
+                <button 
+                  className="cursor-pointer text-light-text flex items-center justify-center p-2 border-none bg-transparent active:scale-95 transition-transform" 
+                  onClick={toggleMenu} 
+                  aria-label={menuOpen ? "Close menu" : "Open menu"}
+                >
+                  {menuOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </div>
             </div>
 
-            {/* RIGHT SIDE CONTAINER FOR NAV & TOGGLE */}
-            <div className="flex items-center gap-1 sm:gap-3 md:gap-8">
-              {/* THEME TOGGLE BUTTON */}
-              <AnimatedThemeToggler
-                theme={theme}
-                onThemeChange={toggleTheme}
-              />
-
-              {/* MOBILE MENU TRIGGER */}
-              <button className="cursor-pointer text-light-text flex items-center justify-center p-2 border-none bg-transparent" onClick={toggleMenu} aria-label="Open menu">
-                <Menu size={20} />
-              </button>
-            </div>
-          </motion.nav>
-        </div>
-      )}
-
-      {/* MOBILE DRAWER */}
-      <AnimatePresence>
-        {menuOpen && !isDesktop && (
-          <>
-            <motion.div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9200]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMenuOpen(false)}
-            />
-
+            {/* EXPANDED MENU LINKS */}
             <motion.ul
-              className="fixed top-0 left-0 h-screen w-full bg-bg flex flex-col justify-center items-start pl-[8vw] gap-[2.2vh] list-none z-[9500] transition-colors duration-300"
-              variants={drawerVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              className="flex flex-col justify-start items-start pl-[4vw] pt-16 gap-[3vh] list-none w-full overflow-y-auto no-scrollbar"
+              variants={containerVariants}
             >
-              {/* CLOSE BUTTON */}
-              <button 
-                className="absolute top-8 right-[8vw] cursor-pointer text-light-text hover:text-primary transition-colors duration-300 flex items-center justify-center p-2 border-none bg-transparent"
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-              >
-                <X size={20} />
-              </button>
-
               {navLinks.map((link) => (
                 <motion.li key={link.id} variants={linkVariants}>
                   <a
@@ -244,9 +287,9 @@ export default function Header() {
                 </motion.li>
               ))}
             </motion.ul>
-          </>
-        )}
-      </AnimatePresence>
+          </motion.nav>
+        </>
+      )}
     </>
   );
 }
