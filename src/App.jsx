@@ -12,6 +12,7 @@ import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./index.css";
 import Loader from "./Loader";
+import ChatBot from "./components/ChatBot";
 import { AnimatePresence } from "framer-motion";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
@@ -118,7 +119,9 @@ function InnerApp() {
       const sectionElem = e.target.closest("[data-section]");
       const sectionId = sectionElem ? sectionElem.getAttribute("data-section") : null;
 
-      if (sectionId) {
+      if (hoverTextElem) {
+        currentHoverText = hoverTextElem.getAttribute("data-hover-text");
+      } else if (sectionId) {
         if (sectionId === "home") {
           currentHoverText = "Back to the beginning";
         } else if (sectionId === "about") {
@@ -169,8 +172,6 @@ function InnerApp() {
             currentHoverText = `Go to ${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}`;
           }
         }
-      } else if (hoverTextElem) {
-        currentHoverText = hoverTextElem.getAttribute("data-hover-text");
       }
 
       updateSpeechBubble();
@@ -388,6 +389,7 @@ function InnerApp() {
             <Contact />
           </main>
           <Footer />
+          {showContent && <ChatBot />}
         </div>
       </div>
     </>

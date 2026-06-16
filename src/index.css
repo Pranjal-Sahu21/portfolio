@@ -316,3 +316,12 @@ html[data-magicui-theme-vt="active"]::view-transition-new(root) {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Gentle bounce for chatbot floating icon */
+@keyframes bounceGentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.animate-bounce-gentle {
+  animation: bounceGentle 2s ease-in-out infinite;
+}

@@ -123,7 +123,7 @@ export default function Home({ showContent = true }) {
       </motion.div>
 
       <motion.div
-        className="absolute top-[85dvh] right-8 md:bottom-7.5 md:right-10 flex flex-col items-center gap-2 font-space z-10"
+        className="absolute top-[85dvh] left-1/2 -translate-x-1/2 md:bottom-7.5 md:left-1/2 md:-translate-x-1/2 flex flex-col items-center gap-2 font-space z-10"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2 }}
