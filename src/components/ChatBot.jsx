@@ -492,7 +492,7 @@ Personality guidelines:
   return (
     <>
       {/* 1. FLOATING ACTION BUTTON */}
-      <div className="fixed bottom-6 right-6 z-[9600] flex items-center justify-center">
+      <div className={`fixed bottom-6 right-6 z-[9600] flex items-center justify-center ${isOpen ? "hidden md:flex" : "flex"}`}>
         <button
           onClick={handleOpenToggle}
           className="w-14 h-14 rounded-full bg-primary text-bg flex items-center justify-center shadow-2xl hover:scale-108 active:scale-95 transition-all duration-300 border border-primary/20 relative group overflow-hidden"
@@ -518,14 +518,14 @@ Personality guidelines:
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-24 right-6 w-[360px] max-w-[calc(100vw-32px)] h-[480px] bg-card-bg/85 backdrop-blur-xl border border-primary/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[9600] origin-bottom-right"
+            className="fixed bottom-0 md:bottom-24 right-0 md:right-6 w-full md:w-[360px] max-w-full md:max-w-[calc(100vw-32px)] h-[100dvh] md:h-[480px] bg-card-bg/95 md:bg-card-bg/85 backdrop-blur-xl border-none md:border md:border-primary/10 rounded-none md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[9600] origin-bottom-right"
             initial={{ opacity: 0, scale: 0.85, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 30 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
           >
             {/* Header */}
-            <div className="p-4 bg-primary text-bg flex items-center justify-between border-b border-primary/10 select-none">
+            <div className="p-4 pt-[calc(1rem+env(safe-area-inset-top))] md:pt-4 bg-primary text-bg flex items-center justify-between border-b border-primary/10 select-none">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-bg text-primary flex items-center justify-center relative">
                   <Bot className="w-5 h-5" />
@@ -604,7 +604,7 @@ Personality guidelines:
             {/* Input Form */}
             <form
               onSubmit={handleSend}
-              className="p-3 bg-card-bg border-t border-primary/10 flex items-center gap-2"
+              className="p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:pb-3 bg-card-bg border-t border-primary/10 flex items-center gap-2"
             >
               <input
                 type="text"

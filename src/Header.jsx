@@ -215,7 +215,7 @@ export default function Header() {
           <AnimatePresence>
             {menuOpen && (
               <motion.div
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9200]"
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9650]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -228,7 +228,7 @@ export default function Header() {
             variants={navbarVariants}
             initial="hidden"
             animate={menuOpen ? "expanded" : "collapsed"}
-            className="fixed backdrop-blur-md shadow-lg pointer-events-auto z-[9500] flex flex-col overflow-hidden"
+            className={`fixed backdrop-blur-md shadow-lg pointer-events-auto flex flex-col overflow-hidden ${menuOpen ? "z-[9700]" : "z-[9500]"}`}
             role="navigation"
             aria-label="Main navigation"
           >
