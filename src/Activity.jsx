@@ -4,6 +4,49 @@ import { GitHubCalendar } from "react-github-calendar";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useTheme } from "./context/ThemeContext";
 
+function CountUp({ value, duration = 1.5, inView }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView) {
+      setCount(0);
+      return;
+    }
+
+    const end = parseInt(value, 10);
+    if (isNaN(end) || end === 0) {
+      setCount(0);
+      return;
+    }
+
+    const totalMiliseconds = duration * 1000;
+    const startTime = performance.now();
+
+    let animationFrameId;
+
+    const updateCount = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      if (elapsedTime >= totalMiliseconds) {
+        setCount(end);
+      } else {
+        const progress = elapsedTime / totalMiliseconds;
+        const easeOutProgress = progress * (2 - progress); // Ease out quadratic
+        const currentCount = Math.floor(easeOutProgress * end);
+        setCount(currentCount);
+        animationFrameId = requestAnimationFrame(updateCount);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(updateCount);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [value, duration, inView]);
+
+  return <span>{count.toLocaleString()}</span>;
+}
+
 export default function Activity() {
   const { theme } = useTheme();
   const headingRef = useRef(null);
@@ -31,7 +74,7 @@ export default function Activity() {
       if (Date.now() - timestamp < 86400000) {
         return data;
       }
-    } catch (e) {
+    } catch {
       // Ignore parsing errors
     }
     return null;
@@ -331,7 +374,7 @@ export default function Activity() {
             fill="transparent"
             className="text-primary/5"
           />
-          <circle
+          <motion.circle
             cx="100"
             cy="100"
             r={radius}
@@ -339,14 +382,16 @@ export default function Activity() {
             strokeWidth="12"
             fill="transparent"
             strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
+            initial={{ strokeDashoffset: circumference }}
+            animate={leetcodeInView ? { strokeDashoffset: strokeDashoffset } : { strokeDashoffset: circumference }}
             strokeLinecap="round"
-            className="text-primary transition-all duration-1000 ease-out"
+            className="text-primary"
+            transition={{ duration: 1.5, ease: "easeOut" }}
           />
         </svg>
         <div className="absolute text-center flex flex-col justify-center items-center">
           <span className="text-4xl md:text-5xl font-bold font-syne text-primary leading-none">
-            {solved}
+            <CountUp value={solved} inView={leetcodeInView} duration={1.5} />
           </span>
           <span className="block text-xs md:text-sm text-muted-text font-space uppercase tracking-wider mt-2.5">
             / {total}
@@ -503,10 +548,34 @@ export default function Activity() {
 
                     return (
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
+                        {/* SVG ClipPath Definition */}
+                        <svg className="absolute w-0 h-0" aria-hidden="true">
+                          <defs>
+                            <clipPath id="github-pie-clip" clipPathUnits="objectBoundingBox">
+                              <motion.circle
+                                cx="0.5"
+                                cy="0.5"
+                                r="0.5"
+                                fill="transparent"
+                                stroke="black"
+                                strokeWidth="1.2"
+                                transform="rotate(-90 0.5 0.5)"
+                                strokeDasharray="3.142"
+                                initial={{ strokeDashoffset: 3.142 }}
+                                animate={githubInView ? { strokeDashoffset: 0 } : { strokeDashoffset: 3.142 }}
+                                transition={{ duration: 1.5, ease: "easeInOut" }}
+                              />
+                            </clipPath>
+                          </defs>
+                        </svg>
+
                         {/* Pie Chart */}
                         <div 
                           className={`w-32 h-32 rounded-full border border-primary/10 shadow-xs flex-shrink-0 ${gradientSegments.length === 0 ? "text-primary/10" : ""}`}
-                          style={conicGradientStyle}
+                          style={{
+                            ...conicGradientStyle,
+                            clipPath: "url(#github-pie-clip)",
+                          }}
                         />
                         {/* Legend */}
                         <div className="flex flex-col gap-2 w-full">
@@ -695,21 +764,23 @@ export default function Activity() {
                           Easy
                         </span>
                         <span className="text-muted-text font-medium">
-                          {leetcodeData.easySolved} / {leetcodeData.totalEasy}
+                          <CountUp value={leetcodeData.easySolved} inView={leetcodeInView} duration={1.2} /> / {leetcodeData.totalEasy}
                         </span>
                       </div>
                       <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
-                        <div
-                          className="bg-neutral-500 h-full rounded-full transition-all duration-1000"
-                          style={{
+                        <motion.div
+                          className="bg-neutral-500 h-full rounded-full"
+                          initial={{ width: "0%" }}
+                          animate={leetcodeInView ? {
                             width: `${
                               leetcodeData.totalEasy > 0
                                 ? (leetcodeData.easySolved /
                                     leetcodeData.totalEasy) *
                                   100
                                 : 0
-                            }%`,
-                          }}
+                            }%`
+                          } : { width: "0%" }}
+                          transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
                         />
                       </div>
                     </div>
@@ -724,22 +795,24 @@ export default function Activity() {
                           Medium
                         </span>
                         <span className="text-muted-text font-medium">
-                          {leetcodeData.mediumSolved} /{" "}
+                          <CountUp value={leetcodeData.mediumSolved} inView={leetcodeInView} duration={1.2} /> /{" "}
                           {leetcodeData.totalMedium}
                         </span>
                       </div>
                       <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
-                        <div
-                          className="bg-neutral-600 dark:bg-neutral-300 h-full rounded-full transition-all duration-1000"
-                          style={{
+                        <motion.div
+                          className="bg-neutral-600 dark:bg-neutral-300 h-full rounded-full"
+                          initial={{ width: "0%" }}
+                          animate={leetcodeInView ? {
                             width: `${
                               leetcodeData.totalMedium > 0
                                 ? (leetcodeData.mediumSolved /
                                     leetcodeData.totalMedium) *
                                   100
                                 : 0
-                            }%`,
-                          }}
+                            }%`
+                          } : { width: "0%" }}
+                          transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
                         />
                       </div>
                     </div>
@@ -752,21 +825,23 @@ export default function Activity() {
                       <div className="flex justify-between text-base mb-2">
                         <span className="text-primary font-semibold">Hard</span>
                         <span className="text-muted-text font-medium">
-                          {leetcodeData.hardSolved} / {leetcodeData.totalHard}
+                          <CountUp value={leetcodeData.hardSolved} inView={leetcodeInView} duration={1.2} /> / {leetcodeData.totalHard}
                         </span>
                       </div>
                       <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
-                        <div
-                          className="bg-primary h-full rounded-full transition-all duration-1000"
-                          style={{
+                        <motion.div
+                          className="bg-primary h-full rounded-full"
+                          initial={{ width: "0%" }}
+                          animate={leetcodeInView ? {
                             width: `${
                               leetcodeData.totalHard > 0
                                 ? (leetcodeData.hardSolved /
                                     leetcodeData.totalHard) *
                                   100
                                 : 0
-                            }%`,
-                          }}
+                            }%`
+                          } : { width: "0%" }}
+                          transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
                         />
                       </div>
                     </div>

@@ -102,7 +102,7 @@ export default function Home({ showContent = true }) {
         transition={{ delay: 0.8 }}
       >
         <a
-          href="https://drive.google.com/file/d/1m2IuK6cj7yE89G0r-fStnfLO3FCfApLR/view?usp=drive_link"
+          href="https://drive.google.com/file/d/1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk/view?usp=drive_link"
           target="_blank"
           rel="noreferrer"
           className="font-space font-semibold tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center bg-linear-to-br from-primary to-accent text-bg border-none shadow-md"
