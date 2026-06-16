@@ -119,7 +119,15 @@ const getLanguagesString = (githubState) => {
   return "JavaScript, HTML, CSS, Java";
 };
 
+const PUTER_AUTH_TOKEN = import.meta.env.VITE_PUTER_AUTH_TOKEN;
+
 export default function ChatBot() {
+  useEffect(() => {
+    if (PUTER_AUTH_TOKEN && !localStorage.getItem("puter.auth.token")) {
+      localStorage.setItem("puter.auth.token", PUTER_AUTH_TOKEN);
+    }
+  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -485,28 +493,18 @@ Personality guidelines:
     <>
       {/* 1. FLOATING ACTION BUTTON */}
       <div className="fixed bottom-6 right-6 z-[9600] flex items-center justify-center">
-        {/* Unread Indicator */}
-        <AnimatePresence>
-          {hasNewMessage && (
-            <motion.span
-              className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full z-10 border border-bg shadow-[0_0_10px_var(--primary)] flex items-center justify-center"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-bg animate-ping" />
-            </motion.span>
-          )}
-        </AnimatePresence>
-
         <button
           onClick={handleOpenToggle}
           className="w-14 h-14 rounded-full bg-primary text-bg flex items-center justify-center shadow-2xl hover:scale-108 active:scale-95 transition-all duration-300 border border-primary/20 relative group overflow-hidden"
           aria-label="Toggle chatbot"
           data-hover-text={isOpen ? "Close AI chat" : "Talk to my AI bot!"}
         >
-          {/* Pulsing online status indicator */}
-          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-bg shadow-[0_0_6px_#22c55e]" />
+          {/* Pulsing online status indicator / Unread indicator */}
+          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-bg shadow-[0_0_6px_#22c55e]">
+            {hasNewMessage && (
+              <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75" />
+            )}
+          </span>
 
           {isOpen ? (
             <X className="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" />
