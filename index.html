@@ -103,6 +103,13 @@
     </div>
   </div>
   <div id="root"></div>
+  <script>
+    // Automatically authenticate Puter.js using Vite env variables before loading library
+    const token = "%VITE_PUTER_AUTH_TOKEN%";
+    if (token && token !== "%" + "VITE_PUTER_AUTH_TOKEN%") {
+      localStorage.setItem("puter.auth.token", token);
+    }
+  </script>
   <script src="https://js.puter.com/v2/"></script>
   <script type="module" src="/src/main.jsx"></script>
 
