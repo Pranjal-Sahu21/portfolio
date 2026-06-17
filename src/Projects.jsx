@@ -1,9 +1,10 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCreative, Pagination } from "swiper/modules";
+import { EffectCards, EffectCoverflow, Pagination } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/effect-creative";
+import "swiper/css/effect-cards";
+import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import voltMart from "../assets/voltmart.png";
 import cheeType from "../assets/cheetype.png";
@@ -70,7 +71,6 @@ export default function Projects() {
     },
   ];
 
-  const marqueeProjects = [...projects, ...projects];
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -100,94 +100,91 @@ export default function Projects() {
 
       <motion.div
         ref={containerRef}
-        className="w-full mt-12 relative overflow-visible md:overflow-hidden perspective-[1500px] md:transform md:-rotate-5 before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-bg before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-bg after:to-transparent"
+        className="w-full mt-12 relative overflow-visible md:overflow-hidden before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-bg before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-bg after:to-transparent"
         initial={{ opacity: 0, y: 50 }}
         animate={isContainerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
         transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.15 }}
       >
-        {/* DESKTOP MARQUEE */}
+        {/* DESKTOP SWIPER COVERFLOW CAROUSEL */}
         {!isMobile && (
-          <motion.div
-            className="flex w-max gap-4"
-            animate={{ x: ["-50%", "0%"] }}
-            transition={{
-              repeat: Infinity,
-              ease: "linear",
-              duration: window.innerWidth <= 1024 ? 20 : 40,
-            }}
-          >
-            {marqueeProjects.map((p, i) => (
-              <a
-                href={p.link}
-                key={i}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-[0_0_80%] md:flex-[0_0_90%] max-w-125 h-auto aspect-5/4 bg-input-bg/90 rounded-2xl p-4 text-center text-light-text transform rotate-y-40 rotate-x-30 shadow-md transition-transform duration-300 -ml-21 hover:cursor-none no-underline block project-card-3d"
-                style={{ transform: "rotateY(40deg) rotateX(30deg)" }}
-              >
-                <img
-                  src={p.img}
-                  alt={`Screenshot of ${p.title} — ${p.desc}`}
-                  className="w-full object-cover rounded-lg"
-                  loading="lazy"
-                />
-                <h2 className="mt-4 text-[1.4rem] font-syne font-bold shimmer-text">
-                  {p.title}
-                </h2>
-                <p className="mt-3 text-[0.9rem] leading-relaxed text-muted-text">
-                  {p.desc}
-                </p>
-              </a>
-            ))}
-          </motion.div>
-        )}
-
-        {/* MOBILE SWIPER CREATIVE CAROUSEL */}
-        {isMobile && (
-          <div className="block opacity-100 transform-none h-auto overflow-visible w-full max-w-lg px-5 mx-auto">
+          <div className="w-full max-w-5xl mx-auto px-5 opacity-100 transform-none h-auto overflow-visible">
             <Swiper
-              effect="creative"
+              effect="coverflow"
               grabCursor={true}
               slidesPerView="auto"
               centeredSlides={true}
               loop={true}
+              coverflowEffect={{
+                rotate: 40,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              }}
               pagination={{
                 clickable: true,
               }}
-              className="Carousal_004"
-              creativeEffect={{
-                prev: {
-                  shadow: true,
-                  origin: "left center",
-                  translate: ["-5%", 0, -200],
-                  rotate: [0, 100, 0],
-                },
-                next: {
-                  origin: "right center",
-                  translate: ["5%", 0, -200],
-                  rotate: [0, -100, 0],
-                },
-              }}
-              modules={[EffectCreative, Pagination]}
+              className="Carousal_003"
+              modules={[EffectCoverflow, Pagination]}
             >
               {projects.map((p, i) => (
-                <SwiperSlide key={i} className="flex justify-center p-2">
+                <SwiperSlide key={i} className="flex justify-center rounded-2xl overflow-hidden">
                   <a
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full mx-auto h-86 sm:h-97.5 bg-input-bg/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d"
+                    className="block w-full h-full bg-input-bg/75 rounded-2xl p-4 text-center text-light-text no-underline shadow-md border border-primary/5 transition-transform hover:scale-[1.02] duration-300"
                   >
                     <img
                       src={p.img}
                       alt={`Screenshot of ${p.title} — ${p.desc}`}
-                      className="w-full h-45 object-cover rounded-xl"
+                      className="w-full h-48 object-cover rounded-xl"
                       loading="lazy"
                     />
-                    <h2 className="mt-6 text-lg font-syne font-bold shimmer-text">
+                    <h2 className="mt-5 text-xl font-syne font-bold shimmer-text">
                       {p.title}
                     </h2>
-                    <p className="mt-3 text-[0.9rem] leading-relaxed text-muted-text line-clamp-3">
+                    <p className="mt-3 text-sm leading-relaxed text-muted-text line-clamp-3">
+                      {p.desc}
+                    </p>
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
+
+        {/* MOBILE SWIPER CARDS CAROUSEL */}
+        {isMobile && (
+          <div className="block opacity-100 transform-none h-auto overflow-visible w-full max-w-lg px-5 mx-auto">
+            <Swiper
+              effect="cards"
+              grabCursor={true}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              className="Carousal_002"
+              modules={[EffectCards, Pagination]}
+            >
+              {projects.map((p, i) => (
+                <SwiperSlide key={i} className="flex justify-center rounded-2xl overflow-hidden">
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full h-full bg-input-bg/85 rounded-2xl p-3.5 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d border border-primary/5"
+                  >
+                    <img
+                      src={p.img}
+                      alt={`Screenshot of ${p.title} — ${p.desc}`}
+                      className="w-full h-44 object-cover rounded-xl"
+                      loading="lazy"
+                    />
+                    <h2 className="mt-4.5 text-[1.15rem] font-syne font-bold shimmer-text text-left leading-snug">
+                      {p.title}
+                    </h2>
+                    <p className="mt-2 text-[0.82rem] leading-relaxed text-muted-text line-clamp-3 text-left">
                       {p.desc}
                     </p>
                   </a>

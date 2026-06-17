@@ -326,29 +326,27 @@ html[data-magicui-theme-vt="active"]::view-transition-new(root) {
   animation: bounceGentle 2s ease-in-out infinite;
 }
 
-/* Swiper Creative Carousel custom styles for Projects */
-.Carousal_004 {
-  width: 100% !important;
+/* Swiper Cards Carousel custom styles for Projects */
+.Carousal_002 {
+  width: 280px !important;
+  height: 380px !important;
   padding-bottom: 50px !important;
   overflow: visible !important;
 }
 
-.Carousal_004 .swiper-slide {
-  width: 100% !important;
-  opacity: 0.3;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.Carousal_004 .swiper-slide-active {
-  opacity: 1 !important;
+@media (min-width: 640px) {
+  .Carousal_002 {
+    width: 320px !important;
+    height: 440px !important;
+  }
 }
 
 /* Glowing Pagination Dots for Swiper */
-.Carousal_004 .swiper-pagination {
-  bottom: 10px !important;
+.Carousal_002 .swiper-pagination {
+  bottom: 0px !important;
 }
 
-.Carousal_004 .swiper-pagination-bullet {
+.Carousal_002 .swiper-pagination-bullet {
   background: var(--primary) !important;
   opacity: 0.3 !important;
   width: 8px !important;
@@ -357,7 +355,48 @@ html[data-magicui-theme-vt="active"]::view-transition-new(root) {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.Carousal_004 .swiper-pagination-bullet-active {
+.Carousal_002 .swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  width: 22px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 10px var(--primary);
+  background: var(--primary) !important;
+}
+
+/* Swiper Coverflow Carousel custom styles for Projects on Desktop */
+.Carousal_003 {
+  width: 100% !important;
+  height: 440px !important;
+  padding-bottom: 50px !important;
+  overflow: visible !important;
+}
+
+.Carousal_003 .swiper-slide {
+  width: 320px !important;
+  height: 380px !important;
+  opacity: 0.4;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+
+.Carousal_003 .swiper-slide-active {
+  opacity: 1;
+}
+
+/* Glowing Pagination Dots for Desktop Coverflow Swiper */
+.Carousal_003 .swiper-pagination {
+  bottom: 0px !important;
+}
+
+.Carousal_003 .swiper-pagination-bullet {
+  background: var(--primary) !important;
+  opacity: 0.3 !important;
+  width: 8px !important;
+  height: 8px !important;
+  margin: 0 5px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.Carousal_003 .swiper-pagination-bullet-active {
   opacity: 1 !important;
   width: 22px !important;
   border-radius: 4px !important;
