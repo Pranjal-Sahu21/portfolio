@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Moon, Sun } from "lucide-react";
 import { flushSync } from "react-dom";
+import { motion } from "framer-motion";
 import { cn } from "../utils";
 
 function polygonCollapsed(cx, cy, vertexCount) {
@@ -250,7 +250,57 @@ export default function AnimatedThemeToggler({
       aria-label="Toggle theme"
       {...props}
     >
-      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ overflow: "visible" }}
+      >
+        <mask id="moon-mask">
+          <rect x="-4" y="-4" width="32" height="32" fill="white" />
+          <motion.circle
+            cx={isDark ? 18 : 30}
+            cy={isDark ? 6 : -10}
+            r="8"
+            fill="black"
+            transition={{ type: "spring", stiffness: 120, damping: 15 }}
+          />
+        </mask>
+
+        <motion.circle
+          cx="12"
+          cy="12"
+          r={isDark ? 8 : 5}
+          fill="currentColor"
+          mask="url(#moon-mask)"
+          transition={{ type: "spring", stiffness: 120, damping: 15 }}
+        />
+
+        <motion.g
+          stroke="currentColor"
+          animate={{
+            rotate: isDark ? 40 : 0,
+            opacity: isDark ? 0 : 1,
+            scale: isDark ? 0 : 1,
+          }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          style={{ originX: "12px", originY: "12px" }}
+        >
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </motion.g>
+      </svg>
       <span className="sr-only">Toggle theme</span>
     </button>
   );

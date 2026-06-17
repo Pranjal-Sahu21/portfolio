@@ -1,8 +1,10 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCreative, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-creative";
+import "swiper/css/pagination";
 import voltMart from "../assets/voltmart.png";
 import cheeType from "../assets/cheetype.png";
 import tasteGpt from "../assets/tastegpt.png";
@@ -11,7 +13,6 @@ import dummistore from "../assets/dummistore-image.png";
 import genixor from "../assets/genixor-image.png";
 import devevent from "../assets/DevEvent.png"
 import snip from "../assets/snip.png"
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Projects() {
   const ref = useRef(null);
@@ -73,40 +74,7 @@ export default function Projects() {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  const NextArrow = ({ onClick }) => (
-    <div
-      onClick={onClick}
-      className="absolute top-1/2 -translate-y-1/2 z-10 w-10.5 h-10.5 flex items-center justify-center bg-card-bg rounded-full cursor-pointer shadow-md transition-all duration-200 -right-2.5 md:right-1.5 text-primary"
-    >
-      <ChevronRight size={18} />
-    </div>
-  );
 
-  const PrevArrow = ({ onClick }) => (
-    <div
-      onClick={onClick}
-      className="absolute top-1/2 -translate-y-1/2 z-10 w-10.5 h-10.5 flex items-center justify-center bg-card-bg rounded-full cursor-pointer shadow-md transition-all duration-200 left-2.5 md:left-1.5 text-primary"
-    >
-      <ChevronLeft size={18} />
-    </div>
-  );
-
-  const sliderSettings = {
-    dots: true,
-    arrows: true,
-    infinite: true,
-    speed: 600,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    centerMode: true,
-    centerPadding: "20px",
-    autoplay: true,
-    autoplaySpeed: 3500,
-    pauseOnHover: true,
-    pauseOnFocus: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -174,17 +142,41 @@ export default function Projects() {
           </motion.div>
         )}
 
-        {/* MOBILE SLICK SLIDER */}
+        {/* MOBILE SWIPER CREATIVE CAROUSEL */}
         {isMobile && (
-          <div className="block opacity-100 transform-none h-auto overflow-visible">
-            <Slider {...sliderSettings}>
+          <div className="block opacity-100 transform-none h-auto overflow-visible w-full max-w-lg px-5 mx-auto">
+            <Swiper
+              effect="creative"
+              grabCursor={true}
+              slidesPerView="auto"
+              centeredSlides={true}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              className="Carousal_004"
+              creativeEffect={{
+                prev: {
+                  shadow: true,
+                  origin: "left center",
+                  translate: ["-5%", 0, -200],
+                  rotate: [0, 100, 0],
+                },
+                next: {
+                  origin: "right center",
+                  translate: ["5%", 0, -200],
+                  rotate: [0, -100, 0],
+                },
+              }}
+              modules={[EffectCreative, Pagination]}
+            >
               {projects.map((p, i) => (
-                <div key={i} className="flex justify-center p-2">
+                <SwiperSlide key={i} className="flex justify-center p-2">
                   <a
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full max-w-120 md:max-w-[320px] mx-auto h-86 sm:h-97.5 bg-input-bg/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d"
+                    className="block w-full mx-auto h-86 sm:h-97.5 bg-input-bg/65 rounded-2xl p-3 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d"
                   >
                     <img
                       src={p.img}
@@ -199,9 +191,9 @@ export default function Projects() {
                       {p.desc}
                     </p>
                   </a>
-                </div>
+                </SwiperSlide>
               ))}
-            </Slider>
+            </Swiper>
           </div>
         )}
       </motion.div>

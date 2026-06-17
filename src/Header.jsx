@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
-import { Menu, X, Home, User, Briefcase, Wrench, FolderGit2, Activity, Mail } from "lucide-react";
+import { Home, User, Briefcase, Wrench, FolderGit2, Activity, Mail } from "lucide-react";
 import { scrollToSection } from "./utils/scrollToSection";
 import { useTheme } from "./context/ThemeContext";
 import AnimatedThemeToggler from "./components/AnimatedThemeToggler";
@@ -255,7 +255,23 @@ export default function Header() {
                   onClick={toggleMenu} 
                   aria-label={menuOpen ? "Close menu" : "Open menu"}
                 >
-                  {menuOpen ? <X size={20} /> : <Menu size={20} />}
+                  <div className="relative w-6 h-5 flex items-center justify-center">
+                    <motion.span
+                      className="absolute w-4 h-0.5 bg-light-text rounded-full"
+                      animate={menuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -6 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                    />
+                    <motion.span
+                      className="absolute w-4 h-0.5 bg-light-text rounded-full"
+                      animate={menuOpen ? { opacity: 0, scale: 0 } : { opacity: 1, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                    />
+                    <motion.span
+                      className="absolute w-4 h-0.5 bg-light-text rounded-full"
+                      animate={menuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 6 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                    />
+                  </div>
                 </button>
               </div>
             </div>

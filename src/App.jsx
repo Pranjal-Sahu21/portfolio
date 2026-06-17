@@ -14,10 +14,9 @@ import "./index.css";
 import Loader from "./Loader";
 import ChatBot from "./components/ChatBot";
 import { AnimatePresence } from "framer-motion";
-import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function InnerApp() {
-  const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
@@ -373,7 +372,7 @@ function InnerApp() {
 
     setTimeout(() => {
       setShowContent(true);
-    }, 8800);
+    }, 8100);
   }, []);
   return (
     <>
