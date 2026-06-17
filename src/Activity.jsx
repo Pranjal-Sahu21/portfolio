@@ -97,14 +97,6 @@ export default function Activity() {
         setGithubLoading(true);
         setGithubError(null);
 
-        // Check local cache (v5 forces cache refresh)
-        const cached = getCachedData("github_stats_cache_v5");
-        if (cached) {
-          setGithubStats(cached);
-          setGithubLoading(false);
-          return;
-        }
-
         const headers = { Accept: "application/vnd.github.v3+json" };
 
         // Fetch stats in parallel using allSettled to prevent failures in one endpoint from breaking the whole request
@@ -205,7 +197,6 @@ export default function Activity() {
         }
 
         if (active) {
-          setCachedData("github_stats_cache_v5", compiledStats);
           setGithubStats(compiledStats);
           setGithubLoading(false);
         }

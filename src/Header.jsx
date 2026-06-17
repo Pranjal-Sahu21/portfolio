@@ -77,9 +77,11 @@ export default function Header() {
       borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
       backgroundColor: theme === "dark" ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)",
       transition: {
-        type: "spring",
-        stiffness: 120,
-        damping: 22,
+        height: { type: "spring", stiffness: 120, damping: 22 },
+        borderRadius: { type: "spring", stiffness: 120, damping: 22 },
+        backgroundColor: { ease: "easeInOut", duration: 0.2 },
+        y: { type: "spring", stiffness: 120, damping: 22 },
+        opacity: { type: "spring", stiffness: 120, damping: 22 }
       }
     },
     expanded: {
@@ -95,9 +97,11 @@ export default function Header() {
       borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
       backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
       transition: {
-        type: "spring",
-        stiffness: 120,
-        damping: 22,
+        height: { type: "spring", stiffness: 120, damping: 22 },
+        borderRadius: { type: "spring", stiffness: 120, damping: 22 },
+        backgroundColor: { ease: "easeInOut", duration: 0.2 },
+        y: { type: "spring", stiffness: 120, damping: 22 },
+        opacity: { type: "spring", stiffness: 120, damping: 22 },
         staggerChildren: 0.08,
         delayChildren: 0.1,
       }
@@ -106,13 +110,8 @@ export default function Header() {
 
   /* LINKS CONTAINER DISPLAY-BASED ANIMATION */
   const containerVariants = {
-    hidden: {
-      opacity: 0,
-      display: "none",
-    },
     collapsed: {
       opacity: 0,
-      display: "none",
       pointerEvents: "none",
       transition: {
         opacity: { duration: 0.15 },
@@ -120,7 +119,6 @@ export default function Header() {
     },
     expanded: {
       opacity: 1,
-      display: "flex",
       pointerEvents: "auto",
       transition: {
         opacity: { duration: 0.3 },
@@ -215,7 +213,7 @@ export default function Header() {
           <AnimatePresence>
             {menuOpen && (
               <motion.div
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9650]"
+                className="fixed inset-0 bg-black/60 z-[9650]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -228,7 +226,7 @@ export default function Header() {
             variants={navbarVariants}
             initial="hidden"
             animate={menuOpen ? "expanded" : "collapsed"}
-            className={`fixed backdrop-blur-md shadow-lg pointer-events-auto flex flex-col overflow-hidden ${menuOpen ? "z-[9700]" : "z-[9500]"}`}
+            className="fixed backdrop-blur-md shadow-lg pointer-events-auto flex flex-col overflow-hidden z-[9700]"
             role="navigation"
             aria-label="Main navigation"
           >
@@ -263,30 +261,37 @@ export default function Header() {
             </div>
 
             {/* EXPANDED MENU LINKS */}
-            <motion.ul
-              className="flex flex-col justify-start items-start pl-[4vw] pt-16 gap-[3vh] list-none w-full overflow-y-auto no-scrollbar"
-              variants={containerVariants}
-            >
-              {navLinks.map((link) => (
-                <motion.li key={link.id} variants={linkVariants}>
-                  <a
-                    href={`#${link.id}`}
-                    data-section={link.id}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(link.id, () => setMenuOpen(false));
-                    }}
-                    className={`font-syne font-extrabold text-[clamp(1.6rem,5.5vw,2.4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
-                      activeSection === link.id
-                        ? "text-primary pl-4 border-l-[3px] border-primary"
-                        : "text-[#555555]"
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </motion.li>
-              ))}
-            </motion.ul>
+            <AnimatePresence>
+              {menuOpen && (
+                <motion.ul
+                  className="flex flex-col justify-start items-start pl-[4vw] pt-16 gap-[3vh] list-none w-full overflow-y-auto no-scrollbar"
+                  variants={containerVariants}
+                  initial="collapsed"
+                  animate="expanded"
+                  exit="collapsed"
+                >
+                  {navLinks.map((link) => (
+                    <motion.li key={link.id} variants={linkVariants}>
+                      <a
+                        href={`#${link.id}`}
+                        data-section={link.id}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToSection(link.id, () => setMenuOpen(false));
+                        }}
+                        className={`font-syne font-extrabold text-[clamp(1.6rem,5.5vw,2.4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
+                          activeSection === link.id
+                            ? "text-primary pl-4 border-l-[3px] border-primary"
+                            : "text-[#555555]"
+                        }`}
+                      >
+                        {link.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </motion.nav>
         </>
       )}

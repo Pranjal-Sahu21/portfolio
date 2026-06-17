@@ -166,20 +166,10 @@ export default function ChatBot() {
   useEffect(() => {
     let active = true;
     const fetchStats = async () => {
-      const cachedGithub = localStorage.getItem("github_stats_cache_v5");
       const cachedLeetcode = localStorage.getItem("leetcode_stats_cache_v5");
       
       let githubData = null;
       let leetcodeData = null;
-      
-      if (cachedGithub) {
-        try {
-          const parsed = JSON.parse(cachedGithub);
-          if (Date.now() - parsed.timestamp < 86400000) {
-            githubData = parsed.data;
-          }
-        } catch {}
-      }
       
       if (cachedLeetcode) {
         try {
@@ -190,62 +180,58 @@ export default function ChatBot() {
         } catch {}
       }
       
-      if (!githubData) {
-        try {
-          const headers = { Accept: "application/vnd.github.v3+json" };
-          const results = await Promise.allSettled([
-            fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
-            fetch("https://api.github.com/users/pranjal-sahu21/repos?per_page=100", { headers }),
-            fetch("https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr", { headers }),
-          ]);
-          
-          const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
-          const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
-          const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
-          
-          let profile = {};
-          if (profileRes && profileRes.ok) profile = await profileRes.json();
-          
-          let repos = [];
-          if (reposRes && reposRes.ok) repos = await reposRes.json();
-          
-          let prs = {};
-          if (prsRes && prsRes.ok) prs = await prsRes.json();
-          
-          let totalStars = 0;
-          const langCounts = {};
-          let totalReposWithLang = 0;
-          if (Array.isArray(repos)) {
-            repos.forEach((repo) => {
-              totalStars += repo.stargazers_count || 0;
-              if (repo.language) {
-                langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
-                totalReposWithLang++;
-              }
-            });
-          }
-
-          const sortedLanguages = Object.entries(langCounts)
-            .sort((a, b) => b[1] - a[1])
-            .map(([name, count]) => {
-              const pct = totalReposWithLang > 0 ? ((count / totalReposWithLang) * 100).toFixed(1) : 0;
-              return `${name} (${pct}%)`;
-            })
-            .slice(0, 5)
-            .join(", ");
-          
-          githubData = {
-            publicRepos: profile.public_repos || (Array.isArray(repos) ? repos.length : 22),
-            followers: profile.followers || 5,
-            totalStars: totalStars || 10,
-            prsCount: prs.total_count || 12,
-            languages: sortedLanguages || "JavaScript, HTML, CSS, Java",
-          };
-          
-          localStorage.setItem("github_stats_cache_v5", JSON.stringify({ data: githubData, timestamp: Date.now() }));
-        } catch (e) {
-          console.error("ChatBot GitHub fetch error:", e);
+      try {
+        const headers = { Accept: "application/vnd.github.v3+json" };
+        const results = await Promise.allSettled([
+          fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
+          fetch("https://api.github.com/users/pranjal-sahu21/repos?per_page=100", { headers }),
+          fetch("https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr", { headers }),
+        ]);
+        
+        const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
+        const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
+        const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
+        
+        let profile = {};
+        if (profileRes && profileRes.ok) profile = await profileRes.json();
+        
+        let repos = [];
+        if (reposRes && reposRes.ok) repos = await reposRes.json();
+        
+        let prs = {};
+        if (prsRes && prsRes.ok) prs = await prsRes.json();
+        
+        let totalStars = 0;
+        const langCounts = {};
+        let totalReposWithLang = 0;
+        if (Array.isArray(repos)) {
+          repos.forEach((repo) => {
+            totalStars += repo.stargazers_count || 0;
+            if (repo.language) {
+              langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
+              totalReposWithLang++;
+            }
+          });
         }
+
+        const sortedLanguages = Object.entries(langCounts)
+          .sort((a, b) => b[1] - a[1])
+          .map(([name, count]) => {
+            const pct = totalReposWithLang > 0 ? ((count / totalReposWithLang) * 100).toFixed(1) : 0;
+            return `${name} (${pct}%)`;
+          })
+          .slice(0, 5)
+          .join(", ");
+        
+        githubData = {
+          publicRepos: profile.public_repos || (Array.isArray(repos) ? repos.length : 22),
+          followers: profile.followers || 5,
+          totalStars: totalStars || 10,
+          prsCount: prs.total_count || 12,
+          languages: sortedLanguages || "JavaScript, HTML, CSS, Java",
+        };
+      } catch (e) {
+        console.error("ChatBot GitHub fetch error:", e);
       }
       
       if (!leetcodeData) {
