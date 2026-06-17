@@ -144,8 +144,14 @@ function InnerApp() {
         const text = clickable.textContent.trim().toLowerCase();
         const href = clickable.getAttribute("href") || "";
 
-        if (text === "download cv" || href.includes("drive.google.com")) {
+        if (text === "download cv" || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk")) {
           currentHoverText = "Check out my resume!";
+        } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("hackerrank")) {
+          currentHoverText = "HackerRank React Developer Certificate!";
+        } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb") || text.includes("gfg")) {
+          currentHoverText = "MongoDB Architecture Certificate!";
+        } else if (href.includes("drive.google.com")) {
+          currentHoverText = "Check out my credential!";
         } else if (text === "contact me" || href === "#contact") {
           currentHoverText = "Let's chat!";
         } else if (e.target.closest(".project-card-3d") || href.includes("netlify.app")) {
