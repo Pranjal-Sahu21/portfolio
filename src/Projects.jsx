@@ -173,7 +173,7 @@ export default function Projects() {
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full h-full bg-input-bg/85 rounded-2xl p-3.5 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d border border-primary/5"
+                    className="block w-full h-full bg-input-bg rounded-2xl p-3.5 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d border border-primary/5"
                   >
                     <img
                       src={p.img}

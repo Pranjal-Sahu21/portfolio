@@ -334,6 +334,10 @@ html[data-magicui-theme-vt="active"]::view-transition-new(root) {
   overflow: visible !important;
 }
 
+.Carousal_002 .swiper-slide {
+  opacity: 1 !important;
+}
+
 @media (min-width: 640px) {
   .Carousal_002 {
     width: 320px !important;
