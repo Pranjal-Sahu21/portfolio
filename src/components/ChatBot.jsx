@@ -527,7 +527,7 @@ Personality guidelines:
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-0 md:bottom-24 right-0 md:right-6 w-full md:w-[360px] max-w-full md:max-w-[calc(100vw-32px)] h-[100dvh] md:h-[480px] bg-card-bg/95 md:bg-card-bg/85 backdrop-blur-xl border-none md:border md:border-primary/10 rounded-none md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[9600] origin-bottom-right"
+            className="fixed bottom-0 md:bottom-24 right-0 md:right-6 w-full md:w-[360px] max-w-full md:max-w-[calc(100vw-32px)] h-[100dvh] md:h-[480px] bg-card-bg/95 md:bg-card-bg/85 backdrop-blur-xl border-none md:border md:border-primary/10 rounded-none md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[9800] origin-bottom-right"
             initial={{ opacity: 0, scale: 0.85, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 30 }}

@@ -92,7 +92,7 @@ export default function Header() {
       right: "5vw",
       height: screenHeight - 32,
       borderRadius: "24px",
-      padding: "16px 24px 32px 24px",
+      padding: "12px 24px 32px 24px",
       borderWidth: "1px",
       borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)",
       backgroundColor: theme === "dark" ? "#000000" : "#ffffff",
