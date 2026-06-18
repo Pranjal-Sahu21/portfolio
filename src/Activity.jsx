@@ -461,6 +461,9 @@ export default function Activity() {
     responsive: true,
     maintainAspectRatio: false,
     cutout: "75%",
+    layout: {
+      padding: 8,
+    },
     animation: {
       duration: 1500,
       animateRotate: true,
@@ -484,9 +487,9 @@ export default function Activity() {
         },
         bodyFont: {
           family: "Space Grotesk",
-          size: 12,
+          size: 11,
         },
-        padding: 10,
+        padding: 6,
         cornerRadius: 8,
         displayColors: false,
         callbacks: {
@@ -499,7 +502,7 @@ export default function Activity() {
             else if (label === "Hard") totalForDiff = leetcodeData.totalHard || 0;
 
             const percent = totalForDiff > 0 ? (value / totalForDiff) * 100 : 0;
-            return ` ${label}: ${value} / ${totalForDiff} (${percent.toFixed(1)}%)`;
+            return ` ${label}: ${value}/${totalForDiff} (${percent.toFixed(1)}%)`;
           },
         },
       },
@@ -579,6 +582,9 @@ export default function Activity() {
     responsive: true,
     maintainAspectRatio: false,
     cutout: "70%",
+    layout: {
+      padding: 8,
+    },
     animation: {
       duration: 1500,
       animateRotate: true,
@@ -602,9 +608,9 @@ export default function Activity() {
         },
         bodyFont: {
           family: "Space Grotesk",
-          size: 12,
+          size: 11,
         },
-        padding: 10,
+        padding: 6,
         cornerRadius: 8,
         displayColors: false,
         callbacks: {
@@ -958,7 +964,7 @@ export default function Activity() {
                   <h3 className="text-primary font-syne font-bold text-lg mb-2">Top Languages</h3>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
                     {/* Pie Chart via Chart.js */}
-                    <div className="w-32 h-32 flex-shrink-0 relative">
+                    <div className="w-40 h-40 flex-shrink-0 relative">
                       {githubInView && githubChartData && <Doughnut data={githubChartData} options={githubChartOptions} />}
                     </div>
                     {/* Legend */}
@@ -1200,7 +1206,7 @@ export default function Activity() {
                     <h3 className="text-primary font-syne font-bold text-lg mb-2">Solved Distribution</h3>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
                       {/* Doughnut Chart */}
-                      <div className="w-32 h-32 flex-shrink-0 relative">
+                      <div className="w-40 h-40 flex-shrink-0 relative">
                         {leetcodeInView && leetcodeChartData && <Doughnut data={leetcodeChartData} options={leetcodeChartOptions} />}
                       </div>
                       {/* Legend */}
