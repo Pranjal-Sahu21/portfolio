@@ -550,7 +550,7 @@ export default function Activity() {
         </svg>
         <div className="absolute text-center flex flex-col justify-center items-center pointer-events-none">
           <span className="text-4xl md:text-5xl font-bold font-syne text-primary leading-none">
-            <CountUp value={solved} inView={leetcodeInView} duration={1.5} />
+            {solved.toLocaleString()}
           </span>
           <span className="block text-xs md:text-sm text-muted-text font-space uppercase tracking-wider mt-2.5">
             / {total}
