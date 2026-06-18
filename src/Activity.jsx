@@ -3,6 +3,29 @@ import { useRef, useState, useEffect } from "react";
 import { GitHubCalendar } from "react-github-calendar";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useTheme } from "./context/ThemeContext";
+import { 
+  Chart as ChartJS, 
+  ArcElement, 
+  Tooltip, 
+  Legend, 
+  CategoryScale, 
+  LinearScale, 
+  PointElement, 
+  LineElement, 
+  Filler 
+} from "chart.js";
+import { Doughnut, Line } from "react-chartjs-2";
+
+ChartJS.register(
+  ArcElement, 
+  Tooltip, 
+  Legend, 
+  CategoryScale, 
+  LinearScale, 
+  PointElement, 
+  LineElement, 
+  Filler
+);
 
 function CountUp({ value, duration = 1.5, inView }) {
   const [count, setCount] = useState(0);
@@ -49,6 +72,7 @@ function CountUp({ value, duration = 1.5, inView }) {
 
 export default function Activity() {
   const { theme } = useTheme();
+  const [activeGithubTab, setActiveGithubTab] = useState("contributions");
   const headingRef = useRef(null);
   const headingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
@@ -64,25 +88,7 @@ export default function Activity() {
     dark: ["#181818", "#333333", "#666666", "#999999", "#ffffff"],
   };
 
-  // Browser Caching Helpers
-  const getCachedData = (key) => {
-    const cached = localStorage.getItem(key);
-    if (!cached) return null;
-    try {
-      const { data, timestamp } = JSON.parse(cached);
-      // 24 hours = 86,400,000 milliseconds
-      if (Date.now() - timestamp < 86400000) {
-        return data;
-      }
-    } catch {
-      // Ignore parsing errors
-    }
-    return null;
-  };
 
-  const setCachedData = (key, data) => {
-    localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() }));
-  };
 
   // --- GITHUB STATS FETCHING ---
   const [githubStats, setGithubStats] = useState(null);
@@ -110,11 +116,13 @@ export default function Activity() {
             "https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr",
             { headers },
           ),
+          fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21"),
         ]);
 
         const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
         const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
         const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
+        const contribsRes = results[3].status === "fulfilled" ? results[3].value : null;
 
         // Ensure we got at least one of the basic profile/repo responses
         if ((!profileRes || !profileRes.ok) && (!reposRes || !reposRes.ok)) {
@@ -172,6 +180,91 @@ export default function Activity() {
               totalReposWithLang > 0 ? (count / totalReposWithLang) * 100 : 0,
           }));
 
+        // Sort repos by creation date to calculate timeline growth
+        const sortedRepos = Array.isArray(repos) 
+          ? [...repos]
+              .filter((r) => r.created_at)
+              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+          : [];
+
+        // Build list of months and count repos created per month
+        const monthlyRepoCounts = {};
+        sortedRepos.forEach((repo) => {
+          const date = new Date(repo.created_at);
+          const monthLabel = date.toLocaleDateString("en-US", {
+            month: "short",
+            year: "2-digit",
+          });
+          monthlyRepoCounts[monthLabel] = (monthlyRepoCounts[monthLabel] || 0) + 1;
+        });
+
+        const githubHistoryLabels = [];
+        const githubHistoryData = [];
+        let runningTotal = 0;
+
+        if (sortedRepos.length > 0) {
+          const startDate = new Date(sortedRepos[0].created_at);
+          const endDate = new Date();
+          
+          let current = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+          while (current <= endDate) {
+            const label = current.toLocaleDateString("en-US", {
+              month: "short",
+              year: "2-digit",
+            });
+            const countInMonth = monthlyRepoCounts[label] || 0;
+            runningTotal += countInMonth;
+            
+            githubHistoryLabels.push(label);
+            githubHistoryData.push(runningTotal);
+            
+            current.setMonth(current.getMonth() + 1);
+          }
+        }
+
+        let contributionsData = null;
+        if (contribsRes && contribsRes.ok) {
+          try {
+            contributionsData = await contribsRes.json();
+          } catch (e) {
+            console.error("Error parsing contributions:", e);
+          }
+        }
+
+        const contribHistoryLabels = [];
+        const contribHistoryData = [];
+
+        if (contributionsData && Array.isArray(contributionsData.contributions)) {
+          const sortedContribs = [...contributionsData.contributions].sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          );
+
+          const monthlyContribCounts = {};
+          const monthOrder = [];
+          const today = new Date();
+
+          sortedContribs.forEach((c) => {
+            const date = new Date(c.date);
+            if (date > today) return;
+
+            const monthLabel = date.toLocaleDateString("en-US", {
+              month: "short",
+              year: "2-digit",
+            });
+
+            if (monthlyContribCounts[monthLabel] === undefined) {
+              monthlyContribCounts[monthLabel] = 0;
+              monthOrder.push(monthLabel);
+            }
+            monthlyContribCounts[monthLabel] += c.count;
+          });
+
+          monthOrder.forEach((label) => {
+            contribHistoryLabels.push(label);
+            contribHistoryData.push(monthlyContribCounts[label]);
+          });
+        }
+
         const compiledStats = {
           publicRepos: profile.public_repos || (Array.isArray(repos) ? repos.length : 0),
           followers: profile.followers || 0,
@@ -182,6 +275,10 @@ export default function Activity() {
             .slice(4)
             .reduce((sum, item) => sum + item.count, 0),
           totalLanguagesCount: totalReposWithLang,
+          repoHistoryLabels: githubHistoryLabels,
+          repoHistoryData: githubHistoryData,
+          contribHistoryLabels,
+          contribHistoryData,
         };
 
         if (sortedLanguages.length > 4) {
@@ -340,7 +437,75 @@ export default function Activity() {
     return data;
   };
 
-  // SVGs / Circular Progress calculations
+  // LeetCode Doughnut Chart Data and Options
+  const leetcodeChartData = leetcodeData ? {
+    labels: ["Easy", "Medium", "Hard"],
+    datasets: [
+      {
+        data: [
+          leetcodeData.easySolved || 0,
+          leetcodeData.mediumSolved || 0,
+          leetcodeData.hardSolved || 0,
+        ],
+        backgroundColor: theme === "dark"
+          ? ["#404040", "#a3a3a3", "#ffffff"]
+          : ["#e5e5e5", "#737373", "#000000"],
+        borderColor: theme === "dark" ? "#181818" : "#ffffff",
+        borderWidth: 2,
+        hoverOffset: 4,
+      },
+    ],
+  } : null;
+
+  const leetcodeChartOptions = leetcodeData ? {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "75%",
+    animation: {
+      duration: 1500,
+      animateRotate: true,
+      animateScale: true,
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: theme === "dark" ? "#181818" : "#ffffff",
+        titleColor: theme === "dark" ? "#ffffff" : "#000000",
+        bodyColor: theme === "dark" ? "#cccccc" : "#666666",
+        borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+        borderWidth: 1,
+        titleFont: {
+          family: "Space Grotesk",
+          size: 13,
+          weight: "bold",
+        },
+        bodyFont: {
+          family: "Space Grotesk",
+          size: 12,
+        },
+        padding: 10,
+        cornerRadius: 8,
+        displayColors: false,
+        callbacks: {
+          label: (context) => {
+            const label = context.label || "";
+            const value = context.parsed || 0;
+            let totalForDiff = 0;
+            if (label === "Easy") totalForDiff = leetcodeData.totalEasy || 0;
+            else if (label === "Medium") totalForDiff = leetcodeData.totalMedium || 0;
+            else if (label === "Hard") totalForDiff = leetcodeData.totalHard || 0;
+
+            const percent = totalForDiff > 0 ? (value / totalForDiff) * 100 : 0;
+            return ` ${label}: ${value} / ${totalForDiff} (${percent.toFixed(1)}%)`;
+          },
+        },
+      },
+    },
+  } : null;
+
   const renderCircularProgress = (solved, total) => {
     const radius = 80;
     const circumference = 2 * Math.PI * radius;
@@ -380,7 +545,7 @@ export default function Activity() {
             transition={{ duration: 1.5, ease: "easeOut" }}
           />
         </svg>
-        <div className="absolute text-center flex flex-col justify-center items-center">
+        <div className="absolute text-center flex flex-col justify-center items-center pointer-events-none">
           <span className="text-4xl md:text-5xl font-bold font-syne text-primary leading-none">
             <CountUp value={solved} inView={leetcodeInView} duration={1.5} />
           </span>
@@ -394,6 +559,282 @@ export default function Activity() {
       </div>
     );
   };
+  // GitHub Languages Doughnut Chart Data and Options
+  const githubChartData = githubStats ? {
+    labels: githubStats.languages.map((l) => l.name),
+    datasets: [
+      {
+        data: githubStats.languages.map((l) => l.count),
+        backgroundColor: theme === "dark" 
+          ? ["#ffffff", "#a3a3a3", "#737373", "#404040", "#262626"] 
+          : ["#000000", "#525252", "#8e8e8e", "#c2c2c2", "#e5e5e5"],
+        borderColor: theme === "dark" ? "#181818" : "#ffffff",
+        borderWidth: 2,
+        hoverOffset: 4,
+      },
+    ],
+  } : null;
+
+  const githubChartOptions = githubStats ? {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "70%",
+    animation: {
+      duration: 1500,
+      animateRotate: true,
+      animateScale: true,
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: theme === "dark" ? "#181818" : "#ffffff",
+        titleColor: theme === "dark" ? "#ffffff" : "#000000",
+        bodyColor: theme === "dark" ? "#cccccc" : "#666666",
+        borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+        borderWidth: 1,
+        titleFont: {
+          family: "Space Grotesk",
+          size: 13,
+          weight: "bold",
+        },
+        bodyFont: {
+          family: "Space Grotesk",
+          size: 12,
+        },
+        padding: 10,
+        cornerRadius: 8,
+        displayColors: false,
+        callbacks: {
+          label: (context) => {
+            const index = context.dataIndex;
+            const lang = githubStats.languages[index];
+            return ` ${lang.count} ${lang.count === 1 ? "repo" : "repos"} (${lang.percentage.toFixed(1)}%)`;
+          },
+        },
+      },
+    },
+  } : null;
+
+  // GitHub Repositories Growth History Line Chart Config
+  const githubLineChartData = githubStats && githubStats.repoHistoryLabels ? {
+    labels: githubStats.repoHistoryLabels,
+    datasets: [
+      {
+        label: "Total Repositories",
+        data: githubStats.repoHistoryData,
+        borderColor: theme === "dark" ? "#ffffff" : "#000000",
+        backgroundColor: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+        pointBackgroundColor: theme === "dark" ? "#ffffff" : "#000000",
+        pointBorderColor: theme === "dark" ? "#181818" : "#ffffff",
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      },
+    ],
+  } : null;
+
+  const githubLineChartOptions = githubStats ? {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: theme === "dark" ? "#181818" : "#ffffff",
+        titleColor: theme === "dark" ? "#ffffff" : "#000000",
+        bodyColor: theme === "dark" ? "#cccccc" : "#666666",
+        borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+        borderWidth: 1,
+        titleFont: { family: "Space Grotesk", size: 12, weight: "bold" },
+        bodyFont: { family: "Space Grotesk", size: 12 },
+        callbacks: {
+          title: (context) => context[0].label,
+          label: (context) => ` Total Repos: ${context.parsed.y}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: theme === "dark" ? "#888888" : "#666666",
+          font: { family: "Space Grotesk", size: 10 },
+          maxRotation: 45,
+          minRotation: 45,
+        },
+      },
+      y: {
+        grid: {
+          color: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        },
+        ticks: {
+          color: theme === "dark" ? "#888888" : "#666666",
+          font: { family: "Space Grotesk", size: 10 },
+          stepSize: 5,
+        },
+      },
+    },
+    animation: {
+      duration: 1500,
+      easing: "easeInOutQuart",
+    },
+  } : null;
+
+  // GitHub Contribution History Line Chart Config
+  const githubContribChartData = githubStats && githubStats.contribHistoryLabels && githubStats.contribHistoryLabels.length > 0 ? {
+    labels: githubStats.contribHistoryLabels,
+    datasets: [
+      {
+        label: "Contributions",
+        data: githubStats.contribHistoryData,
+        borderColor: theme === "dark" ? "#ffffff" : "#000000",
+        backgroundColor: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+        pointBackgroundColor: theme === "dark" ? "#ffffff" : "#000000",
+        pointBorderColor: theme === "dark" ? "#181818" : "#ffffff",
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      },
+    ],
+  } : null;
+
+  const githubContribChartOptions = githubStats ? {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: theme === "dark" ? "#181818" : "#ffffff",
+        titleColor: theme === "dark" ? "#ffffff" : "#000000",
+        bodyColor: theme === "dark" ? "#cccccc" : "#666666",
+        borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+        borderWidth: 1,
+        titleFont: { family: "Space Grotesk", size: 12, weight: "bold" },
+        bodyFont: { family: "Space Grotesk", size: 12 },
+        callbacks: {
+          title: (context) => context[0].label,
+          label: (context) => ` Contributions: ${context.parsed.y}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: theme === "dark" ? "#888888" : "#666666",
+          font: { family: "Space Grotesk", size: 10 },
+          maxRotation: 45,
+          minRotation: 45,
+        },
+      },
+      y: {
+        grid: {
+          color: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        },
+        ticks: {
+          color: theme === "dark" ? "#888888" : "#666666",
+          font: { family: "Space Grotesk", size: 10 },
+        },
+      },
+    },
+    animation: {
+      duration: 1500,
+      easing: "easeInOutQuart",
+    },
+  } : null;
+
+  // LeetCode Contest Rating History Line Chart Config
+  const attendedHistory = leetcodeContest?.userContestRankingHistory
+    ? leetcodeContest.userContestRankingHistory.filter((item) => item.attended)
+    : [];
+
+  const leetcodeLineChartData = leetcodeContest && attendedHistory.length > 0 ? {
+    labels: attendedHistory.map((item) => item.contest.title.replace(" Contest", "")),
+    datasets: [
+      {
+        label: "Contest Rating",
+        data: attendedHistory.map((item) => Math.round(item.rating)),
+        borderColor: theme === "dark" ? "#ffffff" : "#000000",
+        backgroundColor: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+        pointBackgroundColor: theme === "dark" ? "#ffffff" : "#000000",
+        pointBorderColor: theme === "dark" ? "#181818" : "#ffffff",
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      },
+    ],
+  } : null;
+
+  const leetcodeLineChartOptions = leetcodeContest ? {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+        backgroundColor: theme === "dark" ? "#181818" : "#ffffff",
+        titleColor: theme === "dark" ? "#ffffff" : "#000000",
+        bodyColor: theme === "dark" ? "#cccccc" : "#666666",
+        borderColor: theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)",
+        borderWidth: 1,
+        titleFont: { family: "Space Grotesk", size: 12, weight: "bold" },
+        bodyFont: { family: "Space Grotesk", size: 12 },
+        callbacks: {
+          title: (context) => context[0].label,
+          label: (context) => ` Rating: ${Math.round(context.parsed.y)}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: theme === "dark" ? "#888888" : "#666666",
+          font: { family: "Space Grotesk", size: 10 },
+          maxRotation: 45,
+          minRotation: 45,
+        },
+      },
+      y: {
+        grid: {
+          color: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        },
+        ticks: {
+          color: theme === "dark" ? "#888888" : "#666666",
+          font: { family: "Space Grotesk", size: 10 },
+        },
+      },
+    },
+    animation: {
+      duration: 1500,
+      easing: "easeInOutQuart",
+    },
+  } : null;
 
   return (
     <section
@@ -515,81 +956,89 @@ export default function Activity() {
               >
                 <div className="text-left font-space flex flex-col gap-4">
                   <h3 className="text-primary font-syne font-bold text-lg mb-2">Top Languages</h3>
-                  {(() => {
-                    const themeColors = theme === "dark" 
-                      ? ["#ffffff", "#a3a3a3", "#737373", "#404040", "#262626"] 
-                      : ["#000000", "#525252", "#8e8e8e", "#c2c2c2", "#e5e5e5"];
-                    
-                    let cumulativePercentage = 0;
-                    const gradientSegments = [];
-                    githubStats.languages.forEach((lang, index) => {
-                      const start = cumulativePercentage;
-                      cumulativePercentage += lang.percentage;
-                      const end = cumulativePercentage;
-                      const color = themeColors[index % themeColors.length];
-                      gradientSegments.push(`${color} ${start.toFixed(1)}% ${end.toFixed(1)}%`);
-                    });
-
-                    // Fallback to empty gray circle if no languages found
-                    const conicGradientStyle = {
-                      background: gradientSegments.length > 0 
-                        ? `conic-gradient(${gradientSegments.join(", ")})` 
-                        : "currentColor",
-                    };
-
-                    return (
-                      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
-                        {/* SVG ClipPath Definition */}
-                        <svg className="absolute w-0 h-0" aria-hidden="true">
-                          <defs>
-                            <clipPath id="github-pie-clip" clipPathUnits="objectBoundingBox">
-                              <motion.circle
-                                cx="0.5"
-                                cy="0.5"
-                                r="0.5"
-                                fill="transparent"
-                                stroke="black"
-                                strokeWidth="1.2"
-                                transform="rotate(-90 0.5 0.5)"
-                                strokeDasharray="3.142"
-                                initial={{ strokeDashoffset: 3.142 }}
-                                animate={githubInView ? { strokeDashoffset: 0 } : { strokeDashoffset: 3.142 }}
-                                transition={{ duration: 1.5, ease: "easeInOut" }}
-                              />
-                            </clipPath>
-                          </defs>
-                        </svg>
-
-                        {/* Pie Chart */}
-                        <div 
-                          className={`w-32 h-32 rounded-full border border-primary/10 shadow-xs flex-shrink-0 ${gradientSegments.length === 0 ? "text-primary/10" : ""}`}
-                          style={{
-                            ...conicGradientStyle,
-                            clipPath: "url(#github-pie-clip)",
-                          }}
-                        />
-                        {/* Legend */}
-                        <div className="flex flex-col gap-2 w-full">
-                          {githubStats.languages.map((lang, index) => {
-                            const color = themeColors[index % themeColors.length];
-                            return (
-                              <div key={lang.name} className="flex items-center gap-2 text-sm">
-                                <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-                                <span className="text-primary font-semibold">{lang.name}</span>
-                                <span className="text-muted-text font-normal text-xs ml-auto whitespace-nowrap">
-                                  {lang.count} {lang.count === 1 ? "repo" : "repos"} ({lang.percentage.toFixed(1)}%)
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })()}
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
+                    {/* Pie Chart via Chart.js */}
+                    <div className="w-32 h-32 flex-shrink-0 relative">
+                      {githubInView && githubChartData && <Doughnut data={githubChartData} options={githubChartOptions} />}
+                    </div>
+                    {/* Legend */}
+                    <div className="flex flex-col gap-2 w-full">
+                      {githubStats.languages.map((lang, index) => {
+                        const themeColors = theme === "dark" 
+                          ? ["#ffffff", "#a3a3a3", "#737373", "#404040", "#262626"] 
+                          : ["#000000", "#525252", "#8e8e8e", "#c2c2c2", "#e5e5e5"];
+                        const color = themeColors[index % themeColors.length];
+                        return (
+                          <div key={lang.name} className="flex items-center gap-2 text-sm">
+                            <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                            <span className="text-primary font-semibold">{lang.name}</span>
+                            <span className="text-muted-text font-normal text-xs ml-auto whitespace-nowrap">
+                              {lang.count} {lang.count === 1 ? "repo" : "repos"} ({lang.percentage.toFixed(1)}%)
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           ) : null}
+
+          {/* GitHub Activity & Growth Charts */}
+          {githubStats && (
+            <div 
+              className="w-full bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 text-left font-space mb-8"
+              data-hover-text={
+                activeGithubTab === "contributions"
+                  ? "Contributions History: A timeline of my active GitHub contributions."
+                  : "Repositories Growth: A timeline of my open-source project creation."
+              }
+            >
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h3 className="text-primary font-syne font-bold text-lg">
+                  {activeGithubTab === "contributions" ? "Contribution Activity" : "Repository Growth Timeline"}
+                </h3>
+                {/* Tab Toggles */}
+                <div className="flex gap-2 bg-primary/5 p-1 rounded-lg border border-primary/10 select-none">
+                  <button
+                    onClick={() => setActiveGithubTab("contributions")}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 ${
+                      activeGithubTab === "contributions"
+                        ? "bg-primary text-bg shadow-xs"
+                        : "text-muted-text hover:text-primary"
+                    }`}
+                  >
+                    Contributions
+                  </button>
+                  <button
+                    onClick={() => setActiveGithubTab("repos")}
+                    className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 ${
+                      activeGithubTab === "repos"
+                        ? "bg-primary text-bg shadow-xs"
+                        : "text-muted-text hover:text-primary"
+                    }`}
+                  >
+                    Repositories
+                  </button>
+                </div>
+              </div>
+              
+              <div className="h-64 sm:h-72 w-full relative flex items-center justify-center">
+                {activeGithubTab === "contributions" ? (
+                  githubContribChartData ? (
+                    githubInView && <Line data={githubContribChartData} options={githubContribChartOptions} />
+                  ) : (
+                    <div className="text-center text-xs text-muted-text">
+                      Loading contribution activity graph...
+                    </div>
+                  )
+                ) : (
+                  githubInView && githubLineChartData && <Line data={githubLineChartData} options={githubLineChartOptions} />
+                )}
+              </div>
+            </div>
+          )}
 
           {/* GitHub Heatmap Grid */}
           <div 
@@ -742,103 +1191,54 @@ export default function Activity() {
                   </div>
                 </div>
 
-                {/* Difficulty Bars */}
-                <div className="lg:col-span-6 flex flex-col gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full justify-center">
-                  <div className="text-left font-space flex flex-col gap-6">
-                    {/* Easy */}
-                    <div 
-                      className="cursor-help" 
-                      data-hover-text="Easy questions: where I feel like a programming genius!"
-                    >
-                      <div className="flex justify-between text-base mb-2">
-                        <span className="text-neutral-500 dark:text-neutral-400 font-semibold">
-                          Easy
-                        </span>
-                        <span className="text-muted-text font-medium">
-                          <CountUp value={leetcodeData.easySolved} inView={leetcodeInView} duration={1.2} /> / {leetcodeData.totalEasy}
-                        </span>
+                {/* Right Panel: Solved Distribution (Doughnut Chart) */}
+                <div 
+                  className="lg:col-span-6 flex flex-col justify-center bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full"
+                  data-hover-text="Difficulty Breakdown: A visualization of my programming stats."
+                >
+                  <div className="text-left font-space flex flex-col gap-4">
+                    <h3 className="text-primary font-syne font-bold text-lg mb-2">Solved Distribution</h3>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
+                      {/* Doughnut Chart */}
+                      <div className="w-32 h-32 flex-shrink-0 relative">
+                        {leetcodeInView && leetcodeChartData && <Doughnut data={leetcodeChartData} options={leetcodeChartOptions} />}
                       </div>
-                      <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
-                        <motion.div
-                          className="bg-neutral-500 h-full rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={leetcodeInView ? {
-                            width: `${
-                              leetcodeData.totalEasy > 0
-                                ? (leetcodeData.easySolved /
-                                    leetcodeData.totalEasy) *
-                                  100
-                                : 0
-                            }%`
-                          } : { width: "0%" }}
-                          transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Medium */}
-                    <div 
-                      className="cursor-help" 
-                      data-hover-text="Medium questions: where I spend 2 hours writing 10 lines of code."
-                    >
-                      <div className="flex justify-between text-base mb-2">
-                        <span className="text-neutral-600 dark:text-neutral-300 font-semibold">
-                          Medium
-                        </span>
-                        <span className="text-muted-text font-medium">
-                          <CountUp value={leetcodeData.mediumSolved} inView={leetcodeInView} duration={1.2} /> /{" "}
-                          {leetcodeData.totalMedium}
-                        </span>
-                      </div>
-                      <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
-                        <motion.div
-                          className="bg-neutral-600 dark:bg-neutral-300 h-full rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={leetcodeInView ? {
-                            width: `${
-                              leetcodeData.totalMedium > 0
-                                ? (leetcodeData.mediumSolved /
-                                    leetcodeData.totalMedium) *
-                                  100
-                                : 0
-                            }%`
-                          } : { width: "0%" }}
-                          transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Hard */}
-                    <div 
-                      className="cursor-help" 
-                      data-hover-text="Hard questions: where the last testcase always gives TLE (Time Limit Exceeded)."
-                    >
-                      <div className="flex justify-between text-base mb-2">
-                        <span className="text-primary font-semibold">Hard</span>
-                        <span className="text-muted-text font-medium">
-                          <CountUp value={leetcodeData.hardSolved} inView={leetcodeInView} duration={1.2} /> / {leetcodeData.totalHard}
-                        </span>
-                      </div>
-                      <div className="w-full bg-primary/10 h-3 rounded-full overflow-hidden border border-primary/5">
-                        <motion.div
-                          className="bg-primary h-full rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={leetcodeInView ? {
-                            width: `${
-                              leetcodeData.totalHard > 0
-                                ? (leetcodeData.hardSolved /
-                                    leetcodeData.totalHard) *
-                                  100
-                                : 0
-                            }%`
-                          } : { width: "0%" }}
-                          transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-                        />
+                      {/* Legend */}
+                      <div className="flex flex-col gap-2 w-full">
+                        {leetcodeData && [
+                          { name: "Easy", count: leetcodeData.easySolved || 0, total: leetcodeData.totalEasy || 0, color: theme === "dark" ? "#404040" : "#e5e5e5" },
+                          { name: "Medium", count: leetcodeData.mediumSolved || 0, total: leetcodeData.totalMedium || 0, color: theme === "dark" ? "#a3a3a3" : "#737373" },
+                          { name: "Hard", count: leetcodeData.hardSolved || 0, total: leetcodeData.totalHard || 0, color: theme === "dark" ? "#ffffff" : "#000000" }
+                        ].map((item) => {
+                          const percent = item.total > 0 ? (item.count / item.total) * 100 : 0;
+                          return (
+                            <div key={item.name} className="flex items-center gap-2 text-sm">
+                              <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                              <span className="text-primary font-semibold">{item.name}</span>
+                              <span className="text-muted-text font-normal text-xs ml-auto whitespace-nowrap">
+                                {item.count} / {item.total} ({percent.toFixed(1)}%)
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Contest Rating History Line Chart */}
+              {leetcodeContest && leetcodeContest.userContestRankingHistory && leetcodeContest.userContestRankingHistory.length > 0 && (
+                <div 
+                  className="w-full bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 text-left font-space"
+                  data-hover-text="Contest Rating History: A visualization of my programming rank climb."
+                >
+                  <h3 className="text-primary font-syne font-bold text-lg mb-4">Contest Rating History</h3>
+                  <div className="h-64 sm:h-72 w-full relative">
+                    {leetcodeInView && leetcodeLineChartData && <Line data={leetcodeLineChartData} options={leetcodeLineChartOptions} />}
+                  </div>
+                </div>
+              )}
 
               {/* Heatmap Calendar */}
               <div className="w-full flex flex-col gap-2">
