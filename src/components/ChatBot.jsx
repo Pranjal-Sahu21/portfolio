@@ -404,6 +404,8 @@ Here is your complete and detailed knowledge base about Pranjal Sahu, derived fr
 ## Professional Certifications:
 - **HackerRank React Developer Certification** (May 2026): Validated proficiency in 3 frontend technologies: React, JavaScript, and CSS. View [HackerRank Certificate](https://drive.google.com/file/d/1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI/view?usp=sharing).
 - **GeeksforGeeks MongoDB Architecture Certification** (April 2026): Covered 4 MongoDB concepts: data modeling, indexing, replication, and sharding. View [GFG MongoDB Certificate](https://drive.google.com/file/d/1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc/view?usp=sharing).
+- **GeeksforGeeks DSA Certification** (June 2026): Covered 15+ core Data Structures and Algorithms topics (including Arrays, Linked Lists, Stacks, Queues, Trees, Graphs, Dynamic Programming, Recursion, Greedy, Sorting, Searching, Hashing, Heaps, and Backtracking) to strengthen analytical thinking and problem-solving skills. View [GFG DSA Certificate](https://drive.google.com/file/d/1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo/view?usp=sharing).
+- **Udemy Node.js Certification** (June 2026): Acquired 10+ backend development skills (including Node.js, Express.js, REST APIs, JWT Authentication, Middleware, MongoDB, PostgreSQL, Mongoose ORM, Docker, and Cloud Deployment) through practical projects. View [Udemy Node.js Certificate](https://drive.google.com/file/d/1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG/view?usp=drive_link).
 
 ## Technical Skills:
 - **Languages**: Java, JavaScript, TypeScript, Python, C

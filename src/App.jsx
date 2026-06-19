@@ -147,8 +147,12 @@ function InnerApp() {
           currentHoverText = "Check out my resume!";
         } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("hackerrank")) {
           currentHoverText = "HackerRank React Developer Certificate!";
-        } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb") || text.includes("gfg")) {
+        } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb")) {
           currentHoverText = "MongoDB Architecture Certificate!";
+        } else if (href.includes("1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo") || text.includes("dsa")) {
+          currentHoverText = "GeeksforGeeks DSA Certificate!";
+        } else if (href.includes("1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG") || text.includes("udemy") || text.includes("node")) {
+          currentHoverText = "Udemy Node.js Certificate!";
         } else if (href.includes("drive.google.com")) {
           currentHoverText = "Check out my credential!";
         } else if (text === "contact me" || href === "#contact") {
