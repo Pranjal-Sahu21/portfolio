@@ -86,7 +86,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="min-h-screen flex flex-col justify-center items-center py-30 px-5 overflow-hidden relative text-center"
+      className="flex flex-col justify-center items-center py-30 px-5 overflow-hidden relative text-center"
     >
       <motion.h2
         ref={ref}

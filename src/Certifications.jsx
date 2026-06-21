@@ -128,7 +128,7 @@ export default function Certifications() {
   return (
     <section
       id="certifications"
-      className="min-h-screen flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative bg-bg"
+      className="flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative bg-bg"
       ref={ref}
     >
       {/* Title */}
