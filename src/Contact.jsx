@@ -1,6 +1,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Mail, Phone, MapPin, Instagram, Linkedin, Github, Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
   const ref = useRef(null);
@@ -17,32 +18,30 @@ export default function Contact() {
     setErrorMsg("");
 
     const form = formRef.current;
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      subject: form.subject.value,
-      message: form.message.value,
-    };
 
     try {
-      const res = await fetch("https://formspree.io/f/movnrvqz", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-      if (res.ok) {
-        setIsSuccess(true);
-        form.reset();
-      } else {
-        const json = await res.json().catch(() => ({}));
-        setErrorMsg(json?.error || "Something went wrong. Please try again.");
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error("EmailJS is not fully configured in environment variables.");
       }
-    } catch {
-      setErrorMsg("Network error — please check your connection and try again.");
+
+      await emailjs.sendForm(
+        serviceId,
+        templateId,
+        form,
+        {
+          publicKey: publicKey,
+        }
+      );
+
+      setIsSuccess(true);
+      form.reset();
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setErrorMsg(error?.text || error?.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
