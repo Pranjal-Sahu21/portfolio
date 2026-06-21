@@ -107,62 +107,36 @@ export default function About() {
   const isContentInView = useInView(contentRef, { once: true, amount: 0.15 });
 
   const [githubContributions, setGithubContributions] = useState(800);
-  const [leetcodeSolved, setLeetcodeSolved] = useState(700);
+  const [leetcodeSolved, setLeetcodeSolved] = useState(800);
 
   useEffect(() => {
-    const getCached = (key) => {
-      const item = localStorage.getItem(key);
-      if (!item) return null;
-      try {
-        const { val, ts } = JSON.parse(item);
-        if (Date.now() - ts < 86400000) return val;
-      } catch (e) {}
-      return null;
-    };
-
-    const setCached = (key, val) => {
-      localStorage.setItem(key, JSON.stringify({ val, ts: Date.now() }));
-    };
-
     const fetchStats = async () => {
-      const cachedGH = getCached("about_github_contributions_v2");
-      if (cachedGH) {
-        setGithubContributions(cachedGH);
-      } else {
-        try {
-          const res = await fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21");
-          if (res.ok) {
-            const data = await res.json();
-            const total = Object.values(data.total).reduce((a, b) => a + b, 0);
-            if (total > 0) {
-              const rounded = Math.floor(total / 100) * 100;
-              setGithubContributions(rounded);
-              setCached("about_github_contributions_v2", rounded);
-            }
+      try {
+        const res = await fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21");
+        if (res.ok) {
+          const data = await res.json();
+          const total = Object.values(data.total).reduce((a, b) => a + b, 0);
+          if (total > 0) {
+            const rounded = Math.floor(total / 100) * 100;
+            setGithubContributions(rounded);
           }
-        } catch (e) {
-          console.error("Error fetching GH contributions:", e);
         }
+      } catch (e) {
+        console.error("Error fetching GH contributions:", e);
       }
 
-      const cachedLC = getCached("about_leetcode_solved_v2");
-      if (cachedLC) {
-        setLeetcodeSolved(cachedLC);
-      } else {
-        try {
-          const res = await fetch("https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619");
-          if (res.ok) {
-            const data = await res.json();
-            const total = data.totalSolved;
-            if (total > 0) {
-              const rounded = Math.floor(total / 100) * 100;
-              setLeetcodeSolved(rounded);
-              setCached("about_leetcode_solved_v2", rounded);
-            }
+      try {
+        const res = await fetch("https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619");
+        if (res.ok) {
+          const data = await res.json();
+          const total = data.totalSolved;
+          if (total > 0) {
+            const rounded = Math.floor(total / 100) * 100;
+            setLeetcodeSolved(rounded);
           }
-        } catch (e) {
-          console.error("Error fetching LeetCode solved:", e);
         }
+      } catch (e) {
+        console.error("Error fetching LeetCode solved:", e);
       }
     };
 

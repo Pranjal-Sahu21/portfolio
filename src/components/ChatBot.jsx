@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Send, X, Bot, RefreshCw } from "lucide-react";
+import { RESUME_LINK } from "../utils";
 const parseBoldText = (text) => {
   if (typeof text !== "string") return text;
   const boldRegex = /\*\*([^*]+)\*\*/g;
@@ -147,9 +148,10 @@ export default function ChatBot() {
       totalStars: 10,
       prsCount: 12,
       languages: "JavaScript, HTML, CSS, Java",
+      contributions: 800,
     },
     leetcode: {
-      totalSolved: 773,
+      totalSolved: 800,
       easySolved: 303,
       mediumSolved: 432,
       hardSolved: 38,
@@ -166,19 +168,8 @@ export default function ChatBot() {
   useEffect(() => {
     let active = true;
     const fetchStats = async () => {
-      const cachedLeetcode = localStorage.getItem("leetcode_stats_cache_v5");
-      
       let githubData = null;
       let leetcodeData = null;
-      
-      if (cachedLeetcode) {
-        try {
-          const parsed = JSON.parse(cachedLeetcode);
-          if (Date.now() - parsed.timestamp < 86400000) {
-            leetcodeData = parsed.data;
-          }
-        } catch {}
-      }
       
       try {
         const headers = { Accept: "application/vnd.github.v3+json" };
@@ -186,11 +177,24 @@ export default function ChatBot() {
           fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
           fetch("https://api.github.com/users/pranjal-sahu21/repos?per_page=100", { headers }),
           fetch("https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr", { headers }),
+          fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21"),
         ]);
         
         const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
         const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
         const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
+        const contribsRes = results[3].status === "fulfilled" ? results[3].value : null;
+
+        let contributions = 800;
+        if (contribsRes && contribsRes.ok) {
+          try {
+            const data = await contribsRes.json();
+            const total = Object.values(data.total).reduce((a, b) => a + b, 0);
+            if (total > 0) contributions = total;
+          } catch (e) {
+            console.error("Error parsing contributions:", e);
+          }
+        }
         
         let profile = {};
         if (profileRes && profileRes.ok) profile = await profileRes.json();
@@ -229,48 +233,46 @@ export default function ChatBot() {
           totalStars: totalStars || 10,
           prsCount: prs.total_count || 12,
           languages: sortedLanguages || "JavaScript, HTML, CSS, Java",
+          contributions: contributions,
         };
       } catch (e) {
         console.error("ChatBot GitHub fetch error:", e);
       }
       
-      if (!leetcodeData) {
+      try {
+        const mainRes = await fetch("https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619");
+        let mainData = null;
+        if (mainRes.ok) mainData = await mainRes.json();
+        
+        let contestData = null;
         try {
-          const mainRes = await fetch("https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619");
-          let mainData = null;
-          if (mainRes.ok) mainData = await mainRes.json();
-          
-          let contestData = null;
-          try {
-            const contestRes = await fetch("https://alfa-leetcode-api.onrender.com/userContestRankingInfo/Pranjal_1619");
-            if (contestRes.ok) contestData = await contestRes.json();
-          } catch {}
-          
-          let badgesData = null;
-          try {
-            const badgesRes = await fetch("https://alfa-leetcode-api.onrender.com/Pranjal_1619/badges");
-            if (badgesRes.ok) badgesData = await badgesRes.json();
-          } catch {}
-          
-          if (mainData) {
-            leetcodeData = {
-              totalSolved: mainData.totalSolved || 773,
-              easySolved: mainData.easySolved || 303,
-              mediumSolved: mainData.mediumSolved || 432,
-              hardSolved: mainData.hardSolved || 38,
-              totalQuestions: mainData.totalQuestions || 3962,
-              ranking: mainData.ranking || 68867,
-              contestRating: contestData && contestData.userContestRanking ? Math.round(contestData.userContestRanking.rating) : 1810,
-              contestTopPercentage: contestData && contestData.userContestRanking ? contestData.userContestRanking.topPercentage : 1.5,
-              reputation: mainData.reputation || 26,
-              points: mainData.contributionPoint || 3021,
-              badges: badgesData ? badgesData.badgesCount : 5,
-            };
-            localStorage.setItem("leetcode_stats_cache_v5", JSON.stringify({ data: leetcodeData, timestamp: Date.now() }));
-          }
-        } catch (e) {
-          console.error("ChatBot LeetCode fetch error:", e);
+          const contestRes = await fetch("https://alfa-leetcode-api.onrender.com/userContestRankingInfo/Pranjal_1619");
+          if (contestRes.ok) contestData = await contestRes.json();
+        } catch {}
+        
+        let badgesData = null;
+        try {
+          const badgesRes = await fetch("https://alfa-leetcode-api.onrender.com/Pranjal_1619/badges");
+          if (badgesRes.ok) badgesData = await badgesRes.json();
+        } catch {}
+        
+        if (mainData) {
+          leetcodeData = {
+            totalSolved: mainData.totalSolved || 800,
+            easySolved: mainData.easySolved || 303,
+            mediumSolved: mainData.mediumSolved || 432,
+            hardSolved: mainData.hardSolved || 38,
+            totalQuestions: mainData.totalQuestions || 3962,
+            ranking: mainData.ranking || 68867,
+            contestRating: contestData && contestData.userContestRanking ? Math.round(contestData.userContestRanking.rating) : 1810,
+            contestTopPercentage: contestData && contestData.userContestRanking ? contestData.userContestRanking.topPercentage : 1.5,
+            reputation: mainData.reputation || 26,
+            points: mainData.contributionPoint || 3021,
+            badges: badgesData ? badgesData.badgesCount : 5,
+          };
         }
+      } catch (e) {
+        console.error("ChatBot LeetCode fetch error:", e);
       }
       
       if (active) {
@@ -366,10 +368,10 @@ Here is your complete and detailed knowledge base about Pranjal Sahu, derived fr
 - **Instagram**: https://www.instagram.com/prsahu_21/
 - **LeetCode**: https://leetcode.com/u/Pranjal_1619
 - **Portfolio Website**: https://portfoliopranjalsahu.netlify.app
-- **Resume/CV**: Available for download via [Google Drive](https://drive.google.com/file/d/1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk/view?usp=drive_link).
+- **Resume/CV**: Available for download via [Google Drive](${RESUME_LINK}).
 
 ## About Pranjal Sahu
-- **Age**: Born in 2006 (currently 20 years old).
+- **Age**: Born on 12th June 2006 (currently 20 years old).
 - **Current Role**: Web Developer & Computer Science and Engineering (CSE) B.Tech Student at the National Institute of Technology (NIT), Rourkela (2024 - Present).
 
 ## Education & Grades:
@@ -387,7 +389,7 @@ Here is your complete and detailed knowledge base about Pranjal Sahu, derived fr
 
 ## Coding Achievements & Live Stats:
 - **Projects completed**: 15+ featured and utility projects.
-- **GitHub Contributions**: 800+ contributions.
+- **GitHub Contributions**: ${stats.github.contributions} contributions.
 - **GitHub Repositories**: Over 30+ repositories (from which ${stats.github.publicRepos} are public).
 - **GitHub Followers**: ${stats.github.followers} followers.
 - **GitHub Total Stars**: ${stats.github.totalStars} stars earned.

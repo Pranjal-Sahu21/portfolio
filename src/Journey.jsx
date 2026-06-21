@@ -1,6 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MapPin } from "lucide-react";
+import nitRourkelaImg from "../assets/nit_rourkela.png";
+import saiSchoolImg from "../assets/sai_school.jpg";
+import vikashSchoolImg from "../assets/vikash_school.jpg";
 
 export default function Journey() {
   const journeyData = [
@@ -9,18 +12,24 @@ export default function Journey() {
       details: ["B.Tech in Computer Science & Engineering", "(2024 - Present)"],
       grade: ["CGPA - 8.61"],
       hoverText: "I am currently studying Computer Science here!",
+      image: nitRourkelaImg,
+      locationUrl: "https://maps.google.com/?q=National+Institute+of+Technology+Rourkela",
     },
     {
       title: "SAI International School, Bhubaneswar",
       details: ["12th Boards", "(2022 - 2024)"],
       grade: ["Grade: 92.2%"],
       hoverText: "I completed my senior secondary schooling here!",
+      image: saiSchoolImg,
+      locationUrl: "https://maps.google.com/?q=SAI+International+School+Bhubaneswar",
     },
     {
       title: "Vikash Convent School, Karanjia",
       details: ["10th Boards", "(2021 - 2022)"],
       grade: ["Grade: 96.2%"],
       hoverText: "I did my matriculation schooling here!",
+      image: vikashSchoolImg,
+      locationUrl: "https://maps.google.com/?q=Vikash+Convent+School+Karanjia",
     },
   ];
 
@@ -156,6 +165,21 @@ export default function Journey() {
                 whileHover={{ scale: 1.02 }}
                 data-hover-text={journey.hoverText}
               >
+                {journey.image && (
+                  <a
+                    href={journey.locationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block mb-5 overflow-hidden rounded-xl border border-primary/10 group/img relative aspect-[16/9] w-full"
+                  >
+                    <img
+                      src={journey.image}
+                      alt={journey.title}
+                      className="w-full h-full object-cover grayscale brightness-90 contrast-[1.05] transition-all duration-500 ease-out group-hover/img:scale-105 group-hover/img:grayscale-0 group-hover/img:brightness-100"
+                    />
+                    <div className="absolute inset-0 bg-primary/0 group-hover/img:bg-primary/5 transition-colors duration-500" />
+                  </a>
+                )}
                 <h3 className="font-syne font-medium text-[1.1rem] md:text-[1.25rem] xl:text-[1.2rem] mb-[15px] md:mb-6">{journey.title}</h3>
                 {journey.details.map((line, i) => (
                   <p

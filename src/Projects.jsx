@@ -133,14 +133,16 @@ export default function Projects() {
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full h-full bg-input-bg/75 rounded-2xl p-4 text-center text-light-text no-underline shadow-md border border-primary/5 transition-transform hover:scale-[1.02] duration-300"
+                    className="group/proj block w-full h-full bg-input-bg/75 rounded-2xl p-4 text-center text-light-text no-underline shadow-md border border-primary/5 transition-transform hover:scale-[1.02] duration-300"
                   >
-                    <img
-                      src={p.img}
-                      alt={`Screenshot of ${p.title} — ${p.desc}`}
-                      className="w-full h-48 object-cover rounded-xl"
-                      loading="lazy"
-                    />
+                    <div className="overflow-hidden rounded-xl w-full h-48 relative">
+                      <img
+                        src={p.img}
+                        alt={`Screenshot of ${p.title} — ${p.desc}`}
+                        className="w-full h-full object-cover grayscale brightness-90 contrast-[1.05] transition-all duration-500 ease-out group-hover/proj:scale-105 group-hover/proj:grayscale-0 group-hover/proj:brightness-100"
+                        loading="lazy"
+                      />
+                    </div>
                     <h2 className="mt-5 text-xl font-syne font-bold shimmer-text">
                       {p.title}
                     </h2>
@@ -173,14 +175,16 @@ export default function Projects() {
                     href={p.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full h-full bg-input-bg rounded-2xl p-3.5 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d border border-primary/5"
+                    className="group/proj block w-full h-full bg-input-bg rounded-2xl p-3.5 sm:p-5 transition-all duration-300 no-underline shadow-md project-card-3d border border-primary/5"
                   >
-                    <img
-                      src={p.img}
-                      alt={`Screenshot of ${p.title} — ${p.desc}`}
-                      className="w-full h-44 object-cover rounded-xl"
-                      loading="lazy"
-                    />
+                    <div className="overflow-hidden rounded-xl w-full h-44 relative">
+                      <img
+                        src={p.img}
+                        alt={`Screenshot of ${p.title} — ${p.desc}`}
+                        className="w-full h-full object-cover grayscale brightness-90 contrast-[1.05] transition-all duration-500 ease-out group-hover/proj:scale-105 group-hover/proj:grayscale-0 group-hover/proj:brightness-100"
+                        loading="lazy"
+                      />
+                    </div>
                     <h2 className="mt-4.5 text-[1.15rem] font-syne font-bold shimmer-text text-left leading-snug">
                       {p.title}
                     </h2>

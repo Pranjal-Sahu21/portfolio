@@ -15,6 +15,7 @@ import Loader from "./Loader";
 import ChatBot from "./components/ChatBot";
 import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "./context/ThemeContext";
+import { RESUME_LINK } from "./utils";
 
 function InnerApp() {
   const [loading, setLoading] = useState(true);
@@ -28,18 +29,6 @@ function InnerApp() {
     dotRef.current = dot;
 
     const speechBubble = dot.querySelector(".avatar-speech");
-
-    const scrollDialogues = [
-      "Okay, it feels dizzy...",
-      "Stop playing with me!",
-      "Aaaah, too fast!",
-      "Wheee! Stop spinning!",
-      "My head is turning!",
-      "Whoa, dizzy dizzy!",
-      "Hold on, I'm gonna barf!",
-      "I am not a fidget spinner!",
-      "I'm spinning out of control!"
-    ];
 
     const clickDialogues = [
       "Ouch!",
@@ -65,15 +54,12 @@ function InnerApp() {
 
     let currentHoverText = "";
     let currentClickText = "";
-    let currentScrollText = "";
     let clickTimeout;
 
     const updateSpeechBubble = () => {
       let activeText = "";
       if (currentClickText) {
         activeText = currentClickText;
-      } else if (currentScrollText) {
-        activeText = currentScrollText;
       } else if (currentHoverText) {
         activeText = currentHoverText;
       }
@@ -143,7 +129,7 @@ function InnerApp() {
         const text = clickable.textContent.trim().toLowerCase();
         const href = clickable.getAttribute("href") || "";
 
-        if (text === "download cv" || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk")) {
+        if (text === "download cv" || href === RESUME_LINK || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk") || href.includes("1_KrL-UboRRlkNhiWVrA_wacuLGYufBQm")) {
           currentHoverText = "Check out my resume!";
         } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("hackerrank")) {
           currentHoverText = "HackerRank React Developer Certificate!";
@@ -196,24 +182,13 @@ function InnerApp() {
     let scrollTimeout;
     const handleScroll = () => {
       dot.classList.remove("hover-project");
-
-      dot.classList.add("scrolling");
       dot.classList.add("show");
       dot.classList.remove("idle");
       isScrolling = true;
 
-      // Select random scroll text if not already active
-      if (!currentScrollText) {
-        currentScrollText = scrollDialogues[Math.floor(Math.random() * scrollDialogues.length)];
-      }
-      updateSpeechBubble();
-
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        dot.classList.remove("scrolling");
         isScrolling = false;
-        currentScrollText = "";
-        updateSpeechBubble();
       }, 500);
     };
 
