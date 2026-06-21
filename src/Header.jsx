@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/apple-touch-icon.png";
-import { Home, User, Briefcase, Wrench, FolderGit2, Activity, Mail } from "lucide-react";
+import { Home, User, Briefcase, Wrench, Award, FolderGit2, Activity, Mail } from "lucide-react";
 import { scrollToSection } from "./utils/scrollToSection";
 import { useTheme } from "./context/ThemeContext";
 import AnimatedThemeToggler from "./components/AnimatedThemeToggler";
@@ -27,7 +27,7 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const sections = ["home", "about", "journey", "skills", "projects", "activity", "contact"];
+    const sections = ["home", "about", "journey", "skills", "certifications", "projects", "activity", "contact"];
 
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 2;
@@ -158,6 +158,7 @@ export default function Header() {
     { id: "about", label: "About", icon: User },
     { id: "journey", label: "Journey", icon: Briefcase },
     { id: "skills", label: "Skills", icon: Wrench },
+    { id: "certifications", label: "Certifications", icon: Award },
     { id: "projects", label: "Projects", icon: FolderGit2 },
     { id: "activity", label: "Activity", icon: Activity },
     { id: "contact", label: "Contact", icon: Mail },
@@ -280,7 +281,7 @@ export default function Header() {
             <AnimatePresence>
               {menuOpen && (
                 <motion.ul
-                  className="flex flex-col justify-start items-start pl-[4vw] pt-16 gap-[3vh] list-none w-full overflow-y-auto no-scrollbar"
+                  className="flex flex-col justify-start items-start pl-[4vw] pt-18 gap-[2.5vh] list-none w-full overflow-y-auto no-scrollbar"
                   variants={containerVariants}
                   initial="collapsed"
                   animate="expanded"
@@ -295,7 +296,7 @@ export default function Header() {
                           e.preventDefault();
                           scrollToSection(link.id, () => setMenuOpen(false));
                         }}
-                        className={`font-syne font-extrabold text-[clamp(1.6rem,5.5vw,2.4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
+                        className={`font-syne font-extrabold text-[clamp(1.1rem,5.5vw,2.4rem)] tracking-tight no-underline transition-all duration-300 hover:translate-x-2.5 hover:text-primary relative after:content-[''] after:block after:w-0 hover:after:w-2/5 after:h-0.5 after:bg-primary after:mt-1.5 after:transition-[width] after:duration-300 ${
                           activeSection === link.id
                             ? "text-primary pl-4 border-l-[3px] border-primary"
                             : "text-[#555555]"

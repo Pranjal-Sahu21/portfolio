@@ -4,6 +4,7 @@ import Home from "./Home";
 import About from "./About";
 import Journey from "./Journey";
 import Skills from "./Skills";
+import Certifications from "./Certifications";
 import Projects from "./Projects";
 import Activity from "./Activity";
 import Contact from "./Contact";
@@ -115,6 +116,8 @@ function InnerApp() {
           currentHoverText = "Explore my coding journey";
         } else if (sectionId === "skills") {
           currentHoverText = "Check out my technical skills";
+        } else if (sectionId === "certifications") {
+          currentHoverText = "Browse my certifications";
         } else if (sectionId === "projects") {
           currentHoverText = "See what I have built";
         } else if (sectionId === "activity") {
@@ -131,14 +134,18 @@ function InnerApp() {
 
         if (text === "download cv" || href === RESUME_LINK || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk") || href.includes("1_KrL-UboRRlkNhiWVrA_wacuLGYufBQm")) {
           currentHoverText = "Check out my resume!";
-        } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("hackerrank")) {
-          currentHoverText = "HackerRank React Developer Certificate!";
-        } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb")) {
-          currentHoverText = "MongoDB Architecture Certificate!";
-        } else if (href.includes("1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo") || text.includes("dsa")) {
-          currentHoverText = "GeeksforGeeks DSA Certificate!";
-        } else if (href.includes("1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG") || text.includes("udemy") || text.includes("node")) {
-          currentHoverText = "Udemy Node.js Certificate!";
+        } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("react developer")) {
+          currentHoverText = "HackerRank React: Validated my frontend skills in JavaScript, React, and CSS!";
+        } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb architecture")) {
+          currentHoverText = "GFG MongoDB: Learned database architecture, document modeling, sharding, and scaling!";
+        } else if (href.includes("1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo") || text.includes("dsa certification")) {
+          currentHoverText = "GFG DSA: Mastered 15+ core data structures and complex algorithms topics!";
+        } else if (href.includes("1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG") || text.includes("node.js developer")) {
+          currentHoverText = "Udemy Node: Learned 10+ backend technologies including Node, Docker, ORMs, and Cloud Deployment!";
+        } else if (href.includes("1nIBOc97mW8YOuxfXODMgBjUZa39Q0mAF") || text.includes("sql (intermediate)")) {
+          currentHoverText = "HackerRank SQL: Confirmed my proficiency in relational queries and database commands!";
+        } else if (href.includes("1V93UXpsTA7oosK5Wnbgv_pMrIsqSfmnf") || text.includes("postgresql developer")) {
+          currentHoverText = "Simplilearn Postgres: Learned PostgreSQL database design, administration, and querying!";
         } else if (href.includes("drive.google.com")) {
           currentHoverText = "Check out my credential!";
         } else if (text === "contact me" || href === "#contact") {
@@ -368,6 +375,7 @@ function InnerApp() {
             <About />
             <Journey />
             <Skills />
+            <Certifications />
             <Projects />
             <Activity />
             <Contact />

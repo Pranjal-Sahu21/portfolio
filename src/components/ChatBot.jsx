@@ -403,11 +403,13 @@ Here is your complete and detailed knowledge base about Pranjal Sahu, derived fr
 - **LeetCode Points**: ${stats.leetcode.points} contribution points.
 - **LeetCode Badges**: ${stats.leetcode.badges} badges earned.
 
-## Professional Certifications:
-- **HackerRank React Developer Certification** (May 2026): Validated proficiency in 3 frontend technologies: React, JavaScript, and CSS. View [HackerRank Certificate](https://drive.google.com/file/d/1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI/view?usp=sharing).
-- **GeeksforGeeks MongoDB Architecture Certification** (April 2026): Covered 4 MongoDB concepts: data modeling, indexing, replication, and sharding. View [GFG MongoDB Certificate](https://drive.google.com/file/d/1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc/view?usp=sharing).
-- **GeeksforGeeks DSA Certification** (June 2026): Covered 15+ core Data Structures and Algorithms topics (including Arrays, Linked Lists, Stacks, Queues, Trees, Graphs, Dynamic Programming, Recursion, Greedy, Sorting, Searching, Hashing, Heaps, and Backtracking) to strengthen analytical thinking and problem-solving skills. View [GFG DSA Certificate](https://drive.google.com/file/d/1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo/view?usp=sharing).
-- **Udemy Node.js Certification** (June 2026): Acquired 10+ backend development skills (including Node.js, Express.js, REST APIs, JWT Authentication, Middleware, MongoDB, PostgreSQL, Mongoose ORM, Docker, and Cloud Deployment) through practical projects. View [Udemy Node.js Certificate](https://drive.google.com/file/d/1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG/view?usp=drive_link).
+## Professional Certifications (most recent first):
+- **GeeksforGeeks DSA Certification** (June 2026): Covered 15+ core Data Structures and Algorithms topics including Arrays, Strings, Linked Lists, Stacks, Queues, Trees, Graphs, Dynamic Programming, Recursion, Greedy Algorithms, Sorting, Searching, Hashing, Heaps, and Backtracking. Strengthened analytical thinking and complex problem-solving skills. View [GFG DSA Certificate](https://drive.google.com/file/d/1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo/view?usp=sharing).
+- **Udemy Node.js Developer Certification** (June 2026): Acquired 10+ backend development skills including Node.js, Express.js, REST API design, JWT Authentication, Middleware, MongoDB, PostgreSQL, Mongoose ORM, Prisma ORM, Docker Compose, and Cloud Deployment through practical full-stack projects. View [Udemy Node.js Certificate](https://drive.google.com/file/d/1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG/view?usp=drive_link).
+- **HackerRank React Developer Certification** (May 2026): Validated proficiency in building interactive UIs with React.js, covering React state management, hooks, custom hooks, JavaScript ES6 features, and responsive CSS Grid/Flexbox layouts. View [HackerRank React Certificate](https://drive.google.com/file/d/1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI/view?usp=sharing).
+- **HackerRank SQL (Intermediate) Certification** (May 2026): Validated skills in writing complex relational queries, subqueries, advanced joins, aggregations, schema design, and query execution performance optimization. View [HackerRank SQL Certificate](https://drive.google.com/file/d/1nIBOc97mW8YOuxfXODMgBjUZa39Q0mAF/view?usp=sharing).
+- **GeeksforGeeks MongoDB Architecture Certification** (April 2026): Covered MongoDB database architecture including data modeling, indexing strategies, replica set configuration for high availability, and sharding clusters for enterprise-scale horizontal scaling. View [GFG MongoDB Certificate](https://drive.google.com/file/d/1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc/view?usp=sharing).
+- **Simplilearn PostgreSQL Developer Certification** (April 2026): Covered relational database administration, schema design, data constraints, data manipulation, query optimization, and stored procedures in PostgreSQL. View [Simplilearn PostgreSQL Certificate](https://drive.google.com/file/d/1V93UXpsTA7oosK5Wnbgv_pMrIsqSfmnf/view?usp=sharing).
 
 ## Technical Skills:
 - **Languages**: Java, JavaScript, TypeScript, Python, C
@@ -592,7 +594,12 @@ Personality guidelines:
                         : "bg-input-bg text-light-text border border-primary/5 rounded-2xl rounded-tl-xs"
                     }`}
                   >
-                    {parseMessageText(m.text)}
+                    {m.text.split('\n').map((line, i, arr) => (
+                      <span key={i}>
+                        {parseMessageText(line)}
+                        {i < arr.length - 1 && <br />}
+                      </span>
+                    ))}
                   </div>
                   <span className="text-[9px] text-muted-text/80 mt-1 px-1 font-space">
                     {m.time}
