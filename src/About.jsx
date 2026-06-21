@@ -228,7 +228,7 @@ export default function About() {
             {stats.map((stat, i) => (
               <div
                 key={i}
-                className="bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-md cursor-help hover:border-primary/20 transition-all duration-300"
+                className="bg-input-bg/50 backdrop-blur-md border border-primary/10 border-l-4 border-l-neutral-500 rounded-2xl p-4 shadow-md cursor-help hover:border-l-accent transition-all duration-300"
                 data-hover-text={stat.hoverText}
               >
                 <div className="text-primary text-3xl font-bold font-syne mb-1.5">

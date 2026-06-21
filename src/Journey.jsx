@@ -175,7 +175,7 @@ export default function Journey() {
                     <img
                       src={journey.image}
                       alt={journey.title}
-                      className="w-full h-full object-cover grayscale brightness-90 contrast-[1.05] transition-all duration-500 ease-out group-hover/img:scale-105 group-hover/img:grayscale-0 group-hover/img:brightness-100"
+                      className={`w-full h-full object-cover ${isActive ? '' : 'grayscale'} brightness-90 contrast-[1.05] transition-all duration-500 ease-out group-hover/img:scale-105 ${isActive ? '' : 'group-hover/img:grayscale-0'} group-hover/img:brightness-100`}
                     />
                     <div className="absolute inset-0 bg-primary/0 group-hover/img:bg-primary/5 transition-colors duration-500" />
                   </a>
