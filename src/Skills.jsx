@@ -184,7 +184,7 @@ export default function Skills() {
                 damping: 20,
                 delay: idx * 0.1,
               }}
-              className={`flex flex-col bg-input-bg/90 border border-primary/10 dark:border-primary/15 rounded-2xl p-6 md:p-8 backdrop-blur-md shadow-lg transition-all duration-500 hover:border-primary/20 relative overflow-hidden group/card ${category.gridClass}`}
+              className={`flex flex-col bg-input-bg/50 border border-primary/10 rounded-2xl p-6 md:p-8 backdrop-blur-md shadow-md transition-all duration-500 hover:border-primary/20 relative overflow-hidden group/card ${category.gridClass}`}
             >
               {/* Category Header */}
               <div className="flex flex-col gap-1 border-b border-primary/10 pb-4 mb-6">

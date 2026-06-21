@@ -158,7 +158,7 @@ export default function Journey() {
 
               <motion.div
                 ref={cardRef}
-                className={`relative w-[calc(100%-20px)] md:w-[49%] bg-input-bg/90 rounded-[10px] shadow-md text-left p-[15px] md:p-5 ml-[24px] ${index % 2 === 0 ? "md:ml-0 md:self-start" : "md:ml-auto md:self-end"}`}
+                className={`relative w-[calc(100%-20px)] md:w-[49%] bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl shadow-md text-left p-[15px] md:p-5 ml-[24px] ${index % 2 === 0 ? "md:ml-0 md:self-start" : "md:ml-auto md:self-end"}`}
                 variants={cardVariants(index)}
                 initial="hidden"
                 animate={isCardInView ? "visible" : "hidden"}

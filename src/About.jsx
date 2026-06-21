@@ -197,7 +197,7 @@ export default function About() {
           transition={{ type: "spring", stiffness: 50, damping: 20 }}
         >
           <div
-            className="w-full max-w-[400px] bg-input-bg/40 border border-primary/10 rounded-2xl p-4 shadow-xl select-none cursor-help hover:scale-[1.02] transition-all duration-300 overflow-hidden flex justify-center items-center"
+            className="w-full max-w-[400px] bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-md select-none cursor-help hover:scale-[1.02] transition-all duration-300 overflow-hidden flex justify-center items-center"
             data-hover-text="Yes, that's actually me! Converted to highly detailed text-based ASCII art."
           >
             <AsciiCanvas asciiText={asciiArt} theme={theme} />
@@ -228,7 +228,7 @@ export default function About() {
             {stats.map((stat, i) => (
               <div
                 key={i}
-                className="bg-input-bg/40 border border-primary/10 rounded-xl p-4 cursor-help hover:border-primary/20 transition-colors duration-300"
+                className="bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-4 shadow-md cursor-help hover:border-primary/20 transition-all duration-300"
                 data-hover-text={stat.hoverText}
               >
                 <div className="text-primary text-3xl font-bold font-syne mb-1.5">
