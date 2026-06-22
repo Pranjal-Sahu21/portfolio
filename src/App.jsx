@@ -44,6 +44,9 @@ function InnerApp() {
       "Phew, keep your cursor away!"
     ];
 
+    let clickTimestamps = [];
+    let isLeavingOrDisappeared = false;
+
     let targetX = window.innerWidth / 2;
     let targetY = window.innerHeight / 2;
     let dotX = window.innerWidth / 2;
@@ -74,6 +77,7 @@ function InnerApp() {
     };
 
     const handleMouseMove = (e) => {
+      if (isLeavingOrDisappeared) return;
       targetX = e.clientX;
       targetY = e.clientY;
       dot.classList.add("show");
@@ -102,10 +106,13 @@ function InnerApp() {
 
       // Speech bubble logic
       currentHoverText = "";
+      const isOverChart = e.target.closest("canvas");
       const sectionElem = e.target.closest("[data-section]");
       const sectionId = sectionElem ? sectionElem.getAttribute("data-section") : null;
 
-      if (hoverTextElem) {
+      if (isOverChart) {
+        currentHoverText = "";
+      } else if (hoverTextElem) {
         currentHoverText = hoverTextElem.getAttribute("data-hover-text");
       } else if (sectionId) {
         if (sectionId === "home") {
@@ -181,6 +188,7 @@ function InnerApp() {
 
     let isScrolling = false;
     const handleMouseOut = () => {
+      if (isLeavingOrDisappeared) return;
       if (!isScrolling) {
         dot.classList.remove("show");
       }
@@ -188,6 +196,7 @@ function InnerApp() {
 
     let scrollTimeout;
     const handleScroll = () => {
+      if (isLeavingOrDisappeared) return;
       dot.classList.remove("hover-project");
       dot.classList.add("show");
       dot.classList.remove("idle");
@@ -200,6 +209,25 @@ function InnerApp() {
     };
 
     const handleMouseDown = (e) => {
+      if (isLeavingOrDisappeared) return;
+
+      const now = Date.now();
+      clickTimestamps.push(now);
+      clickTimestamps = clickTimestamps.filter((t) => now - t < 1000);
+
+      if (clickTimestamps.length >= 5) {
+        isLeavingOrDisappeared = true;
+        clearTimeout(clickTimeout);
+        currentClickText = "Okay, then I'm leaving";
+        currentHoverText = "";
+        updateSpeechBubble();
+
+        setTimeout(() => {
+          dot.style.display = "none";
+        }, 1800);
+        return;
+      }
+
       // Don't react to click if the cursor is over clickable elements like a, button, etc.
       const clickable = e.target.closest("a, button, input, textarea, .cursor-pointer");
       if (clickable) return;
@@ -216,6 +244,7 @@ function InnerApp() {
     };
 
     const handleMouseUp = () => {
+      if (isLeavingOrDisappeared) return;
       dot.classList.remove("clicking");
     };
 
@@ -227,6 +256,9 @@ function InnerApp() {
 
     let animationId;
     const follow = () => {
+      if (isLeavingOrDisappeared && dot.style.display === "none") {
+        return;
+      }
       dotX += (targetX - dotX) * delay;
       dotY += (targetY - dotY) * delay;
 

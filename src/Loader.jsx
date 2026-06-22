@@ -45,12 +45,11 @@ export default function Loader() {
     })
   };
 
-  // Invert loader colors based on the current theme
-  const isInvertedDark = theme === "light"; // Loader is dark when website is light, and vice versa
-  const loaderBg = isInvertedDark ? "#000000" : "#ffffff";
-  const loaderText = isInvertedDark ? "#ffffff" : "#000000";
-  const loaderAccent = isInvertedDark ? "#cccccc" : "#666666";
-  const progressTrackBg = isInvertedDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)";
+  // Lock loader colors to light mode (white background, dark text) as requested
+  const loaderBg = "#ffffff";
+  const loaderText = "#000000";
+  const loaderAccent = "#666666";
+  const progressTrackBg = "rgba(0, 0, 0, 0.1)";
 
   return (
     <motion.div

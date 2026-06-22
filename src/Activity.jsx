@@ -14,7 +14,7 @@ import {
   LineElement, 
   Filler 
 } from "chart.js";
-import { Doughnut, Line } from "react-chartjs-2";
+import { Pie, Line } from "react-chartjs-2";
 
 ChartJS.register(
   ArcElement, 
@@ -82,10 +82,30 @@ export default function Activity() {
   const leetcodeRef = useRef(null);
   const leetcodeInView = useInView(leetcodeRef, { once: true, amount: 0.3 });
 
-  // Custom monochromatic theme fitting the website design
-  const explicitTheme = {
-    light: ["#ebedf0", "#cccccc", "#999999", "#555555", "#000000"],
-    dark: ["#181818", "#333333", "#666666", "#999999", "#ffffff"],
+  // Calendar themes
+  const githubCalendarTheme = {
+    light: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
+    dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+  };
+
+  const languageColors = {
+    JavaScript: "#f1e05a",
+    TypeScript: "#3178c6",
+    Python: "#3572a5",
+    HTML: "#e34c26",
+    CSS: "#563d7c",
+    Java: "#b07219",
+    "C++": "#f34b7d",
+    C: "#555555",
+    Shell: "#89e051",
+    Jupyter: "#da5b0b",
+    Rust: "#dea584",
+    Go: "#00add8",
+    Ruby: "#701516",
+    PHP: "#4f5d95",
+    Swift: "#f05138",
+    Kotlin: "#A97BFF",
+    Other: "#888888"
   };
 
 
@@ -437,7 +457,7 @@ export default function Activity() {
     return data;
   };
 
-  // LeetCode Doughnut Chart Data and Options
+  // LeetCode Pie Chart Data and Options
   const leetcodeChartData = leetcodeData ? {
     labels: ["Easy", "Medium", "Hard"],
     datasets: [
@@ -447,9 +467,7 @@ export default function Activity() {
           leetcodeData.mediumSolved || 0,
           leetcodeData.hardSolved || 0,
         ],
-        backgroundColor: theme === "dark"
-          ? ["#404040", "#a3a3a3", "#ffffff"]
-          : ["#e5e5e5", "#737373", "#000000"],
+        backgroundColor: ["#00b8a3", "#ffc01e", "#ef4743"],
         borderColor: theme === "dark" ? "#181818" : "#ffffff",
         borderWidth: 2,
         hoverOffset: 4,
@@ -460,7 +478,6 @@ export default function Activity() {
   const leetcodeChartOptions = leetcodeData ? {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: "75%",
     layout: {
       padding: 8,
     },
@@ -517,11 +534,11 @@ export default function Activity() {
 
     return (
       <div 
-        className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0 cursor-help"
+        className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0"
         data-hover-text="That's a lot of questions. I should probably touch some grass."
       >
         <svg
-          className="w-full h-full transform -rotate-90"
+          className="w-full h-full transform -rotate-90 grayscale-0!"
           viewBox="0 0 200 200"
         >
           <circle
@@ -531,7 +548,7 @@ export default function Activity() {
             stroke="currentColor"
             strokeWidth="12"
             fill="transparent"
-            className="text-primary/5"
+            className="text-[#ffa116]/10"
           />
           <motion.circle
             cx="100"
@@ -544,7 +561,7 @@ export default function Activity() {
             initial={{ strokeDashoffset: circumference }}
             animate={leetcodeInView ? { strokeDashoffset: strokeDashoffset } : { strokeDashoffset: circumference }}
             strokeLinecap="round"
-            className="text-primary"
+            className="text-[#ffa116]"
             transition={{ duration: 1.5, ease: "easeOut" }}
           />
         </svg>
@@ -562,15 +579,13 @@ export default function Activity() {
       </div>
     );
   };
-  // GitHub Languages Doughnut Chart Data and Options
+  // GitHub Languages Pie Chart Data and Options
   const githubChartData = githubStats ? {
     labels: githubStats.languages.map((l) => l.name),
     datasets: [
       {
         data: githubStats.languages.map((l) => l.count),
-        backgroundColor: theme === "dark" 
-          ? ["#ffffff", "#a3a3a3", "#737373", "#404040", "#262626"] 
-          : ["#000000", "#525252", "#8e8e8e", "#c2c2c2", "#e5e5e5"],
+        backgroundColor: githubStats.languages.map((l) => languageColors[l.name] || "#888888"),
         borderColor: theme === "dark" ? "#181818" : "#ffffff",
         borderWidth: 2,
         hoverOffset: 4,
@@ -581,7 +596,6 @@ export default function Activity() {
   const githubChartOptions = githubStats ? {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: "70%",
     layout: {
       padding: 8,
     },
@@ -631,12 +645,12 @@ export default function Activity() {
       {
         label: "Total Repositories",
         data: githubStats.repoHistoryData,
-        borderColor: theme === "dark" ? "#ffffff" : "#000000",
-        backgroundColor: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        borderColor: "#2ea44f",
+        backgroundColor: "rgba(46, 164, 79, 0.05)",
         fill: true,
         tension: 0.3,
         borderWidth: 2,
-        pointBackgroundColor: theme === "dark" ? "#ffffff" : "#000000",
+        pointBackgroundColor: "#2ea44f",
         pointBorderColor: theme === "dark" ? "#181818" : "#ffffff",
         pointBorderWidth: 1.5,
         pointRadius: 4,
@@ -703,12 +717,12 @@ export default function Activity() {
       {
         label: "Contributions",
         data: githubStats.contribHistoryData,
-        borderColor: theme === "dark" ? "#ffffff" : "#000000",
-        backgroundColor: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        borderColor: "#2ea44f",
+        backgroundColor: "rgba(46, 164, 79, 0.05)",
         fill: true,
         tension: 0.3,
         borderWidth: 2,
-        pointBackgroundColor: theme === "dark" ? "#ffffff" : "#000000",
+        pointBackgroundColor: "#2ea44f",
         pointBorderColor: theme === "dark" ? "#181818" : "#ffffff",
         pointBorderWidth: 1.5,
         pointRadius: 4,
@@ -778,12 +792,12 @@ export default function Activity() {
       {
         label: "Contest Rating",
         data: attendedHistory.map((item) => Math.round(item.rating)),
-        borderColor: theme === "dark" ? "#ffffff" : "#000000",
-        backgroundColor: theme === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+        borderColor: "#ffa116",
+        backgroundColor: "rgba(255, 161, 22, 0.05)",
         fill: true,
         tension: 0.3,
         borderWidth: 2,
-        pointBackgroundColor: theme === "dark" ? "#ffffff" : "#000000",
+        pointBackgroundColor: "#ffa116",
         pointBorderColor: theme === "dark" ? "#181818" : "#ffffff",
         pointBorderWidth: 1.5,
         pointRadius: 4,
@@ -909,46 +923,46 @@ export default function Activity() {
               <div className="lg:col-span-6 flex flex-col items-center justify-center gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
                 <div className="grid grid-cols-2 gap-3 w-full">
                   <div 
-                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    className="bg-[#2ea44f]/[0.03] dark:bg-[#2ea44f]/[0.05] border border-[#2ea44f]/10 border-l-4 border-l-[#2ea44f] rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space"
                     data-hover-text="Public Repos: where my half-finished projects go to sleep forever."
                   >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Public Repos
                     </span>
-                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                    <span className="text-[#2ea44f] text-lg sm:text-xl font-bold font-syne">
                       {githubStats.publicRepos}
                     </span>
                   </div>
                   <div 
-                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    className="bg-[#2ea44f]/[0.03] dark:bg-[#2ea44f]/[0.05] border border-[#2ea44f]/10 border-l-4 border-l-[#2ea44f] rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space"
                     data-hover-text="Total Stars: My self-worth is directly proportional to this number."
                   >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Total Stars
                     </span>
-                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                    <span className="text-[#2ea44f] text-lg sm:text-xl font-bold font-syne">
                       {githubStats.totalStars}
                     </span>
                   </div>
                   <div 
-                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    className="bg-[#2ea44f]/[0.03] dark:bg-[#2ea44f]/[0.05] border border-[#2ea44f]/10 border-l-4 border-l-[#2ea44f] rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space"
                     data-hover-text="Pull Requests: Merging code and praying nothing breaks."
                   >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Pull Requests
                     </span>
-                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                    <span className="text-[#2ea44f] text-lg sm:text-xl font-bold font-syne">
                       {githubStats.prsCount}
                     </span>
                   </div>
                   <div 
-                    className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space cursor-help"
+                    className="bg-[#2ea44f]/[0.03] dark:bg-[#2ea44f]/[0.05] border border-[#2ea44f]/10 border-l-4 border-l-[#2ea44f] rounded-lg p-2.5 sm:p-3 shadow-xs text-left font-space"
                     data-hover-text="Followers: We could fit comfortably in a single Git commit."
                   >
                     <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                       Followers
                     </span>
-                    <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                    <span className="text-[#2ea44f] text-lg sm:text-xl font-bold font-syne">
                       {githubStats.followers}
                     </span>
                   </div>
@@ -958,22 +972,18 @@ export default function Activity() {
               {/* Right Panel: Languages (Pie Chart) */}
               <div 
                 className="lg:col-span-6 flex flex-col justify-center bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full"
-                data-hover-text="Top Languages: JavaScript is my true love, but TypeScript keeps me sane!"
               >
                 <div className="text-left font-space flex flex-col gap-4">
                   <h3 className="text-primary font-syne font-bold text-lg mb-2">Top Languages</h3>
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
                     {/* Pie Chart via Chart.js */}
                     <div className="w-40 h-40 flex-shrink-0 relative">
-                      {githubInView && githubChartData && <Doughnut data={githubChartData} options={githubChartOptions} />}
+                      {githubInView && githubChartData && <Pie data={githubChartData} options={githubChartOptions} />}
                     </div>
                     {/* Legend */}
                     <div className="flex flex-col gap-2 w-full">
                       {githubStats.languages.map((lang, index) => {
-                        const themeColors = theme === "dark" 
-                          ? ["#ffffff", "#a3a3a3", "#737373", "#404040", "#262626"] 
-                          : ["#000000", "#525252", "#8e8e8e", "#c2c2c2", "#e5e5e5"];
-                        const color = themeColors[index % themeColors.length];
+                        const color = languageColors[lang.name] || "#888888";
                         return (
                           <div key={lang.name} className="flex items-center gap-2 text-sm">
                             <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
@@ -995,24 +1005,19 @@ export default function Activity() {
           {githubStats && (
             <div 
               className="w-full bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 text-left font-space mb-8"
-              data-hover-text={
-                activeGithubTab === "contributions"
-                  ? "Contributions History: A timeline of my active GitHub contributions."
-                  : "Repositories Growth: A timeline of my open-source project creation."
-              }
             >
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h3 className="text-primary font-syne font-bold text-lg">
                   {activeGithubTab === "contributions" ? "Contribution Activity" : "Repository Growth Timeline"}
                 </h3>
                 {/* Tab Toggles */}
-                <div className="flex gap-2 bg-primary/5 p-1 rounded-lg border border-primary/10 select-none">
+                <div className="flex gap-2 bg-[#2ea44f]/5 p-1 rounded-lg border border-[#2ea44f]/10 select-none">
                   <button
                     onClick={() => setActiveGithubTab("contributions")}
                     className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 ${
                       activeGithubTab === "contributions"
-                        ? "bg-primary text-bg shadow-xs"
-                        : "text-muted-text hover:text-primary"
+                        ? "bg-[#2ea44f] text-white shadow-xs"
+                        : "text-muted-text hover:text-[#2ea44f]"
                     }`}
                   >
                     Contributions
@@ -1021,8 +1026,8 @@ export default function Activity() {
                     onClick={() => setActiveGithubTab("repos")}
                     className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 ${
                       activeGithubTab === "repos"
-                        ? "bg-primary text-bg shadow-xs"
-                        : "text-muted-text hover:text-primary"
+                        ? "bg-[#2ea44f] text-white shadow-xs"
+                        : "text-muted-text hover:text-[#2ea44f]"
                     }`}
                   >
                     Repositories
@@ -1048,12 +1053,12 @@ export default function Activity() {
 
           {/* GitHub Heatmap Grid */}
           <div 
-            className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8 cursor-help"
+            className="calendar-container w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8"
             data-hover-text="The denser it gets, the less of a social life I have."
           >
             <GitHubCalendar
               username="pranjal-sahu21"
-              theme={explicitTheme}
+              theme={githubCalendarTheme}
               colorScheme={theme}
               blockSize={14}
               blockMargin={4}
@@ -1144,13 +1149,13 @@ export default function Activity() {
                   <div className="text-left font-space grid grid-cols-2 gap-3 w-full sm:w-auto flex-shrink-0">
                     {leetcodeContest && leetcodeContest.userContestRanking && (
                       <div 
-                        className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                        className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
                         data-hover-text="I only play when I feel brave enough to hurt my rating."
                       >
                         <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                           Contest Rating
                         </span>
-                        <span className="text-primary text-lg sm:text-xl font-bold font-syne flex items-baseline gap-1">
+                        <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne flex items-baseline gap-1">
                           {Math.round(
                             leetcodeContest.userContestRanking.rating,
                           )}
@@ -1162,35 +1167,35 @@ export default function Activity() {
                       </div>
                     )}
                     <div 
-                      className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
                       data-hover-text="People read my solution, take the idea, and vanish in O(1) time."
                     >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Reputation
                       </span>
-                      <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne">
                         {leetcodeData.reputation || 0}
                       </span>
                     </div>
                     <div 
-                      className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
                       data-hover-text="Saving points for a T-shirt my grandchildren will redeem."
                     >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Points
                       </span>
-                      <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne">
                         {leetcodeData.contributionPoint || 0}
                       </span>
                     </div>
                     <div 
-                      className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-neutral-500 rounded-lg p-2.5 sm:p-3 shadow-xs cursor-help"
+                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
                       data-hover-text="Shiny medals for sitting in front of a monitor too long."
                     >
                       <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
                         Badges
                       </span>
-                      <span className="text-primary text-lg sm:text-xl font-bold font-syne">
+                      <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne">
                         {leetcodeBadges?.badgesCount || 0}
                       </span>
                     </div>
@@ -1200,21 +1205,20 @@ export default function Activity() {
                 {/* Right Panel: Solved Distribution (Doughnut Chart) */}
                 <div 
                   className="lg:col-span-6 flex flex-col justify-center bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full"
-                  data-hover-text="Difficulty Breakdown: A visualization of my programming stats."
                 >
                   <div className="text-left font-space flex flex-col gap-4">
                     <h3 className="text-primary font-syne font-bold text-lg mb-2">Solved Distribution</h3>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 mt-2">
-                      {/* Doughnut Chart */}
+                      {/* Pie Chart */}
                       <div className="w-40 h-40 flex-shrink-0 relative">
-                        {leetcodeInView && leetcodeChartData && <Doughnut data={leetcodeChartData} options={leetcodeChartOptions} />}
+                        {leetcodeInView && leetcodeChartData && <Pie data={leetcodeChartData} options={leetcodeChartOptions} />}
                       </div>
                       {/* Legend */}
                       <div className="flex flex-col gap-2 w-full">
                         {leetcodeData && [
-                          { name: "Easy", count: leetcodeData.easySolved || 0, total: leetcodeData.totalEasy || 0, color: theme === "dark" ? "#404040" : "#e5e5e5" },
-                          { name: "Medium", count: leetcodeData.mediumSolved || 0, total: leetcodeData.totalMedium || 0, color: theme === "dark" ? "#a3a3a3" : "#737373" },
-                          { name: "Hard", count: leetcodeData.hardSolved || 0, total: leetcodeData.totalHard || 0, color: theme === "dark" ? "#ffffff" : "#000000" }
+                          { name: "Easy", count: leetcodeData.easySolved || 0, total: leetcodeData.totalEasy || 0, color: "#00b8a3" },
+                          { name: "Medium", count: leetcodeData.mediumSolved || 0, total: leetcodeData.totalMedium || 0, color: "#ffc01e" },
+                          { name: "Hard", count: leetcodeData.hardSolved || 0, total: leetcodeData.totalHard || 0, color: "#ef4743" }
                         ].map((item) => {
                           const percent = item.total > 0 ? (item.count / item.total) * 100 : 0;
                           return (
@@ -1237,7 +1241,6 @@ export default function Activity() {
               {leetcodeContest && leetcodeContest.userContestRankingHistory && leetcodeContest.userContestRankingHistory.length > 0 && (
                 <div 
                   className="w-full bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 text-left font-space"
-                  data-hover-text="Contest Rating History: A visualization of my programming rank climb."
                 >
                   <h3 className="text-primary font-syne font-bold text-lg mb-4">Contest Rating History</h3>
                   <div className="h-64 sm:h-72 w-full relative">
@@ -1249,12 +1252,12 @@ export default function Activity() {
               {/* Heatmap Calendar */}
               <div className="w-full flex flex-col gap-2">
                 <div 
-                  className="w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 cursor-help"
+                  className="calendar-container w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2"
                   data-hover-text="A visual representation of me crying in O(N log N) time complexity."
                 >
                   <ActivityCalendar
                     data={leetcodeCalendar}
-                    theme={explicitTheme}
+                    theme={githubCalendarTheme}
                     colorScheme={theme}
                     blockSize={14}
                     blockMargin={4}

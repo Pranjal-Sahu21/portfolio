@@ -398,3 +398,8 @@ html[data-magicui-theme-vt="active"]::view-transition-new(root) {
   box-shadow: 0 0 10px var(--primary);
   background: var(--primary) !important;
 }
+
+/* Override global grayscale filter for activity heatmap calendars */
+.calendar-container svg {
+  filter: none !important;
+}

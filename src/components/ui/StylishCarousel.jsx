@@ -164,9 +164,7 @@ const StylishCarousel = ({
                         }
                       }}
                       className={cn(
-                        "w-full h-full object-contain transition-all duration-300 will-change-transform",
-                        !isActive && "brightness-60 grayscale",
-                        isActive && "brightness-100 grayscale-0",
+                        "w-full h-full object-contain transition-all duration-300 will-change-transform grayscale-0! brightness-100",
                         isActive && onActiveClick && "cursor-pointer",
                         clickToNavigate && !isActive && "cursor-pointer"
                       )}

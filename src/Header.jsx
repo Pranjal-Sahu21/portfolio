@@ -198,14 +198,7 @@ export default function Header() {
             })}
           </div>
 
-          {/* THEME TOGGLER */}
-          <div className="pointer-events-auto relative group" data-section="theme">
-            <AnimatedThemeToggler
-              theme={theme}
-              onThemeChange={toggleTheme}
-              className="w-11 h-11 rounded-full bg-bg/60 border border-primary/20 backdrop-blur-md shadow-md flex items-center justify-center text-light-text hover:text-primary transition-colors cursor-pointer"
-            />
-          </div>
+
         </motion.div>
       ) : (
         /* MOBILE TOP FLOATING PILL NAVBAR THAT EXPANDS INTO FULLSCREEN */
@@ -244,11 +237,7 @@ export default function Header() {
 
               {/* RIGHT SIDE CONTAINER FOR TOGGLE & MENU/CLOSE */}
               <div className="flex items-center gap-3">
-                {/* THEME TOGGLE BUTTON */}
-                <AnimatedThemeToggler
-                  theme={theme}
-                  onThemeChange={toggleTheme}
-                />
+
 
                 {/* MOBILE MENU TRIGGER */}
                 <button 

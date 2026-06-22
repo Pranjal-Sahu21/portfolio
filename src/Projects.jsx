@@ -119,7 +119,7 @@ export default function Projects() {
                 stretch: 0,
                 depth: 100,
                 modifier: 1,
-                slideShadows: true,
+                slideShadows: false,
               }}
               pagination={{
                 clickable: true,
@@ -134,17 +134,15 @@ export default function Projects() {
                       href={p.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group/proj block w-full h-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-4 text-center text-light-text no-underline shadow-md transition-transform hover:scale-[1.02] duration-300"
+                      className={`group/proj block w-full h-full bg-input-bg/50 backdrop-blur-md border border-primary/10 rounded-2xl p-4 text-center text-light-text no-underline transition-transform hover:scale-[1.02] duration-300 ${
+                        isActive ? "shadow-md" : "shadow-none"
+                      }`}
                     >
                       <div className="overflow-hidden rounded-xl w-full h-48 relative">
                         <img
                           src={p.img}
                           alt={`Screenshot of ${p.title} — ${p.desc}`}
-                          className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover/proj:scale-105 group-hover/proj:brightness-100 ${
-                            isActive
-                              ? "!grayscale-0 brightness-100"
-                              : "grayscale brightness-90 contrast-[1.05] group-hover/proj:!grayscale-0"
-                          }`}
+                          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover/proj:scale-105 group-hover/proj:brightness-100 grayscale-0! brightness-100"
                           loading="lazy"
                         />
                       </div>
@@ -188,11 +186,7 @@ export default function Projects() {
                         <img
                           src={p.img}
                           alt={`Screenshot of ${p.title} — ${p.desc}`}
-                          className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover/proj:scale-105 group-hover/proj:brightness-100 ${
-                            isActive
-                              ? "!grayscale-0 brightness-100"
-                              : "grayscale brightness-90 contrast-[1.05] group-hover/proj:!grayscale-0"
-                          }`}
+                          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover/proj:scale-105 group-hover/proj:brightness-100 grayscale-0! brightness-100"
                           loading="lazy"
                         />
                       </div>
