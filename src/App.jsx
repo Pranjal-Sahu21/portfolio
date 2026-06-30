@@ -106,7 +106,7 @@ function InnerApp() {
 
       // Speech bubble logic
       currentHoverText = "";
-      const isOverChart = e.target.closest("canvas");
+      const isOverChart = e.target.closest("canvas") && !e.target.closest("#about");
       const sectionElem = e.target.closest("[data-section]");
       const sectionId = sectionElem ? sectionElem.getAttribute("data-section") : null;
 

@@ -12,20 +12,36 @@ import tasteGpt from "../assets/tastegpt.png";
 import crexo from "../assets/crexo-image.png";
 import dummistore from "../assets/dummistore-image.png";
 import genixor from "../assets/genixor-image.png";
-import devevent from "../assets/DevEvent.png"
-import snip from "../assets/snip.png"
+import devevent from "../assets/DevEvent.png";
+import snip from "../assets/snip.png";
+import zynero from "../assets/zynero-image.png";
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const containerRef = useRef(null);
-  const isContainerInView = useInView(containerRef, { once: true, amount: 0.15 });
+  const isContainerInView = useInView(containerRef, {
+    once: true,
+    amount: 0.15,
+  });
   const projects = [
+    {
+      title: "Zynero",
+      img: zynero,
+      link: "https://zynero-delta.vercel.app",
+      desc: "A real-time project management platform for organizing workspaces, tracking timelines, managing tasks, collaborating in threads, and analyzing team workloads.",
+    },
     {
       title: "Genixor",
       img: genixor,
       link: "https://genixor.netlify.app",
       desc: "AI-powered website generator that creates custom sites using OpenAI's Step 3.5 model for prompt enhancing and website generation.",
+    },
+    {
+      title: "DevEvent",
+      img: devevent,
+      link: "https://dev-events-bay.vercel.app",
+      desc: "A Next.js web app for booking spots (using your email) at registered developer events or creating new events.",
     },
     {
       title: "Crexo",
@@ -39,12 +55,7 @@ export default function Projects() {
       link: "https://snip-xi.vercel.app",
       desc: "A modern URL shortener with Next.js, PostgreSQL, and Drizzle ORM featuring custom aliases, fast redirects, and sleek dashboards.",
     },
-    {
-      title: "DevEvent",
-      img: devevent,
-      link: "https://dev-events-bay.vercel.app",
-      desc: "A Next.js web app for booking spots (using your email) at registered developer events or creating new events.",
-    },
+
     {
       title: "DummiStore",
       img: dummistore,
@@ -71,10 +82,7 @@ export default function Projects() {
     },
   ];
 
-
   const [isMobile, setIsMobile] = useState(false);
-
-
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -102,7 +110,9 @@ export default function Projects() {
         ref={containerRef}
         className="w-full mt-12 relative overflow-visible md:overflow-hidden before:hidden md:before:block before:content-[''] before:absolute before:top-0 before:left-0 before:w-[10%] before:h-full before:z-2 before:pointer-events-none before:bg-linear-to-r before:from-bg before:to-transparent after:hidden md:after:block after:content-[''] after:absolute after:top-0 after:right-0 after:w-[10%] after:h-full after:z-2 after:pointer-events-none after:bg-linear-to-l after:from-bg after:to-transparent"
         initial={{ opacity: 0, y: 50 }}
-        animate={isContainerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        animate={
+          isContainerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
+        }
         transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.15 }}
       >
         {/* DESKTOP SWIPER COVERFLOW CAROUSEL */}
@@ -128,7 +138,10 @@ export default function Projects() {
               modules={[EffectCoverflow, Pagination]}
             >
               {projects.map((p, i) => (
-                <SwiperSlide key={i} className="flex justify-center rounded-2xl overflow-hidden">
+                <SwiperSlide
+                  key={i}
+                  className="flex justify-center rounded-2xl overflow-hidden"
+                >
                   {({ isActive }) => (
                     <a
                       href={p.link}
@@ -174,7 +187,10 @@ export default function Projects() {
               modules={[EffectCards, Pagination]}
             >
               {projects.map((p, i) => (
-                <SwiperSlide key={i} className="flex justify-center rounded-2xl overflow-hidden">
+                <SwiperSlide
+                  key={i}
+                  className="flex justify-center rounded-2xl overflow-hidden"
+                >
                   {({ isActive }) => (
                     <a
                       href={p.link}

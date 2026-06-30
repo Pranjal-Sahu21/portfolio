@@ -49,6 +49,7 @@ export default function Skills() {
         { name: "Tailwind CSS", img: tailwindLogo },
         { name: "React.js", img: reactLogo },
         { name: "Next.js", img: nextLogo },
+        { name: "Redux", img: "https://cdn.simpleicons.org/redux/764abc" },
       ],
     },
     {
@@ -97,6 +98,8 @@ export default function Skills() {
     switch (name) {
       case "React.js":
         return "React.js: writing HTML inside JS because why not?";
+      case "Redux":
+        return "Redux: because passing props down three levels is too much work.";
       case "JavaScript":
         return "JavaScript: where 1 + '1' is '11' and [] + [] is ''.";
       case "TypeScript":
