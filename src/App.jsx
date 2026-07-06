@@ -12,6 +12,7 @@ import Footer from "./Footer";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./index.css";
+import CinematicBlur from "./components/ui/CinematicBlur";
 import Loader from "./Loader";
 import ChatBot from "./components/ChatBot";
 import { AnimatePresence } from "framer-motion";
@@ -21,6 +22,7 @@ import { RESUME_LINK } from "./utils";
 function InnerApp() {
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [isTextHovered, setIsTextHovered] = useState(false);
 
   const dotRef = useRef(null);
 
@@ -398,11 +400,13 @@ function InnerApp() {
 
       <div className={`min-h-screen w-full relative bg-bg transition-colors duration-300 ${!showContent ? 'h-screen overflow-hidden' : ''}`}>
 
-        <div className="relative z-10">
+        {/* Main Content Wrapper (Scrolls normally, has solid bg and high z-index) */}
+        <div className="relative z-20 bg-bg transition-colors duration-300">
           <AnimatePresence>
             {showContent && <Header />}
           </AnimatePresence>
           <main id="main-content">
+            {showContent && <CinematicBlur />}
             <Home showContent={showContent} />
             <About />
             <Journey />
@@ -413,8 +417,33 @@ function InnerApp() {
             <Contact />
           </main>
           <Footer />
-          {showContent && <ChatBot />}
         </div>
+
+        {/* Parallax Name Container (Fixed behind the main content) */}
+        {showContent && (
+          <div className="fixed bottom-0 left-0 right-0 h-[25vh] md:h-[50vh] z-10 bg-bg flex items-center justify-center overflow-hidden select-none pointer-events-none transition-colors duration-300">
+            <h1
+              onMouseEnter={() => setIsTextHovered(true)}
+              onMouseLeave={() => setIsTextHovered(false)}
+              className="font-space font-black text-[clamp(3rem,24vw,24rem)] tracking-tighter leading-none select-none uppercase transition-all duration-500 ease-out cursor-default pointer-events-auto mt-24 md:mt-36"
+              style={{
+                WebkitTextStroke: "2.5px var(--primary)",
+                color: isTextHovered ? "var(--primary)" : "transparent",
+                opacity: isTextHovered ? 0.35 : 0.15,
+              }}
+            >
+              Pranjal
+            </h1>
+          </div>
+        )}
+
+        {/* Scroll Spacer (Extends page height to reveal the fixed element) */}
+        {showContent && (
+          <div className="h-[25vh] md:h-[50vh] relative z-0 pointer-events-none" />
+        )}
+
+        {/* ChatBot (Fixed on screen, sits on top) */}
+        {showContent && <ChatBot />}
       </div>
     </>
   );

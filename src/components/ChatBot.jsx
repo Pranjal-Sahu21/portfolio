@@ -130,6 +130,44 @@ export default function ChatBot() {
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState(24);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sy = window.scrollY;
+      const sh = document.documentElement.scrollHeight;
+      const ch = document.documentElement.clientHeight;
+      const maxScroll = Math.max(sh - ch, 1);
+      const revealHeight = ch * 0.35; // 35dvh
+
+      // Only follow footer on mobile (width <= 768px)
+      if (window.innerWidth <= 768) {
+        const triggerPoint = maxScroll - revealHeight;
+        if (sy > triggerPoint) {
+          const overflow = sy - triggerPoint;
+          setBottomOffset(24 + overflow);
+        } else {
+          setBottomOffset(24);
+        }
+      } else {
+        setBottomOffset(24);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    
+    handleScroll();
+
+    const observer = new MutationObserver(handleScroll);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      observer.disconnect();
+    };
+  }, []);
   const [messages, setMessages] = useState([
     {
       sender: "bot",
@@ -512,7 +550,10 @@ Personality guidelines:
   return (
     <>
       {/* 1. FLOATING ACTION BUTTON */}
-      <div className={`fixed bottom-6 right-6 z-[9600] flex items-center justify-center ${isOpen ? "hidden md:flex" : "flex"}`}>
+      <div 
+        className={`fixed right-6 z-[9600] flex items-center justify-center ${isOpen ? "hidden md:flex" : "flex"}`}
+        style={{ bottom: `${bottomOffset}px` }}
+      >
         <button
           onClick={handleOpenToggle}
           className="w-14 h-14 rounded-full bg-primary text-bg flex items-center justify-center shadow-2xl hover:scale-108 active:scale-95 transition-all duration-300 border border-primary/20 relative group overflow-hidden"
@@ -538,7 +579,10 @@ Personality guidelines:
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-0 md:bottom-24 right-0 md:right-6 w-full md:w-[360px] max-w-full md:max-w-[calc(100vw-32px)] h-[100dvh] md:h-[480px] bg-card-bg/95 md:bg-card-bg/85 backdrop-blur-xl border-none md:border md:border-primary/10 rounded-none md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[9800] origin-bottom-right"
+            className="fixed right-0 md:right-6 w-full md:w-[360px] max-w-full md:max-w-[calc(100vw-32px)] h-[100dvh] md:h-[480px] bg-card-bg/95 md:bg-card-bg/85 backdrop-blur-xl border-none md:border md:border-primary/10 rounded-none md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[9800] origin-bottom-right"
+            style={{ 
+              bottom: typeof window !== "undefined" && window.innerWidth > 768 ? `${bottomOffset + 72}px` : "0px" 
+            }}
             initial={{ opacity: 0, scale: 0.85, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85, y: 30 }}

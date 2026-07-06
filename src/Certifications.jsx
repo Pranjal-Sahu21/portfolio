@@ -1,4 +1,5 @@
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView as realUseInView, AnimatePresence } from "framer-motion";
+const useInView = () => true;
 import { useRef, useState } from "react";
 import { Award } from "lucide-react";
 import StylishCarousel from "./components/ui/StylishCarousel";

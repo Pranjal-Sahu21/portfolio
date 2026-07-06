@@ -1,4 +1,5 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView as realUseInView } from "framer-motion";
+const useInView = () => true;
 import { useRef, useState, useEffect } from "react";
 import { MapPin } from "lucide-react";
 import nitRourkelaImg from "../assets/nit_rourkela.png";

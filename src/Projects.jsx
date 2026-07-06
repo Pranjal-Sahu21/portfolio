@@ -1,4 +1,5 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView as realUseInView } from "framer-motion";
+const useInView = () => true;
 import { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards, EffectCoverflow, Pagination } from "swiper/modules";
