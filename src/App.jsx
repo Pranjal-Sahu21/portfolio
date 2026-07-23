@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Header from "./Header";
 import Home from "./Home";
 import About from "./About";
 import Journey from "./Journey";
@@ -12,12 +11,13 @@ import Footer from "./Footer";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./index.css";
-import CinematicBlur from "./components/ui/CinematicBlur";
 import Loader from "./Loader";
 import ChatBot from "./components/ChatBot";
 import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "./context/ThemeContext";
+import { StatsProvider } from "./context/StatsContext";
 import { RESUME_LINK } from "./utils";
+
 
 function InnerApp() {
   const [loading, setLoading] = useState(true);
@@ -217,7 +217,7 @@ function InnerApp() {
       clickTimestamps.push(now);
       clickTimestamps = clickTimestamps.filter((t) => now - t < 1000);
 
-      if (clickTimestamps.length >= 5) {
+      if (clickTimestamps.length >= 3) {
         isLeavingOrDisappeared = true;
         clearTimeout(clickTimeout);
         currentClickText = "Okay, then I'm leaving";
@@ -320,10 +320,18 @@ function InnerApp() {
       duration: 1.2,
       smooth: true,
       smoothTouch: false,
+      autoRaf: false,
     });
+
+    // Prevent Lenis from setting overflow: clip on html (breaks position: sticky)
+    document.documentElement.style.removeProperty("overflow");
 
     function raf(time) {
       lenisRef.current.raf(time);
+      // Continuously undo Lenis overflow: clip on <html> — it breaks position: sticky
+      if (document.documentElement.style.overflow) {
+        document.documentElement.style.removeProperty("overflow");
+      }
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
@@ -402,11 +410,7 @@ function InnerApp() {
 
         {/* Main Content Wrapper (Scrolls normally, has solid bg and high z-index) */}
         <div className="relative z-20 bg-bg transition-colors duration-300">
-          <AnimatePresence>
-            {showContent && <Header />}
-          </AnimatePresence>
           <main id="main-content">
-            {showContent && <CinematicBlur />}
             <Home showContent={showContent} />
             <About />
             <Journey />
@@ -425,7 +429,7 @@ function InnerApp() {
             <h1
               onMouseEnter={() => setIsTextHovered(true)}
               onMouseLeave={() => setIsTextHovered(false)}
-              className="font-space font-black text-[clamp(3rem,24vw,24rem)] tracking-tighter leading-none select-none uppercase transition-all duration-500 ease-out cursor-default pointer-events-auto mt-24 md:mt-36"
+              className="font-caitog text-[clamp(3rem,24vw,24rem)] tracking-tight leading-none select-none uppercase transition-all duration-500 ease-out cursor-default pointer-events-auto mt-24 md:mt-36"
               style={{
                 WebkitTextStroke: "2.5px var(--primary)",
                 color: isTextHovered ? "var(--primary)" : "transparent",
@@ -444,6 +448,20 @@ function InnerApp() {
 
         {/* ChatBot (Fixed on screen, sits on top) */}
         {showContent && <ChatBot />}
+
+        {/* Viewport Bottom Blur Mask (similar style as below section titles) */}
+        {showContent && (
+          <div
+            className="fixed bottom-0 left-0 right-0 h-16 pointer-events-none z-[9990] transition-colors duration-300"
+            style={{
+              background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)",
+              maskImage: "linear-gradient(to top, black 0%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 100%)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }}
+          />
+        )}
       </div>
     </>
   );
@@ -452,7 +470,9 @@ function InnerApp() {
 export default function App() {
   return (
     <ThemeProvider>
-      <InnerApp />
+      <StatsProvider>
+        <InnerApp />
+      </StatsProvider>
     </ThemeProvider>
   );
 }

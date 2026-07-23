@@ -3,6 +3,7 @@ const useInView = () => true;
 import { useRef, useState } from "react";
 import { Award } from "lucide-react";
 import StylishCarousel from "./components/ui/StylishCarousel";
+import StickyTitle from "./components/StickyTitle";
 
 import reactHackerRankImg from "../assets/REACT_DEVELOPER_HACKERRANK.png";
 import dsaGfgImg from "../assets/DSA_GFG.png";
@@ -129,22 +130,21 @@ export default function Certifications() {
   return (
     <section
       id="certifications"
-      className="flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative bg-bg"
+      className="flex flex-col justify-center items-center py-24 px-5 text-center relative bg-bg"
       ref={ref}
     >
       {/* Title */}
-      <motion.h2
-        className="shimmer-text font-syne font-bold mb-10 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      <StickyTitle 
+        className="shimmer-text font-bebas tracking-tighter mb-16 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase"
+        blurHeight="h-32"
+        negativeMargin="-mb-48"
       >
         Certifications
-      </motion.h2>
+      </StickyTitle>
 
       {/* Carousel */}
       <motion.div
-        className="w-full flex flex-col items-center"
+        className="w-full flex flex-col items-center mt-32"
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}

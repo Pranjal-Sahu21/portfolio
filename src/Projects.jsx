@@ -1,6 +1,7 @@
 import { motion, useInView as realUseInView } from "framer-motion";
 const useInView = () => true;
 import { useRef, useEffect, useState } from "react";
+import StickyTitle from "./components/StickyTitle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards, EffectCoverflow, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -18,8 +19,6 @@ import snip from "../assets/snip.png";
 import zynero from "../assets/zynero-image.png";
 
 export default function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
   const containerRef = useRef(null);
   const isContainerInView = useInView(containerRef, {
     once: true,
@@ -95,17 +94,11 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="flex flex-col justify-center items-center py-30 px-5 overflow-hidden relative text-center"
+      className="flex flex-col justify-center items-center py-30 px-5 relative text-center"
     >
-      <motion.h2
-        ref={ref}
-        className="shimmer-text font-syne font-bold mb-17 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Featured Projects
-      </motion.h2>
+      </StickyTitle>
 
       <motion.div
         ref={containerRef}

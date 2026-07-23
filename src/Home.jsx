@@ -1,153 +1,154 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Silk from "./components/Silk/Silk";
-import { scrollToSection } from "./utils/scrollToSection";
 import { useTheme } from "./context/ThemeContext";
-import { RESUME_LINK } from "./utils";
+import Globe3d from "./components/ui/Globe3d";
 
 export default function Home({ showContent = true }) {
   const { theme } = useTheme();
-  const firstName = "PRANJAL".split("");
-  const lastName = "SAHU".split("");
+  const nameChars = "PRANJAL".split("");
+  const sectionRef = useRef(null);
+
+  // Parallax scroll tracking
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // 1. Staggered vertical parallax translations for each letter in PRANJAL (7 letters)
+  const y0 = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "115%"]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "130%"]);
+  const y3 = useTransform(scrollYProgress, [0, 1], ["0%", "145%"]);
+  const y4 = useTransform(scrollYProgress, [0, 1], ["0%", "160%"]);
+  const y5 = useTransform(scrollYProgress, [0, 1], ["0%", "175%"]);
+  const y6 = useTransform(scrollYProgress, [0, 1], ["0%", "190%"]);
+
+  // Staggered opacity fades for each letter
+  const op0 = useTransform(scrollYProgress, [0.00, 0.65, 1], [1, 0.4, 0]);
+  const op1 = useTransform(scrollYProgress, [0.04, 0.69, 1], [1, 0.4, 0]);
+  const op2 = useTransform(scrollYProgress, [0.08, 0.73, 1], [1, 0.4, 0]);
+  const op3 = useTransform(scrollYProgress, [0.12, 0.77, 1], [1, 0.4, 0]);
+  const op4 = useTransform(scrollYProgress, [0.16, 0.81, 1], [1, 0.4, 0]);
+  const op5 = useTransform(scrollYProgress, [0.20, 0.85, 1], [1, 0.4, 0]);
+  const op6 = useTransform(scrollYProgress, [0.24, 0.89, 1], [1, 0.4, 0]);
+
+  const letterTransforms = [
+    { y: y0, opacity: op0 },
+    { y: y1, opacity: op1 },
+    { y: y2, opacity: op2 },
+    { y: y3, opacity: op3 },
+    { y: y4, opacity: op4 },
+    { y: y5, opacity: op5 },
+    { y: y6, opacity: op6 },
+  ];
+
+  // 2. Center text/description moves up as user scrolls
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-90%"]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.65, 1], [1, 0.3, 0]);
+
+  // 3. Silk background parallax with oversized bounds to prevent gaps
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.25]);
 
   return (
     <section
-      className="h-screen w-full text-light-text flex flex-col justify-center items-start px-[5vw] overflow-hidden relative"
+      ref={sectionRef}
+      className="h-screen w-full text-light-text flex flex-col justify-between items-center px-4 md:px-8 pt-24 pb-0 overflow-hidden relative select-none"
       id="home"
     >
-      {/* Silk Background */}
-      <div className="absolute inset-0 z-0 bg-[var(--bg-silk)] transition-colors duration-300">
+      {/* Silk Background with oversized bounds to completely eliminate scroll gaps */}
+      <motion.div
+        style={{ y: bgY, scale: bgScale }}
+        className="absolute -top-[25%] -bottom-[25%] -left-[10%] -right-[10%] z-0 bg-[var(--bg-silk)] transition-colors duration-300 will-change-transform"
+      >
         <Silk
           color={theme === "dark" ? "#272626" : "#ffffff"}
           speed={5}
           scale={1}
           noiseIntensity={1.5}
         />
-      </div>
+      </motion.div>
 
       {showContent && (
         <>
-          {/* NAME */}
-      <h1
-        className="relative z-10 font-syne font-extrabold text-[clamp(3rem,18vw,8rem)] md:text-[clamp(5rem,14vw,18rem)] leading-[0.85] tracking-[-2px] md:tracking-[-4px] flex flex-wrap"
-        data-hover-text="That is my name!"
-      >
-        {/* FIRST LINE */}
-        <motion.span className="flex" aria-label="Pranjal">
-          {firstName.map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ y: 120, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{
-                delay: i * 0.04,
-                type: "spring",
-                stiffness: 90,
-              }}
-              className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-none dark:drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
-              aria-hidden="true"
-            >
-              {char}
-            </motion.span>
-          ))}
-        </motion.span>
-
-        {/* SECOND LINE */}
-        <motion.span className="flex font-syne font-bold" aria-label="Sahu">
-          {lastName.map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ y: 120, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{
-                delay: 0.3 + i * 0.04, 
-                type: "spring",
-                stiffness: 90,
-              }}
-              className="inline-block will-change-transform font-syne font-extrabold text-[clamp(2.3rem,10vw,14rem)] tracking-[-1.5px] leading-[0.9] bg-linear-to-br from-primary to-accent bg-clip-text text-transparent drop-shadow-none dark:drop-shadow-[0_0_30px_rgba(192,192,192,0.2)]"
-              aria-hidden="true"
-            >
-              {char}
-            </motion.span>
-          ))}
-        </motion.span>
-        <span className="sr-only">Pranjal Sahu</span>
-      </h1>
-
-      <motion.h2
-        className="relative z-10 mt-7.5 font-space text-[0.9rem] tracking-[1.5px] uppercase bg-[linear-gradient(90deg,var(--primary),var(--accent),var(--primary))] bg-size-[200%_auto] bg-clip-text text-transparent animate-[roleGradient_2s_linear_infinite]"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        data-hover-text="That is what I do!"
-      >
-        Web Developer
-      </motion.h2>
-
-      {/* DESCRIPTION */}
-      <motion.p
-        className="relative z-10 mt-5 max-w-125 font-space text-[1rem] leading-[1.7] text-muted-text"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        data-hover-text="I love building beautiful websites!"
-      >
-        Crafting fast, interactive, and visually engaging web experiences using
-        modern technologies and thoughtful design.
-      </motion.p>
-
-      {/* BUTTONS */}
-      <motion.div
-        className="relative z-10 mt-10 flex flex-col md:flex-row gap-3.75 md:gap-5"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8 }}
-      >
-        <a
-          href={RESUME_LINK}
-          target="_blank"
-          rel="noreferrer"
-          className="font-space font-semibold tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center bg-linear-to-br from-primary to-accent text-bg border-none shadow-md"
-        >
-          Download CV
-        </a>
-
-        <a
-          href="#contact"
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection("contact");
-          }}
-          className="font-space font-medium tracking-[0.5px] text-[0.95rem] uppercase py-3 px-7 rounded-xl no-underline transition-all duration-300 inline-flex items-center justify-center border border-primary text-primary bg-transparent"
-        >
-          Contact Me
-        </a>
-      </motion.div>
-
-      <motion.div
-        className="absolute top-[85dvh] left-1/2 -translate-x-1/2 md:bottom-7.5 md:left-1/2 md:-translate-x-1/2 flex flex-col items-center gap-2 font-space z-10"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2 }}
-      >
-        <span className="text-[0.75rem] tracking-[2px] uppercase text-muted-text">
-          Scroll
-        </span>
-
-        <div className="w-0.5 h-7.5 md:h-10 bg-white/20 rounded-[10px] relative overflow-hidden">
+          {/* Center Description Content moving up */}
           <motion.div
-            className="w-full h-2 bg-linear-to-b from-primary to-accent rounded-[10px]"
-            animate={{ y: [0, 12, 0] }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </div>
-      </motion.div>
-      
+            style={{ y: textY, opacity: textOpacity }}
+            className="relative z-10 flex flex-col items-center justify-center my-auto max-w-[320px] sm:max-w-[350px] text-center px-4 will-change-transform"
+          >
+            {/* Minimal 3D Globe */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.75 }}
+              transition={{ duration: 0.6 }}
+              className="mb-4"
+            >
+              <Globe3d />
+            </motion.div>
+
+            {/* Tighter Description */}
+            <motion.p
+              className="font-inter text-[0.92rem] sm:text-[0.98rem] leading-relaxed text-primary font-medium tracking-tight mb-2"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              data-hover-text="That's what I do!"
+            >
+              Designing high-performance, change-making web experiences that elevate digital products.
+            </motion.p>
+
+            <motion.p
+              className="font-inter text-[0.8rem] sm:text-[0.85rem] leading-normal text-muted-text font-normal"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              data-hover-text="Yes, I'm currently here!"
+            >
+              Web Developer & B.Tech CSE Student @ NIT Rourkela.
+            </motion.p>
+          </motion.div>
+
+          {/* Bottom Display Name: PRANJAL moving down letter-by-letter */}
+          <div className="relative z-10 w-full flex justify-center items-end select-none pb-0 pt-6 md:pt-10 overflow-visible">
+            <h1
+              className="w-full flex justify-between sm:justify-around items-end font-caitog text-[clamp(4.2rem,22vw,22rem)] leading-[0.88] tracking-[-0.02em] text-[#898989] uppercase select-none transition-colors duration-300 py-1"
+              data-hover-text="SAY MY NAME!"
+            >
+              {nameChars.map((char, i) => (
+                <motion.span
+                  key={i}
+                  style={letterTransforms[i] || {}}
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: "0%", opacity: 1 }}
+                  transition={{
+                    delay: 0.3 + i * 0.05,
+                    type: "spring",
+                    stiffness: 85,
+                    damping: 18,
+                  }}
+                  className="inline-block will-change-transform py-1"
+                >
+                  {char}
+                </motion.span>
+              ))}
+              <span className="sr-only">Pranjal</span>
+            </h1>
+          </div>
         </>
       )}
+
+      {/* Bottom Blur Mask to blur elements as they scroll down / exit */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-20"
+        style={{
+          background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 0%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 100%)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+        }}
+      />
     </section>
   );
 }

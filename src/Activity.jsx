@@ -1,9 +1,12 @@
 import { motion, useInView as realUseInView } from "framer-motion";
 const useInView = () => true;
 import { useRef, useState, useEffect } from "react";
+import StickyTitle from "./components/StickyTitle";
 import { GitHubCalendar } from "react-github-calendar";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useTheme } from "./context/ThemeContext";
+import { useStats } from "./context/StatsContext";
+
 import { 
   Chart as ChartJS, 
   ArcElement, 
@@ -74,8 +77,6 @@ function CountUp({ value, duration = 1.5, inView }) {
 export default function Activity() {
   const { theme } = useTheme();
   const [activeGithubTab, setActiveGithubTab] = useState("contributions");
-  const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
   const githubRef = useRef(null);
   const githubInView = useInView(githubRef, { once: true, amount: 0.3 });
@@ -111,352 +112,19 @@ export default function Activity() {
 
 
 
-  // --- GITHUB STATS FETCHING ---
-  const [githubStats, setGithubStats] = useState(null);
-  const [githubLoading, setGithubLoading] = useState(true);
-  const [githubError, setGithubError] = useState(null);
+  // --- SHARE CODING STATS VIA CONTEXT ---
+  const {
+    githubStats,
+    githubLoading,
+    githubError,
+    leetcodeData,
+    leetcodeCalendar,
+    leetcodeContest,
+    leetcodeBadges,
+    leetcodeLoading: loading,
+    leetcodeError: error,
+  } = useStats();
 
-  useEffect(() => {
-    let active = true;
-
-    const fetchGithubStats = async () => {
-      try {
-        setGithubLoading(true);
-        setGithubError(null);
-
-        const headers = { Accept: "application/vnd.github.v3+json" };
-
-        // Fetch stats in parallel using allSettled to prevent failures in one endpoint from breaking the whole request
-        const results = await Promise.allSettled([
-          fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
-          fetch(
-            "https://api.github.com/users/pranjal-sahu21/repos?per_page=100",
-            { headers },
-          ),
-          fetch(
-            "https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr",
-            { headers },
-          ),
-          fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21"),
-        ]);
-
-        const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
-        const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
-        const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
-        const contribsRes = results[3].status === "fulfilled" ? results[3].value : null;
-
-        // Ensure we got at least one of the basic profile/repo responses
-        if ((!profileRes || !profileRes.ok) && (!reposRes || !reposRes.ok)) {
-          throw new Error("GitHub API rate limit exceeded or network request failed.");
-        }
-
-        // Graceful fallbacks for individual failures (e.g. search rate limits or network issues)
-        let profile = { public_repos: 0, followers: 0 };
-        if (profileRes && profileRes.ok) {
-          try {
-            profile = await profileRes.json();
-          } catch (e) {
-            console.error("Error parsing profile:", e);
-          }
-        }
-
-        let repos = [];
-        if (reposRes && reposRes.ok) {
-          try {
-            repos = await reposRes.json();
-          } catch (e) {
-            console.error("Error parsing repos:", e);
-          }
-        }
-
-        let prs = { total_count: 0 };
-        if (prsRes && prsRes.ok) {
-          try {
-            prs = await prsRes.json();
-          } catch (e) {
-            console.error("Error parsing prs:", e);
-          }
-        }
-
-        // Process top languages and star counts
-        let totalStars = 0;
-        const langCounts = {};
-        let totalReposWithLang = 0;
-        if (Array.isArray(repos)) {
-          repos.forEach((repo) => {
-            totalStars += repo.stargazers_count || 0;
-            if (repo.language) {
-              langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
-              totalReposWithLang++;
-            }
-          });
-        }
-
-        const sortedLanguages = Object.entries(langCounts)
-          .sort((a, b) => b[1] - a[1])
-          .map(([name, count]) => ({
-            name,
-            count,
-            percentage:
-              totalReposWithLang > 0 ? (count / totalReposWithLang) * 100 : 0,
-          }));
-
-        // Sort repos by creation date to calculate timeline growth
-        const sortedRepos = Array.isArray(repos) 
-          ? [...repos]
-              .filter((r) => r.created_at)
-              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-          : [];
-
-        // Build list of months and count repos created per month
-        const monthlyRepoCounts = {};
-        sortedRepos.forEach((repo) => {
-          const date = new Date(repo.created_at);
-          const monthLabel = date.toLocaleDateString("en-US", {
-            month: "short",
-            year: "2-digit",
-          });
-          monthlyRepoCounts[monthLabel] = (monthlyRepoCounts[monthLabel] || 0) + 1;
-        });
-
-        const githubHistoryLabels = [];
-        const githubHistoryData = [];
-        let runningTotal = 0;
-
-        if (sortedRepos.length > 0) {
-          const startDate = new Date(sortedRepos[0].created_at);
-          const endDate = new Date();
-          
-          let current = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
-          while (current <= endDate) {
-            const label = current.toLocaleDateString("en-US", {
-              month: "short",
-              year: "2-digit",
-            });
-            const countInMonth = monthlyRepoCounts[label] || 0;
-            runningTotal += countInMonth;
-            
-            githubHistoryLabels.push(label);
-            githubHistoryData.push(runningTotal);
-            
-            current.setMonth(current.getMonth() + 1);
-          }
-        }
-
-        let contributionsData = null;
-        if (contribsRes && contribsRes.ok) {
-          try {
-            contributionsData = await contribsRes.json();
-          } catch (e) {
-            console.error("Error parsing contributions:", e);
-          }
-        }
-
-        const contribHistoryLabels = [];
-        const contribHistoryData = [];
-
-        if (contributionsData && Array.isArray(contributionsData.contributions)) {
-          const sortedContribs = [...contributionsData.contributions].sort(
-            (a, b) => new Date(a.date) - new Date(b.date)
-          );
-
-          const monthlyContribCounts = {};
-          const monthOrder = [];
-          const today = new Date();
-
-          sortedContribs.forEach((c) => {
-            const date = new Date(c.date);
-            if (date > today) return;
-
-            const monthLabel = date.toLocaleDateString("en-US", {
-              month: "short",
-              year: "2-digit",
-            });
-
-            if (monthlyContribCounts[monthLabel] === undefined) {
-              monthlyContribCounts[monthLabel] = 0;
-              monthOrder.push(monthLabel);
-            }
-            monthlyContribCounts[monthLabel] += c.count;
-          });
-
-          monthOrder.forEach((label) => {
-            contribHistoryLabels.push(label);
-            contribHistoryData.push(monthlyContribCounts[label]);
-          });
-        }
-
-        const compiledStats = {
-          publicRepos: profile.public_repos || (Array.isArray(repos) ? repos.length : 0),
-          followers: profile.followers || 0,
-          totalStars,
-          prsCount: prs.total_count || 0,
-          languages: sortedLanguages.slice(0, 4),
-          otherLanguagesCount: sortedLanguages
-            .slice(4)
-            .reduce((sum, item) => sum + item.count, 0),
-          totalLanguagesCount: totalReposWithLang,
-          repoHistoryLabels: githubHistoryLabels,
-          repoHistoryData: githubHistoryData,
-          contribHistoryLabels,
-          contribHistoryData,
-        };
-
-        if (sortedLanguages.length > 4) {
-          const otherCount = compiledStats.otherLanguagesCount;
-          compiledStats.languages.push({
-            name: "Other",
-            count: otherCount,
-            percentage:
-              totalReposWithLang > 0
-                ? (otherCount / totalReposWithLang) * 100
-                : 0,
-          });
-        }
-
-        if (active) {
-          setGithubStats(compiledStats);
-          setGithubLoading(false);
-        }
-      } catch (err) {
-        if (active) {
-          console.error(err);
-          setGithubError(err.message);
-          setGithubLoading(false);
-        }
-      }
-    };
-
-    fetchGithubStats();
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  // --- LEETCODE STATS FETCHING ---
-  const [leetcodeData, setLeetcodeData] = useState(null);
-  const [leetcodeCalendar, setLeetcodeCalendar] = useState([]);
-  const [leetcodeContest, setLeetcodeContest] = useState(null);
-  const [leetcodeBadges, setLeetcodeBadges] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let active = true;
-
-    const fetchLeetcodeStats = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-
-        const res = await fetch(
-          "https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619",
-        );
-        if (!res.ok) throw new Error("Failed to fetch LeetCode data");
-        const data = await res.json();
-
-        // Optional fetch for contest ranking details (from separate API wrapper)
-        let contestData = null;
-        try {
-          const contestRes = await fetch(
-            "https://alfa-leetcode-api.onrender.com/userContestRankingInfo/Pranjal_1619",
-          );
-          if (contestRes.ok) {
-            contestData = await contestRes.json();
-          }
-        } catch (e) {
-          console.error("Contest rating fetch failed (optional):", e);
-        }
-
-        // Optional fetch for badges details
-        let badgesData = null;
-        try {
-          const badgesRes = await fetch(
-            "https://alfa-leetcode-api.onrender.com/Pranjal_1619/badges",
-          );
-          if (badgesRes.ok) {
-            badgesData = await badgesRes.json();
-          }
-        } catch (e) {
-          console.error("Badges fetch failed (optional):", e);
-        }
-
-        if (active) {
-          let formattedCalendar = [];
-          if (data.submissionCalendar) {
-            formattedCalendar = formatSubmissionCalendar(
-              data.submissionCalendar,
-            );
-            setLeetcodeCalendar(formattedCalendar);
-          }
-          setLeetcodeData(data);
-          setLeetcodeContest(contestData);
-          setLeetcodeBadges(badgesData);
-
-          setLoading(false);
-        }
-      } catch (err) {
-        if (active) {
-          console.error(err);
-          setError(err.message);
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchLeetcodeStats();
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  // Formats LeetCode's submissionCalendar object { "timestamp": count } to react-activity-calendar structure
-  const formatSubmissionCalendar = (submissionCalendar) => {
-    const data = [];
-    const today = new Date();
-
-    // 1. Generate empty entries for the last 365 days
-    for (let i = 365; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(today.getDate() - i);
-
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, "0");
-      const dd = String(date.getDate()).padStart(2, "0");
-      const dateString = `${yyyy}-${mm}-${dd}`;
-
-      data.push({
-        date: dateString,
-        count: 0,
-        level: 0,
-      });
-    }
-
-    // 2. Map submission timestamp counts into the calendar array
-    Object.entries(submissionCalendar).forEach(([timestamp, count]) => {
-      const date = new Date(parseInt(timestamp) * 1000);
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, "0");
-      const dd = String(date.getDate()).padStart(2, "0");
-      const dateString = `${yyyy}-${mm}-${dd}`;
-
-      // Update matching date entry
-      const dayEntry = data.find((d) => d.date === dateString);
-      if (dayEntry) {
-        dayEntry.count = count;
-        if (count === 0) dayEntry.level = 0;
-        else if (count <= 2) dayEntry.level = 1;
-        else if (count <= 5) dayEntry.level = 2;
-        else if (count <= 10) dayEntry.level = 3;
-        else dayEntry.level = 4;
-      }
-    });
-
-    return data;
-  };
 
   // LeetCode Pie Chart Data and Options
   const leetcodeChartData = leetcodeData ? {
@@ -528,35 +196,35 @@ export default function Activity() {
   } : null;
 
   const renderCircularProgress = (solved, total) => {
-    const radius = 80;
+    const radius = 68;
     const circumference = 2 * Math.PI * radius;
     const percentage = total > 0 ? (solved / total) * 100 : 0;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     return (
       <div 
-        className="relative w-52 h-52 md:w-56 md:h-56 flex items-center justify-center flex-shrink-0"
+        className="relative w-40 h-40 sm:w-44 sm:h-44 flex items-center justify-center flex-shrink-0"
         data-hover-text="That's a lot of questions. I should probably touch some grass."
       >
         <svg
           className="w-full h-full transform -rotate-90 grayscale-0!"
-          viewBox="0 0 200 200"
+          viewBox="0 0 160 160"
         >
           <circle
-            cx="100"
-            cy="100"
+            cx="80"
+            cy="80"
             r={radius}
             stroke="currentColor"
-            strokeWidth="12"
+            strokeWidth="10"
             fill="transparent"
             className="text-[#ffa116]/10"
           />
           <motion.circle
-            cx="100"
-            cy="100"
+            cx="80"
+            cy="80"
             r={radius}
             stroke="currentColor"
-            strokeWidth="12"
+            strokeWidth="10"
             fill="transparent"
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
@@ -567,14 +235,14 @@ export default function Activity() {
           />
         </svg>
         <div className="absolute text-center flex flex-col justify-center items-center pointer-events-none">
-          <span className="text-4xl md:text-5xl font-bold font-syne text-primary leading-none">
+          <span className="text-3xl sm:text-4xl font-bold font-syne text-primary leading-none">
             {solved.toLocaleString()}
           </span>
-          <span className="block text-xs md:text-sm text-muted-text font-space uppercase tracking-wider mt-2.5">
+          <span className="block text-[0.7rem] sm:text-xs text-muted-text font-space uppercase tracking-wider mt-1.5">
             / {total}
           </span>
-          <span className="block text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 font-space font-medium mt-2 leading-none">
-            beats 99.8%
+          <span className="block text-[9px] sm:text-[10px] text-neutral-500 dark:text-neutral-400 font-space font-medium mt-1 leading-none">
+            beats 99.9%
           </span>
         </div>
       </div>
@@ -860,20 +528,14 @@ export default function Activity() {
   return (
     <section
       id="activity"
-      className="flex flex-col justify-center items-center py-20 px-5 text-center relative overflow-hidden"
+      className="flex flex-col justify-center items-center py-20 px-5 text-center relative"
     >
       {/* Title */}
-      <motion.h2
-        ref={headingRef}
-        className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40 }}
-        animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Coding Activity
-      </motion.h2>
+      </StickyTitle>
 
-      <div className="w-full max-w-[1200px] flex flex-col gap-12">
+      <div className="w-full max-w-[1200px] flex flex-col gap-12 mt-16">
         {/* 1. GITHUB CALENDAR CARD */}
         <motion.div
           ref={githubRef}
@@ -1142,61 +804,60 @@ export default function Activity() {
               {/* Stats Summary Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4">
                 {/* Circular Progress & Info */}
-                <div className="lg:col-span-6 flex flex-col sm:flex-row lg:flex-row items-center justify-center gap-6 xl:gap-8 bg-input-bg/40 border border-primary/5 rounded-xl p-6 sm:p-8 h-full">
+                <div className="lg:col-span-6 flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-6 bg-input-bg/40 border border-primary/5 rounded-xl p-5 sm:p-6 h-full">
                   {renderCircularProgress(
                     leetcodeData.totalSolved || 0,
                     leetcodeData.totalQuestions || 0,
                   )}
-                  <div className="text-left font-space grid grid-cols-2 gap-3 w-full sm:w-auto flex-shrink-0">
+                  <div className="text-left font-space grid grid-cols-2 gap-2.5 w-full flex-grow">
                     {leetcodeContest && leetcodeContest.userContestRanking && (
                       <div 
-                        className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
+                        className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2 sm:p-2.5 shadow-xs"
                         data-hover-text="I only play when I feel brave enough to hurt my rating."
                       >
-                        <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                        <span className="text-muted-text text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider block leading-none mb-1">
                           Contest Rating
                         </span>
-                        <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne flex items-baseline gap-1">
+                        <span className="text-[#ffa116] text-base sm:text-lg font-bold font-syne block leading-tight">
                           {Math.round(
                             leetcodeContest.userContestRanking.rating,
                           )}
-                          <span className="text-[9px] sm:text-[10px] text-neutral-400 font-space font-normal">
-                            (Top{" "}
-                            {leetcodeContest.userContestRanking.topPercentage}%)
-                          </span>
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] text-neutral-400 font-space font-normal block leading-none mt-1">
+                          Top {leetcodeContest.userContestRanking.topPercentage}%
                         </span>
                       </div>
                     )}
                     <div 
-                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
+                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2 sm:p-2.5 shadow-xs"
                       data-hover-text="People read my solution, take the idea, and vanish in O(1) time."
                     >
-                      <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      <span className="text-muted-text text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider block leading-none mb-1">
                         Reputation
                       </span>
-                      <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne">
+                      <span className="text-[#ffa116] text-base sm:text-lg font-bold font-syne block leading-tight">
                         {leetcodeData.reputation || 0}
                       </span>
                     </div>
                     <div 
-                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
+                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2 sm:p-2.5 shadow-xs"
                       data-hover-text="Saving points for a T-shirt my grandchildren will redeem."
                     >
-                      <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      <span className="text-muted-text text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider block leading-none mb-1">
                         Points
                       </span>
-                      <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne">
+                      <span className="text-[#ffa116] text-base sm:text-lg font-bold font-syne block leading-tight">
                         {leetcodeData.contributionPoint || 0}
                       </span>
                     </div>
                     <div 
-                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2.5 sm:p-3 shadow-xs"
+                      className="bg-[#ffa116]/[0.03] dark:bg-[#ffa116]/[0.05] border border-[#ffa116]/10 border-l-4 border-l-[#ffa116] rounded-lg p-2 sm:p-2.5 shadow-xs"
                       data-hover-text="Shiny medals for sitting in front of a monitor too long."
                     >
-                      <span className="text-muted-text text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider block leading-none mb-1">
+                      <span className="text-muted-text text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider block leading-none mb-1">
                         Badges
                       </span>
-                      <span className="text-[#ffa116] text-lg sm:text-xl font-bold font-syne">
+                      <span className="text-[#ffa116] text-base sm:text-lg font-bold font-syne block leading-tight">
                         {leetcodeBadges?.badgesCount || 0}
                       </span>
                     </div>

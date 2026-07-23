@@ -1,6 +1,7 @@
 import { motion, useInView as realUseInView } from "framer-motion";
 const useInView = () => true;
 import { useRef, useState, useEffect } from "react";
+import StickyTitle from "./components/StickyTitle";
 import { useTheme } from "./context/ThemeContext";
 import asciiArtDark from "../assets/ascii_art_dark.txt?raw";
 import asciiArtLight from "../assets/ascii_art_light.txt?raw";
@@ -101,14 +102,11 @@ export default function About() {
   const { theme } = useTheme();
   const asciiArt = theme === "dark" ? asciiArtDark : asciiArtLight;
 
-  const headingRef = useRef(null);
-  const isHeadingInView = useInView(headingRef, { once: true, amount: 0.3 });
-
   const contentRef = useRef(null);
   const isContentInView = useInView(contentRef, { once: true, amount: 0.15 });
 
-  const [githubContributions, setGithubContributions] = useState(800);
-  const [leetcodeSolved, setLeetcodeSolved] = useState(800);
+  const [githubContributions, setGithubContributions] = useState(900);
+  const [leetcodeSolved, setLeetcodeSolved] = useState(900);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -174,21 +172,15 @@ export default function About() {
   return (
     <section
       id="about"
-      className="flex flex-col justify-center items-center py-24 px-5 text-center relative overflow-hidden bg-bg"
+      className="flex flex-col justify-center items-center py-24 px-5 text-center relative bg-bg"
     >
-      <motion.h2
-        ref={headingRef}
-        className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40 }}
-        animate={isHeadingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         About Me
-      </motion.h2>
+      </StickyTitle>
 
       <div
         ref={contentRef}
-        className="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-12 gap-10 items-stretch text-left px-4"
+        className="w-full max-w-[1100px] grid grid-cols-1 md:grid-cols-12 gap-10 items-stretch text-left px-4 mt-16"
       >
         {/* Left Column: Portrait ASCII Art */}
         <motion.div
@@ -217,10 +209,11 @@ export default function About() {
             <p className="font-space text-lg text-primary font-semibold">
               B.Tech Computer Science student @ NIT Rourkela
             </p>
-            <p className="font-space text-[1rem] leading-[1.7] text-muted-text">
-              I specialize in crafting fast, clean, and highly interactive web applications. 
-              I love translating complex problems into efficient, structured, and elegant code. 
-              My work combines clean layouts with functional engineering and thoughtful user experiences, focusing on modern web standards and performance.
+            <p className="font-space text-[0.95rem] leading-[1.7] text-muted-text">
+              I specialize in crafting fast, clean, and highly interactive web applications. My work combines clean layouts with functional engineering and thoughtful user experiences, focusing on modern web standards, semantic integrity, and performance.
+            </p>
+            <p className="font-space text-[0.95rem] leading-[1.7] text-muted-text">
+              I love translating complex architectural problems into efficient, structured, and elegant code. With hands-on experience in building full-stack applications, API design, and database optimization, I strive to create robust software systems that grow seamlessly with user needs.
             </p>
           </div>
 

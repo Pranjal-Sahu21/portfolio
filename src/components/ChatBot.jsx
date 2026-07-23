@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, Send, X, Bot, RefreshCw } from "lucide-react";
 import { RESUME_LINK } from "../utils";
+import { useStats } from "../context/StatsContext";
+
 const parseBoldText = (text) => {
   if (typeof text !== "string") return text;
   const boldRegex = /\*\*([^*]+)\*\*/g;
@@ -131,10 +133,12 @@ export default function ChatBot() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [bottomOffset, setBottomOffset] = useState(24);
+  const [showFab, setShowFab] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const sy = window.scrollY;
+      setShowFab(sy > 180);
       const sh = document.documentElement.scrollHeight;
       const ch = document.documentElement.clientHeight;
       const maxScroll = Math.max(sh - ch, 1);
@@ -179,153 +183,41 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
   
-  const [stats, setStats] = useState({
+  const {
+    githubStats,
+    leetcodeData,
+    leetcodeContest,
+    leetcodeBadges,
+  } = useStats();
+
+  const stats = {
     github: {
-      publicRepos: 22,
-      followers: 5,
-      totalStars: 10,
-      prsCount: 12,
-      languages: "JavaScript, HTML, CSS, Java",
-      contributions: 800,
+      publicRepos: githubStats?.publicRepos ?? 22,
+      followers: githubStats?.followers ?? 5,
+      totalStars: githubStats?.totalStars ?? 10,
+      prsCount: githubStats?.prsCount ?? 12,
+      languages: (githubStats?.languages && githubStats.languages.length > 0)
+        ? githubStats.languages
+        : "JavaScript, HTML, CSS, Java",
+      contributions: githubStats?.contributions ?? 900,
     },
     leetcode: {
-      totalSolved: 800,
-      easySolved: 303,
-      mediumSolved: 432,
-      hardSolved: 38,
-      totalQuestions: 3962,
-      ranking: 68867,
-      contestRating: 1810,
-      contestTopPercentage: 1.5,
-      reputation: 26,
-      points: 3021,
-      badges: 5,
+      totalSolved: leetcodeData?.totalSolved ?? 900,
+      easySolved: leetcodeData?.easySolved ?? 303,
+      mediumSolved: leetcodeData?.mediumSolved ?? 432,
+      hardSolved: leetcodeData?.hardSolved ?? 38,
+      totalQuestions: leetcodeData?.totalQuestions ?? 3962,
+      ranking: leetcodeData?.ranking ?? 68867,
+      contestRating: leetcodeContest?.userContestRanking?.rating
+        ? Math.round(leetcodeContest.userContestRanking.rating)
+        : 2009,
+      contestTopPercentage: leetcodeContest?.userContestRanking?.topPercentage ?? 1.5,
+      reputation: leetcodeData?.reputation ?? 26,
+      points: leetcodeData?.contributionPoint ?? 3021,
+      badges: leetcodeBadges?.badgesCount ?? 5,
     }
-  });
+  };
 
-  useEffect(() => {
-    let active = true;
-    const fetchStats = async () => {
-      let githubData = null;
-      let leetcodeData = null;
-      
-      try {
-        const headers = { Accept: "application/vnd.github.v3+json" };
-        const results = await Promise.allSettled([
-          fetch("https://api.github.com/users/pranjal-sahu21", { headers }),
-          fetch("https://api.github.com/users/pranjal-sahu21/repos?per_page=100", { headers }),
-          fetch("https://api.github.com/search/issues?q=author:pranjal-sahu21+type:pr", { headers }),
-          fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21"),
-        ]);
-        
-        const profileRes = results[0].status === "fulfilled" ? results[0].value : null;
-        const reposRes = results[1].status === "fulfilled" ? results[1].value : null;
-        const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
-        const contribsRes = results[3].status === "fulfilled" ? results[3].value : null;
-
-        let contributions = 800;
-        if (contribsRes && contribsRes.ok) {
-          try {
-            const data = await contribsRes.json();
-            const total = Object.values(data.total).reduce((a, b) => a + b, 0);
-            if (total > 0) contributions = total;
-          } catch (e) {
-            console.error("Error parsing contributions:", e);
-          }
-        }
-        
-        let profile = {};
-        if (profileRes && profileRes.ok) profile = await profileRes.json();
-        
-        let repos = [];
-        if (reposRes && reposRes.ok) repos = await reposRes.json();
-        
-        let prs = {};
-        if (prsRes && prsRes.ok) prs = await prsRes.json();
-        
-        let totalStars = 0;
-        const langCounts = {};
-        let totalReposWithLang = 0;
-        if (Array.isArray(repos)) {
-          repos.forEach((repo) => {
-            totalStars += repo.stargazers_count || 0;
-            if (repo.language) {
-              langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
-              totalReposWithLang++;
-            }
-          });
-        }
-
-        const sortedLanguages = Object.entries(langCounts)
-          .sort((a, b) => b[1] - a[1])
-          .map(([name, count]) => {
-            const pct = totalReposWithLang > 0 ? ((count / totalReposWithLang) * 100).toFixed(1) : 0;
-            return `${name} (${pct}%)`;
-          })
-          .slice(0, 5)
-          .join(", ");
-        
-        githubData = {
-          publicRepos: profile.public_repos || (Array.isArray(repos) ? repos.length : 22),
-          followers: profile.followers || 5,
-          totalStars: totalStars || 10,
-          prsCount: prs.total_count || 12,
-          languages: sortedLanguages || "JavaScript, HTML, CSS, Java",
-          contributions: contributions,
-        };
-      } catch (e) {
-        console.error("ChatBot GitHub fetch error:", e);
-      }
-      
-      try {
-        const mainRes = await fetch("https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619");
-        let mainData = null;
-        if (mainRes.ok) mainData = await mainRes.json();
-        
-        let contestData = null;
-        try {
-          const contestRes = await fetch("https://alfa-leetcode-api.onrender.com/userContestRankingInfo/Pranjal_1619");
-          if (contestRes.ok) contestData = await contestRes.json();
-        } catch {}
-        
-        let badgesData = null;
-        try {
-          const badgesRes = await fetch("https://alfa-leetcode-api.onrender.com/Pranjal_1619/badges");
-          if (badgesRes.ok) badgesData = await badgesRes.json();
-        } catch {}
-        
-        if (mainData) {
-          leetcodeData = {
-            totalSolved: mainData.totalSolved || 800,
-            easySolved: mainData.easySolved || 303,
-            mediumSolved: mainData.mediumSolved || 432,
-            hardSolved: mainData.hardSolved || 38,
-            totalQuestions: mainData.totalQuestions || 3962,
-            ranking: mainData.ranking || 68867,
-            contestRating: contestData && contestData.userContestRanking ? Math.round(contestData.userContestRanking.rating) : 1810,
-            contestTopPercentage: contestData && contestData.userContestRanking ? contestData.userContestRanking.topPercentage : 1.5,
-            reputation: mainData.reputation || 26,
-            points: mainData.contributionPoint || 3021,
-            badges: badgesData ? badgesData.badgesCount : 5,
-          };
-        }
-      } catch (e) {
-        console.error("ChatBot LeetCode fetch error:", e);
-      }
-      
-      if (active) {
-        setStats((prev) => ({
-          github: githubData || prev.github,
-          leetcode: leetcodeData || prev.leetcode,
-        }));
-      }
-    };
-    
-    fetchStats();
-    return () => {
-      active = false;
-    };
-  }, []);
   
   const chatEndRef = useRef(null);
 
@@ -435,8 +327,8 @@ Here is your complete and detailed knowledge base about Pranjal Sahu, derived fr
 - **GitHub Top Languages**: ${getLanguagesString(stats.github)}.
 - **LeetCode Username**: @Pranjal_1619
 - **LeetCode Solved**: Solved ${stats.leetcode.totalSolved} questions out of ${stats.leetcode.totalQuestions} total questions (${stats.leetcode.easySolved} Easy, ${stats.leetcode.mediumSolved} Medium, and ${stats.leetcode.hardSolved} Hard).
-- **LeetCode Ranking**: Global rank is #${stats.leetcode.ranking.toLocaleString()} (beats 99.8% of users).
-- **LeetCode Contest Rating**: Contest Rating of ${stats.leetcode.contestRating} (which is over 1800).
+- **LeetCode Ranking**: Global rank is #${stats.leetcode.ranking.toLocaleString()} (beats 99.9% of users).
+- **LeetCode Contest Rating**: Contest Rating of ${stats.leetcode.contestRating} (which is over 2000).
 - **LeetCode Reputation**: ${stats.leetcode.reputation} reputation points.
 - **LeetCode Points**: ${stats.leetcode.points} contribution points.
 - **LeetCode Badges**: ${stats.leetcode.badges} badges earned.
@@ -550,30 +442,39 @@ Personality guidelines:
   return (
     <>
       {/* 1. FLOATING ACTION BUTTON */}
-      <div 
-        className={`fixed right-6 z-[9600] flex items-center justify-center ${isOpen ? "hidden md:flex" : "flex"}`}
-        style={{ bottom: `${bottomOffset}px` }}
-      >
-        <button
-          onClick={handleOpenToggle}
-          className="w-14 h-14 rounded-full bg-primary text-bg flex items-center justify-center shadow-2xl hover:scale-108 active:scale-95 transition-all duration-300 border border-primary/20 relative group overflow-hidden"
-          aria-label="Toggle chatbot"
-          data-hover-text={isOpen ? "Close AI chat" : "Talk to my AI bot!"}
-        >
-          {/* Pulsing online status indicator / Unread indicator */}
-          <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-bg shadow-[0_0_6px_#22c55e]">
-            {hasNewMessage && (
-              <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75" />
-            )}
-          </span>
+      <AnimatePresence>
+        {showFab && (
+          <motion.div
+            key="chatbot-fab"
+            initial={{ opacity: 0, scale: 0.4, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.4, y: 30 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className={`fixed right-6 z-[9600] flex items-center justify-center ${isOpen ? "hidden md:flex" : "flex"}`}
+            style={{ bottom: `${bottomOffset}px` }}
+          >
+            <button
+              onClick={handleOpenToggle}
+              className="w-14 h-14 rounded-full bg-primary text-bg flex items-center justify-center shadow-2xl hover:scale-108 active:scale-95 transition-all duration-300 border border-primary/20 relative group overflow-hidden"
+              aria-label="Toggle chatbot"
+              data-hover-text={isOpen ? "Close AI chat" : "Talk to my AI bot!"}
+            >
+              {/* Pulsing online status indicator / Unread indicator */}
+              <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-green-500 rounded-full border border-bg shadow-[0_0_6px_#22c55e]">
+                {hasNewMessage && (
+                  <span className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75" />
+                )}
+              </span>
 
-          {isOpen ? (
-            <X className="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" />
-          ) : (
-            <Bot className="w-6 h-6 transition-transform duration-300 group-hover:-translate-y-0.5 animate-bounce-gentle" />
-          )}
-        </button>
-      </div>
+              {isOpen ? (
+                <X className="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" />
+              ) : (
+                <Bot className="w-6 h-6 transition-transform duration-300 group-hover:-translate-y-0.5 animate-bounce-gentle" />
+              )}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 2. CHAT PANEL WINDOW */}
       <AnimatePresence>

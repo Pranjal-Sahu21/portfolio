@@ -2,6 +2,7 @@ import { motion, useInView as realUseInView } from "framer-motion";
 const useInView = () => true;
 import { useRef } from "react";
 import { useTheme } from "./context/ThemeContext";
+import StickyTitle from "./components/StickyTitle";
 
 import htmlLogo from "../assets/html-logo.png";
 import cssLogo from "../assets/css-logo.png";
@@ -144,29 +145,21 @@ export default function Skills() {
     }
   };
 
-  const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
   return (
     <section
       id="skills"
-      className="flex flex-col justify-center items-center py-20 px-5 text-center relative overflow-hidden"
+      className="flex flex-col justify-center items-center py-20 px-5 text-center relative"
     >
       {/* Decorative background glows */}
       <div className="absolute top-1/4 left-1/10 w-72 h-72 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-pulse duration-[8s]" />
       <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-accent/5 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse duration-[10s]" />
 
-      <motion.h2
-        ref={headingRef}
-        className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40 }}
-        animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Skills & Expertise
-      </motion.h2>
+      </StickyTitle>
 
-      <div className="w-full max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 text-left px-4">
+      <div className="w-full max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 text-left px-4 mt-16">
         {categories.map((category, idx) => {
           const categoryRef = useRef(null);
           const isCategoryInView = useInView(categoryRef, {

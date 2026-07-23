@@ -2,6 +2,7 @@ import React from "react";
 import { Mail, Phone, MapPin, Instagram, Linkedin, Github, ArrowUp } from "lucide-react";
 import { scrollToSection } from "./utils/scrollToSection";
 import logo from "../assets/apple-touch-icon.png";
+import { RESUME_LINK } from "./utils";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -29,11 +30,21 @@ export default function Footer() {
               alt="Pranjal Sahu — Logo" 
               className="w-8 h-8 p-0.5 bg-white border border-primary/20 rounded-full shadow-sm select-none" 
             />
-            <h3 className="font-syne font-semibold text-2xl text-primary tracking-tight">PRANJAL SAHU</h3>
+            <h3 className="font-bebas text-2xl text-primary tracking-wide">PRANJAL SAHU</h3>
           </div>
-          <p className="font-space text-muted-text text-sm leading-relaxed max-w-sm">
+          <p className="font-inter text-muted-text text-[0.95rem] leading-relaxed max-w-sm">
             Crafting fast, interactive, and visually engaging web experiences with modern tech stacks. Focused on clean layouts and thoughtful engineering.
           </p>
+          <div className="mt-1">
+            <a 
+              href={RESUME_LINK}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 hover:border-primary/30 rounded-xl font-space text-[0.8rem] uppercase tracking-wider font-semibold shadow-xs hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-300 no-underline cursor-pointer"
+            >
+              View Resume
+            </a>
+          </div>
           <div className="flex gap-3 mt-2">
             {socialLinks.map((social) => {
               const Icon = social.icon;
@@ -55,7 +66,7 @@ export default function Footer() {
 
         {/* Quick Links Column */}
         <div className="md:col-span-3 flex flex-col gap-4">
-          <h4 className="font-syne font-bold text-sm uppercase tracking-widest text-primary pl-0.5">Quick Links</h4>
+          <h4 className="font-inter font-bold text-sm uppercase tracking-widest text-primary pl-0.5">Quick Links</h4>
           <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
             {quickLinks.map((link) => (
               <li key={link.id}>
@@ -65,7 +76,7 @@ export default function Footer() {
                     e.preventDefault();
                     scrollToSection(link.id);
                   }}
-                  className="font-space text-muted-text hover:text-primary text-sm no-underline transition-colors duration-200"
+                  className="font-inter text-muted-text hover:text-primary text-[0.95rem] no-underline transition-colors duration-200"
                 >
                   {link.label}
                 </a>
@@ -76,25 +87,25 @@ export default function Footer() {
 
         {/* Contact Column */}
         <div className="md:col-span-4 flex flex-col gap-4">
-          <h4 className="font-syne font-bold text-sm uppercase tracking-widest text-primary pl-0.5">Contact</h4>
+          <h4 className="font-inter font-bold text-sm uppercase tracking-widest text-primary pl-0.5">Contact</h4>
           <div className="flex flex-col gap-3">
             <a
               href="mailto:sahupranjal1619@gmail.com"
-              className="flex items-center gap-3 text-muted-text hover:text-primary text-sm no-underline transition-colors duration-200"
+              className="flex items-center gap-3 text-muted-text hover:text-primary text-[0.95rem] no-underline transition-colors duration-200"
             >
               <Mail size={16} className="text-primary/70 shrink-0" />
-              <span className="font-space truncate">sahupranjal1619@gmail.com</span>
+              <span className="font-inter truncate">sahupranjal1619@gmail.com</span>
             </a>
             <a
               href="tel:+918895596189"
-              className="flex items-center gap-3 text-muted-text hover:text-primary text-sm no-underline transition-colors duration-200"
+              className="flex items-center gap-3 text-muted-text hover:text-primary text-[0.95rem] no-underline transition-colors duration-200"
             >
               <Phone size={16} className="text-primary/70 shrink-0" />
-              <span className="font-space">+91 88955 96189</span>
+              <span className="font-inter">+91 88955 96189</span>
             </a>
-            <div className="flex items-center gap-3 text-muted-text text-sm">
+            <div className="flex items-center gap-3 text-muted-text text-[0.95rem]">
               <MapPin size={16} className="text-primary/70 shrink-0" />
-              <span className="font-space">Rourkela, Odisha, India</span>
+              <span className="font-inter">Rourkela, Odisha, India</span>
             </div>
           </div>
         </div>
@@ -102,7 +113,7 @@ export default function Footer() {
 
       {/* Bottom Row */}
       <div className="max-w-[1100px] mx-auto border-t border-primary/10 pt-8 flex justify-center items-center">
-        <p className="font-space text-xs text-muted-text m-0 text-center">
+        <p className="font-inter text-xs text-muted-text m-0 text-center">
           &copy; {currentYear} Pranjal Sahu. All rights reserved.
         </p>
       </div>

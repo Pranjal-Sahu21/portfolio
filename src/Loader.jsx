@@ -45,11 +45,11 @@ export default function Loader() {
     })
   };
 
-  // Lock loader colors to light mode (white background, dark text) as requested
-  const loaderBg = "#ffffff";
-  const loaderText = "#000000";
-  const loaderAccent = "#666666";
-  const progressTrackBg = "rgba(0, 0, 0, 0.1)";
+  // Dark theme palette for preloader screen
+  const loaderBg = "#0d0d0d";
+  const loaderText = "#ffffff";
+  const loaderAccent = "#888888";
+  const progressTrackBg = "rgba(255, 255, 255, 0.15)";
 
   return (
     <motion.div
@@ -67,13 +67,23 @@ export default function Loader() {
             variants={stairsVariants}
             initial="initial"
             exit="exit"
-            className="absolute top-0 h-full"
+            className="absolute top-0 h-full overflow-hidden"
             style={{ 
-              backgroundColor: loaderBg, 
+              background: "linear-gradient(180deg, #1a1a1a 0%, #090909 100%)", 
               left: `${i * 20}%`, 
-              width: "calc(20% + 1px)" 
+              width: "calc(20% + 1px)",
+              borderRight: "1px solid rgba(255, 255, 255, 0.03)"
             }}
-          />
+          >
+            {/* Grid overlay that slides up staggered with the panel */}
+            <div 
+              className="absolute inset-0 opacity-25 pointer-events-none"
+              style={{
+                backgroundImage: "radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px)",
+                backgroundSize: "24px 24px"
+              }}
+            />
+          </motion.div>
         ))}
       </div>
 

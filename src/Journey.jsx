@@ -1,6 +1,7 @@
 import { motion, useInView as realUseInView } from "framer-motion";
 const useInView = () => true;
 import { useRef, useState, useEffect } from "react";
+import StickyTitle from "./components/StickyTitle";
 import { MapPin } from "lucide-react";
 import nitRourkelaImg from "../assets/nit_rourkela.png";
 import saiSchoolImg from "../assets/sai_school.jpg";
@@ -33,9 +34,6 @@ export default function Journey() {
       locationUrl: "https://maps.google.com/?q=Vikash+Convent+School+Karanjia",
     },
   ];
-
-  const headingRef = useRef(null);
-  const isHeadingInView = useInView(headingRef, { once: true, amount: 0.3 });
 
   const [hasAnimated, setHasAnimated] = useState(false);
   const [isDriving, setIsDriving] = useState(false);
@@ -73,19 +71,13 @@ export default function Journey() {
   });
 
   return (
-    <section id="journey" className="flex flex-col justify-center items-center pt-[120px] pb-10 px-5 overflow-hidden relative text-center">
-      <motion.h2
-        ref={headingRef}
-        initial={{ opacity: 0, y: 40 }}
-        animate={isHeadingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="shimmer-text mb-[68px] font-syne font-bold text-[clamp(2rem,4vw,3rem)]"
-      >
+    <section id="journey" className="flex flex-col justify-center items-center pt-[120px] pb-10 px-5 relative text-center">
+      <StickyTitle className="shimmer-text mb-14 font-bebas tracking-tighter text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         My Journey
-      </motion.h2>
+      </StickyTitle>
 
       <div 
-        className="relative flex flex-col gap-[40px] md:gap-[60px] w-full max-w-[1024px] mx-auto mt-6 before:content-[''] before:absolute before:left-[14px] md:before:left-1/2 before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-4 before:bg-neutral-200 dark:before:bg-neutral-800 before:border before:border-primary/10 before:rounded-full after:content-[''] after:absolute after:left-[14px] md:after:left-1/2 after:-translate-x-1/2 after:top-0 after:bottom-0 after:w-0 after:border-l-[2px] after:border-dashed after:border-neutral-400 dark:after:border-neutral-600 after:opacity-80" 
+        className="relative flex flex-col gap-[40px] md:gap-[60px] w-full max-w-[1024px] mx-auto mt-6 before:content-[''] before:absolute before:left-[14px] md:before:left-1/2 before:-translate-x-1/2 before:top-0 before:bottom-0 before:w-4 before:bg-neutral-200 dark:before:bg-neutral-800 before:border before:border-primary/10 before:rounded-full after:content-[''] after:absolute after:left-[14px] md:after:left-1/2 after:-translate-x-1/2 after:top-0 after:bottom-0 after:w-0 after:border-l-[2px] after:border-dashed after:border-neutral-400 dark:after:border-neutral-600 after:opacity-80 mt-16" 
         ref={timelineRef}
       >
         {/* Animated Space Rover Car */}

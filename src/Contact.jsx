@@ -1,8 +1,10 @@
 import { motion, useInView as realUseInView, AnimatePresence } from "framer-motion";
 const useInView = () => true;
 import { useRef, useState } from "react";
-import { Mail, Phone, MapPin, Instagram, Linkedin, Github, Send } from "lucide-react";
+import StickyTitle from "./components/StickyTitle";
+import { Mail, Phone, MapPin, Instagram, Linkedin, Github, Send, FileText } from "lucide-react";
 import emailjs from "@emailjs/browser";
+import { RESUME_LINK } from "./utils";
 
 export default function Contact() {
   const ref = useRef(null);
@@ -57,20 +59,15 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="flex flex-col justify-center items-center py-24 px-5 overflow-hidden text-center relative"
+      className="flex flex-col justify-center items-center py-24 px-5 text-center relative"
       ref={ref}
     >
       {/* Heading */}
-      <motion.h2
-        className="shimmer-text font-syne font-bold mb-16 text-[clamp(2rem,4vw,3rem)]"
-        initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
+      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Let's work together
-      </motion.h2>
+      </StickyTitle>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 w-full max-w-[1100px] items-stretch text-left px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 w-full max-w-[1100px] items-stretch text-left px-4 mt-16">
         
         {/* RIGHT (on desktop) — Contact Form */}
         <motion.div
@@ -195,7 +192,7 @@ export default function Contact() {
                 </div>
                 <div className="text-left">
                   <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Email</p>
-                  <p className="font-space text-primary text-sm sm:text-base leading-none">sahupranjal1619@gmail.com</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none mt-2">sahupranjal1619@gmail.com</p>
                 </div>
               </a>
 
@@ -208,7 +205,7 @@ export default function Contact() {
                 </div>
                 <div className="text-left">
                   <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Phone</p>
-                  <p className="font-space text-primary text-sm sm:text-base leading-none">+91 88955 96189</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none mt-2">+91 88955 96189</p>
                 </div>
               </a>
 
@@ -223,32 +220,26 @@ export default function Contact() {
                 </div>
                 <div className="text-left">
                   <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Location</p>
-                  <p className="font-space text-primary text-sm sm:text-base leading-none">Rourkela, Odisha, India</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none mt-2">Rourkela, Odisha, India</p>
+                </div>
+              </a>
+              <a 
+                href={RESUME_LINK} 
+                target="_blank"
+                rel="noreferrer"
+                className="bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 border-l-4 border-l-primary/30 rounded-xl p-4 flex items-center gap-4 hover:border-primary/20 hover:border-l-primary hover:bg-primary/[0.06] dark:hover:bg-primary/[0.08] hover:-translate-y-0.5 hover:shadow-sm transition-all duration-300 group no-underline"
+              >
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-primary/5 border border-primary/10 text-primary transition-all duration-300 group-hover:scale-105 group-hover:bg-primary/10 shrink-0">
+                  <FileText size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none mb-1">Resume / CV</p>
+                  <p className="font-space text-primary text-sm sm:text-base leading-none mt-2">View & Download CV</p>
                 </div>
               </a>
             </div>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex flex-col gap-3 text-center lg:text-left mt-6 lg:mt-0">
-            <p className="font-syne text-[0.65rem] text-muted-text uppercase tracking-widest leading-none">Find me on</p>
-            <div className="flex gap-3 mt-1 justify-center lg:justify-start">
-              {socialLinks.map((s, idx) => {
-                const SocialIcon = s.icon;
-                return (
-                  <a
-                    key={idx}
-                    href={s.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary/[0.03] dark:bg-primary/[0.05] border border-primary/10 text-muted-text hover:text-primary hover:bg-primary/10 hover:border-primary/30 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 shadow-xs"
-                  >
-                    <SocialIcon size={20} />
-                  </a>
-                );
-              })}
-            </div>
-          </div>
         </motion.div>
       </div>
 
