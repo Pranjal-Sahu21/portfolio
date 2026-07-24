@@ -406,7 +406,7 @@ function InnerApp() {
     <>
       <AnimatePresence>{loading && <Loader />}</AnimatePresence>
 
-      <div className={`min-h-screen w-full relative bg-bg transition-colors duration-300 ${!showContent ? 'h-screen overflow-hidden' : ''}`}>
+      <div className={`min-h-[100dvh] w-full relative bg-bg transition-colors duration-300 ${!showContent ? 'h-[100dvh] overflow-hidden' : ''}`}>
 
         {/* Main Content Wrapper (Scrolls normally, has solid bg and high z-index) */}
         <div className="relative z-20 bg-bg transition-colors duration-300">

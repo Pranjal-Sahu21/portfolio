@@ -96,7 +96,7 @@ export default function Projects() {
       id="projects"
       className="flex flex-col justify-center items-center py-30 px-5 relative text-center"
     >
-      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
+      <StickyTitle className="text-muted-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Featured Projects
       </StickyTitle>
 

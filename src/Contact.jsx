@@ -63,7 +63,7 @@ export default function Contact() {
       ref={ref}
     >
       {/* Heading */}
-      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
+      <StickyTitle className="text-muted-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Let's work together
       </StickyTitle>
 

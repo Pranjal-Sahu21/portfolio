@@ -155,7 +155,7 @@ export default function Skills() {
       <div className="absolute top-1/4 left-1/10 w-72 h-72 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-pulse duration-[8s]" />
       <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-accent/5 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse duration-[10s]" />
 
-      <StickyTitle className="shimmer-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
+      <StickyTitle className="text-muted-text font-bebas tracking-tighter mb-14 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         Skills & Expertise
       </StickyTitle>
 

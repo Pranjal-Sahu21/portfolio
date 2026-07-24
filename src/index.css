@@ -99,7 +99,7 @@
   }
 
   body {
-    @apply bg-bg text-light-text flex flex-col min-h-screen relative transition-colors duration-300;
+    @apply bg-bg text-light-text flex flex-col min-h-[100dvh] relative transition-colors duration-300;
     font-family: 'Inter', sans-serif;
     background-size: cover !important;
     background-attachment: fixed !important;
@@ -131,7 +131,6 @@
   .font-bebas {
     font-family: 'Bebas Neue', sans-serif !important;
     letter-spacing: -0.02em !important;
-    -webkit-text-stroke: 0.8px var(--primary);
   }
   .section-title {
     font-family: 'Bebas Neue', sans-serif !important;
@@ -139,7 +138,6 @@
     font-size: clamp(3.8rem, 9.5vw, 7.5rem) !important;
     line-height: 0.9 !important;
     text-transform: uppercase;
-    -webkit-text-stroke: 1.2px var(--primary);
   }
   .font-caitog {
     font-family: 'Caitog', sans-serif !important;

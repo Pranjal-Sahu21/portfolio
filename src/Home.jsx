@@ -54,7 +54,7 @@ export default function Home({ showContent = true }) {
   return (
     <section
       ref={sectionRef}
-      className="h-screen w-full text-light-text flex flex-col justify-between items-center px-4 md:px-8 pt-24 pb-0 overflow-hidden relative select-none"
+      className="h-[100dvh] w-full text-light-text flex flex-col justify-between items-center px-4 md:px-8 pt-24 pb-0 overflow-hidden relative select-none"
       id="home"
     >
       {/* Silk Background with oversized bounds to completely eliminate scroll gaps */}
@@ -66,7 +66,7 @@ export default function Home({ showContent = true }) {
           color={theme === "dark" ? "#272626" : "#ffffff"}
           speed={5}
           scale={1}
-          noiseIntensity={1.5}
+          noiseIntensity={1}
         />
       </motion.div>
 
@@ -103,7 +103,7 @@ export default function Home({ showContent = true }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              data-hover-text="Yes, I'm currently here!"
+              data-hover-text="B.Tech CSE @ NIT Rourkela"
             >
               Web Developer & B.Tech CSE Student @ NIT Rourkela.
             </motion.p>
@@ -112,13 +112,12 @@ export default function Home({ showContent = true }) {
           {/* Bottom Display Name: PRANJAL moving down letter-by-letter */}
           <div className="relative z-10 w-full flex justify-center items-end select-none pb-0 pt-6 md:pt-10 overflow-visible">
             <h1
-              className="w-full flex justify-between sm:justify-around items-end font-caitog text-[clamp(4.2rem,22vw,22rem)] leading-[0.88] tracking-[-0.02em] text-[#898989] uppercase select-none transition-colors duration-300 py-1"
+              className="w-full flex justify-between sm:justify-around items-end font-caitog text-[clamp(4.2rem,22vw,22rem)] leading-[0.88] tracking-[-0.02em] text-[#898989] uppercase select-none transition-colors duration-300 py-6 md:py-1"
               data-hover-text="SAY MY NAME!"
             >
               {nameChars.map((char, i) => (
                 <motion.span
                   key={i}
-                  style={letterTransforms[i] || {}}
                   initial={{ y: "100%", opacity: 0 }}
                   animate={{ y: "0%", opacity: 1 }}
                   transition={{
@@ -129,7 +128,12 @@ export default function Home({ showContent = true }) {
                   }}
                   className="inline-block will-change-transform py-1"
                 >
-                  {char}
+                  <motion.span
+                    style={letterTransforms[i] || {}}
+                    className="inline-block will-change-transform"
+                  >
+                    {char}
+                  </motion.span>
                 </motion.span>
               ))}
               <span className="sr-only">Pranjal</span>

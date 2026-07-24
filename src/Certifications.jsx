@@ -135,7 +135,7 @@ export default function Certifications() {
     >
       {/* Title */}
       <StickyTitle 
-        className="shimmer-text font-bebas tracking-tighter mb-16 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase"
+        className="text-muted-text font-bebas tracking-tighter mb-16 text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase"
         blurHeight="h-32"
         negativeMargin="-mb-48"
       >

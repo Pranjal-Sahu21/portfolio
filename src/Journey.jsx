@@ -72,7 +72,7 @@ export default function Journey() {
 
   return (
     <section id="journey" className="flex flex-col justify-center items-center pt-[120px] pb-10 px-5 relative text-center">
-      <StickyTitle className="shimmer-text mb-14 font-bebas tracking-tighter text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
+      <StickyTitle className="text-muted-text mb-14 font-bebas tracking-tighter text-[clamp(3.8rem,9.5vw,7.5rem)] leading-none uppercase">
         My Journey
       </StickyTitle>
 
