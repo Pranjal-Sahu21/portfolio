@@ -17,6 +17,7 @@ import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "./context/ThemeContext";
 import { StatsProvider } from "./context/StatsContext";
 import { RESUME_LINK } from "./utils";
+import { playHoverSound, playClickSound, playSpeechSound } from "./utils/audio";
 
 
 function InnerApp() {
@@ -72,14 +73,128 @@ function InnerApp() {
 
       if (activeText) {
         dot.classList.add("has-speech");
-        if (speechBubble) speechBubble.textContent = activeText;
+        if (speechBubble) {
+          if (speechBubble.textContent !== activeText) {
+            speechBubble.textContent = activeText;
+            playSpeechSound();
+          }
+        }
       } else {
         dot.classList.remove("has-speech");
+        if (speechBubble) speechBubble.textContent = "";
       }
     };
 
     const handleMouseMove = (e) => {
+      const card = e.target.closest(".project-card-3d");
+      const clickable = e.target.closest("a, button, input[type='submit'], input[type='button'], .cursor-pointer");
+      const isNav = e.target.closest(".nav-container") || e.target.closest("nav");
+      const hoverTextElem = e.target.closest("[data-hover-text]");
+
+      // Speech bubble logic variables
+      currentHoverText = "";
+
+      if (!isLeavingOrDisappeared) {
+        const isOverChart = e.target.closest("canvas") && !e.target.closest("#about");
+        const sectionElem = e.target.closest("[data-section]");
+        const sectionId = sectionElem ? sectionElem.getAttribute("data-section") : null;
+
+        if (isOverChart) {
+          currentHoverText = "";
+        } else if (hoverTextElem) {
+          currentHoverText = hoverTextElem.getAttribute("data-hover-text");
+        } else if (sectionId) {
+          if (sectionId === "home") {
+            currentHoverText = "Back to the beginning";
+          } else if (sectionId === "about") {
+            currentHoverText = "Get to know me a bit better";
+          } else if (sectionId === "journey") {
+            currentHoverText = "Explore my coding journey";
+          } else if (sectionId === "skills") {
+            currentHoverText = "Check out my technical skills";
+          } else if (sectionId === "certifications") {
+            currentHoverText = "Browse my certifications";
+          } else if (sectionId === "projects") {
+            currentHoverText = "See what I have built";
+          } else if (sectionId === "activity") {
+            currentHoverText = "Check out my coding stats";
+          } else if (sectionId === "contact") {
+            currentHoverText = "Let's get in touch";
+          } else if (sectionId === "theme") {
+            const isLight = document.documentElement.classList.contains("light");
+            currentHoverText = isLight ? "Join the Dark Side..." : "Return to the Light Side...";
+          }
+        } else if (clickable) {
+          const text = clickable.textContent.trim().toLowerCase();
+          const href = clickable.getAttribute("href") || "";
+
+          if (text === "download cv" || href === RESUME_LINK || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk") || href.includes("1_KrL-UboRRlkNhiWVrA_wacuLGYufBQm")) {
+            currentHoverText = "Check out my resume!";
+          } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("react developer")) {
+            currentHoverText = "HackerRank React: Validated my frontend skills in JavaScript, React, and CSS!";
+          } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb architecture")) {
+            currentHoverText = "GFG MongoDB: Learned database architecture, document modeling, sharding, and scaling!";
+          } else if (href.includes("1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo") || text.includes("dsa certification")) {
+            currentHoverText = "GFG DSA: Mastered 15+ core data structures and complex algorithms topics!";
+          } else if (href.includes("1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG") || text.includes("node.js developer")) {
+            currentHoverText = "Udemy Node: Learned 10+ backend technologies including Node, Docker, ORMs, and Cloud Deployment!";
+          } else if (href.includes("1nIBOc97mW8YOuxfXODMgBjUZa39Q0mAF") || text.includes("sql (intermediate)")) {
+            currentHoverText = "HackerRank SQL: Confirmed my proficiency in relational queries and database commands!";
+          } else if (href.includes("1V93UXpsTA7oosK5Wnbgv_pMrIsqSfmnf") || text.includes("postgresql developer")) {
+            currentHoverText = "Simplilearn Postgres: Learned PostgreSQL database design, administration, and querying!";
+          } else if (href.includes("drive.google.com")) {
+            currentHoverText = "Check out my credential!";
+          } else if (text === "contact me" || href === "#contact") {
+            currentHoverText = "Let's chat!";
+          } else if (e.target.closest(".project-card-3d") || href.includes("netlify.app")) {
+            currentHoverText = "Checkout this project! 🡕";
+          } else if (href.includes("instagram.com")) {
+            currentHoverText = "Instagram: @prsahu_21";
+          } else if (href.includes("linkedin.com")) {
+            currentHoverText = "LinkedIn: Pranjal Sahu";
+          } else if (href.includes("github.com")) {
+            currentHoverText = "GitHub: @Pranjal-Sahu21";
+          } else if (href.includes("leetcode.com")) {
+            currentHoverText = "LeetCode: @Pranjal_1619";
+          } else if (clickable.closest("#contact") && clickable.tagName.toLowerCase() === "button") {
+            currentHoverText = "Send the message";
+          } else if (href.startsWith("mailto:")) {
+            currentHoverText = "Drop an email";
+          } else if (href.startsWith("tel:")) {
+            currentHoverText = "Give a call";
+          } else if (href.includes("google.com/maps") || href.includes("maps.google.com")) {
+            currentHoverText = "Find my location";
+          } else if (isNav) {
+            if (href.startsWith("#")) {
+              const sectionName = href.replace("#", "");
+              currentHoverText = `Go to ${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}`;
+            }
+          }
+        }
+      }
+
+      // Play hover sounds only on specific action-based cards:
+      // Project cards, timeline/journey cards, cert cards, swiper-slides, cards on the left side of contact, about cards, and ascii art card
+      const currentHoverTarget = card || e.target.closest(".timeline-card, .journey-card, .cert-card, .swiper-slide, #contact a, .about-card, .ascii-card");
+      if (currentHoverTarget) {
+        if (window._lastHoveredElement !== currentHoverTarget) {
+          window._lastHoveredElement = currentHoverTarget;
+          const now = Date.now();
+          if (!window._lastHoverTime || now - window._lastHoverTime > 60) {
+            window._lastHoverTime = now;
+            // Play hover sound only if avatar is gone or there is no active speech dialogue triggered on hover
+            if (isLeavingOrDisappeared || !currentHoverText) {
+              playHoverSound();
+            }
+          }
+        }
+      } else {
+        window._lastHoveredElement = null;
+      }
+
+      // If the cursor avatar is gone, skip all avatar rendering/speech bubble logic
       if (isLeavingOrDisappeared) return;
+
       targetX = e.clientX;
       targetY = e.clientY;
       dot.classList.add("show");
@@ -91,11 +206,6 @@ function InnerApp() {
         dot.classList.remove("speech-left");
       }
 
-      const card = e.target.closest(".project-card-3d");
-      const clickable = e.target.closest("a, button, input[type='submit'], input[type='button'], .cursor-pointer");
-      const isNav = e.target.closest(".nav-container") || e.target.closest("nav");
-      const hoverTextElem = e.target.closest("[data-hover-text]");
-
       if (card) {
         dot.classList.add("hover-project");
         dot.classList.remove("hover-clickable");
@@ -106,85 +216,7 @@ function InnerApp() {
         dot.classList.remove("hover-project", "hover-clickable");
       }
 
-      // Speech bubble logic
-      currentHoverText = "";
-      const isOverChart = e.target.closest("canvas") && !e.target.closest("#about");
-      const sectionElem = e.target.closest("[data-section]");
-      const sectionId = sectionElem ? sectionElem.getAttribute("data-section") : null;
-
-      if (isOverChart) {
-        currentHoverText = "";
-      } else if (hoverTextElem) {
-        currentHoverText = hoverTextElem.getAttribute("data-hover-text");
-      } else if (sectionId) {
-        if (sectionId === "home") {
-          currentHoverText = "Back to the beginning";
-        } else if (sectionId === "about") {
-          currentHoverText = "Get to know me a bit better";
-        } else if (sectionId === "journey") {
-          currentHoverText = "Explore my coding journey";
-        } else if (sectionId === "skills") {
-          currentHoverText = "Check out my technical skills";
-        } else if (sectionId === "certifications") {
-          currentHoverText = "Browse my certifications";
-        } else if (sectionId === "projects") {
-          currentHoverText = "See what I have built";
-        } else if (sectionId === "activity") {
-          currentHoverText = "Check out my coding stats";
-        } else if (sectionId === "contact") {
-          currentHoverText = "Let's get in touch";
-        } else if (sectionId === "theme") {
-          const isLight = document.documentElement.classList.contains("light");
-          currentHoverText = isLight ? "Join the Dark Side..." : "Return to the Light Side...";
-        }
-      } else if (clickable) {
-        const text = clickable.textContent.trim().toLowerCase();
-        const href = clickable.getAttribute("href") || "";
-
-        if (text === "download cv" || href === RESUME_LINK || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk") || href.includes("1_KrL-UboRRlkNhiWVrA_wacuLGYufBQm")) {
-          currentHoverText = "Check out my resume!";
-        } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("react developer")) {
-          currentHoverText = "HackerRank React: Validated my frontend skills in JavaScript, React, and CSS!";
-        } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb architecture")) {
-          currentHoverText = "GFG MongoDB: Learned database architecture, document modeling, sharding, and scaling!";
-        } else if (href.includes("1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo") || text.includes("dsa certification")) {
-          currentHoverText = "GFG DSA: Mastered 15+ core data structures and complex algorithms topics!";
-        } else if (href.includes("1MFq0v7G2bw7nRwYhCozQrYqAKbA-SPuG") || text.includes("node.js developer")) {
-          currentHoverText = "Udemy Node: Learned 10+ backend technologies including Node, Docker, ORMs, and Cloud Deployment!";
-        } else if (href.includes("1nIBOc97mW8YOuxfXODMgBjUZa39Q0mAF") || text.includes("sql (intermediate)")) {
-          currentHoverText = "HackerRank SQL: Confirmed my proficiency in relational queries and database commands!";
-        } else if (href.includes("1V93UXpsTA7oosK5Wnbgv_pMrIsqSfmnf") || text.includes("postgresql developer")) {
-          currentHoverText = "Simplilearn Postgres: Learned PostgreSQL database design, administration, and querying!";
-        } else if (href.includes("drive.google.com")) {
-          currentHoverText = "Check out my credential!";
-        } else if (text === "contact me" || href === "#contact") {
-          currentHoverText = "Let's chat!";
-        } else if (e.target.closest(".project-card-3d") || href.includes("netlify.app")) {
-          currentHoverText = "Checkout this project! 🡕";
-        } else if (href.includes("instagram.com")) {
-          currentHoverText = "Instagram: @prsahu_21";
-        } else if (href.includes("linkedin.com")) {
-          currentHoverText = "LinkedIn: Pranjal Sahu";
-        } else if (href.includes("github.com")) {
-          currentHoverText = "GitHub: @Pranjal-Sahu21";
-        } else if (href.includes("leetcode.com")) {
-          currentHoverText = "LeetCode: @Pranjal_1619";
-        } else if (clickable.closest("#contact") && clickable.tagName.toLowerCase() === "button") {
-          currentHoverText = "Send the message";
-        } else if (href.startsWith("mailto:")) {
-          currentHoverText = "Drop an email";
-        } else if (href.startsWith("tel:")) {
-          currentHoverText = "Give a call";
-        } else if (href.includes("google.com/maps") || href.includes("maps.google.com")) {
-          currentHoverText = "Find my location";
-        } else if (isNav) {
-          if (href.startsWith("#")) {
-            const sectionName = href.replace("#", "");
-            currentHoverText = `Go to ${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}`;
-          }
-        }
-      }
-
+      // Update speech bubble text
       updateSpeechBubble();
     };
 
@@ -211,6 +243,14 @@ function InnerApp() {
     };
 
     const handleMouseDown = (e) => {
+      // Play click sound on interactive elements (buttons, links, inputs) and cards (project, journey, cert, about, ascii art)
+      const clickableElement = e.target.closest(
+        "a, button, input, textarea, .cursor-pointer, [role='button'], .project-card-3d, .timeline-card, .journey-card, .cert-card, .about-card, .ascii-card"
+      );
+      if (clickableElement) {
+        playClickSound();
+      }
+
       if (isLeavingOrDisappeared) return;
 
       const now = Date.now();

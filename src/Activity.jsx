@@ -6,6 +6,7 @@ import { GitHubCalendar } from "react-github-calendar";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useTheme } from "./context/ThemeContext";
 import { useStats } from "./context/StatsContext";
+import { playHoverSound } from "./utils/audio";
 
 import { 
   Chart as ChartJS, 
@@ -147,6 +148,18 @@ export default function Activity() {
   const leetcodeChartOptions = leetcodeData ? {
     responsive: true,
     maintainAspectRatio: false,
+    onHover: (event, activeElements) => {
+      if (activeElements && activeElements.length > 0) {
+        const activeEl = activeElements[0];
+        const uniqueKey = `lc-pie-${activeEl.datasetIndex}-${activeEl.index}`;
+        if (window._lastChartHoverKey !== uniqueKey) {
+          window._lastChartHoverKey = uniqueKey;
+          playHoverSound();
+        }
+      } else {
+        window._lastChartHoverKey = null;
+      }
+    },
     layout: {
       padding: 8,
     },
@@ -265,6 +278,18 @@ export default function Activity() {
   const githubChartOptions = githubStats ? {
     responsive: true,
     maintainAspectRatio: false,
+    onHover: (event, activeElements) => {
+      if (activeElements && activeElements.length > 0) {
+        const activeEl = activeElements[0];
+        const uniqueKey = `gh-pie-${activeEl.datasetIndex}-${activeEl.index}`;
+        if (window._lastChartHoverKey !== uniqueKey) {
+          window._lastChartHoverKey = uniqueKey;
+          playHoverSound();
+        }
+      } else {
+        window._lastChartHoverKey = null;
+      }
+    },
     layout: {
       padding: 8,
     },

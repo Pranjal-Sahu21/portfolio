@@ -1,11 +1,19 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTheme } from "./context/ThemeContext";
+import { playSpeechSound, playStaircaseSound } from "./utils/audio";
 
 export default function Loader() {
   const { theme } = useTheme();
   const [walkActive, setWalkActive] = useState(true);
   const [bubbleText, setBubbleText] = useState("");
+
+  useEffect(() => {
+    // Play character speaking sound when dialogue updates
+    if (bubbleText) {
+      playSpeechSound();
+    }
+  }, [bubbleText]);
 
   useEffect(() => {
     // Walk finishes at 1.8 seconds, character says "Hi there!"
@@ -24,10 +32,16 @@ export default function Loader() {
       setBubbleText("Welcome to my portfolio");
     }, 5800);
 
+    // Staircase exit transition starts at 7.8 seconds
+    const exitSoundTimer = setTimeout(() => {
+      playStaircaseSound();
+    }, 7800);
+
     return () => {
       clearTimeout(walkTimer);
       clearTimeout(s2Timer);
       clearTimeout(s3Timer);
+      clearTimeout(exitSoundTimer);
     };
   }, []);
 
