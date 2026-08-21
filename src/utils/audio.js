@@ -1,5 +1,8 @@
 // Web Audio API sound generator for premium, low-latency UI feedback
+import sayMyNameUrl from "../assets/say-my-name.mp3";
+
 let audioCtx = null;
+let sayMyNameAudio = null;
 
 function getAudioContext() {
   if (!audioCtx) {
@@ -164,6 +167,22 @@ export function playStaircaseSound() {
       osc.start(startTime);
       osc.stop(startTime + 0.35);
     });
+  } catch (error) {
+    // Fail silently
+  }
+}
+
+/**
+ * Play Walter White's iconic "Say my name" Breaking Bad audio clip.
+ */
+export function playSayMyNameSound() {
+  try {
+    if (!sayMyNameAudio) {
+      sayMyNameAudio = new Audio(sayMyNameUrl);
+      sayMyNameAudio.volume = 0.55;
+    }
+    sayMyNameAudio.currentTime = 0;
+    sayMyNameAudio.play();
   } catch (error) {
     // Fail silently
   }

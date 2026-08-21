@@ -17,7 +17,7 @@ import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "./context/ThemeContext";
 import { StatsProvider } from "./context/StatsContext";
 import { RESUME_LINK } from "./utils";
-import { playHoverSound, playClickSound, playSpeechSound } from "./utils/audio";
+import { playHoverSound, playClickSound, playSpeechSound, playSayMyNameSound } from "./utils/audio";
 
 
 function InnerApp() {
@@ -76,7 +76,11 @@ function InnerApp() {
         if (speechBubble) {
           if (speechBubble.textContent !== activeText) {
             speechBubble.textContent = activeText;
-            playSpeechSound();
+            if (activeText === "NOW, SAY MY NAME") {
+              playSayMyNameSound();
+            } else {
+              playSpeechSound();
+            }
           }
         }
       } else {

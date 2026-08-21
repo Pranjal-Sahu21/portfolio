@@ -126,6 +126,8 @@ export default function Activity() {
     leetcodeError: error,
   } = useStats();
 
+  console.log("Activity component leetcodeData:", leetcodeData);
+
 
   // LeetCode Pie Chart Data and Options
   const leetcodeChartData = leetcodeData ? {
