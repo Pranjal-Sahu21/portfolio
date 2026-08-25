@@ -5,4 +5,4 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-export const RESUME_LINK = "https://drive.google.com/file/d/1KoRaa5fomII4PT_rbtrF0-rI61lmYu5p/view?usp=drive_link";
+export const RESUME_LINK = "https://drive.google.com/file/d/12_BBA4B9U2zcu1qdhVMTOR7uCijyLSyO/view?usp=drive_link";
