@@ -106,7 +106,7 @@ export default function About() {
   const isContentInView = useInView(contentRef, { once: true, amount: 0.15 });
 
   const [githubContributions, setGithubContributions] = useState(900);
-  const [leetcodeSolved, setLeetcodeSolved] = useState(900);
+  const [leetcodeSolved, setLeetcodeSolved] = useState(990);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -116,7 +116,7 @@ export default function About() {
           const data = await res.json();
           const total = Object.values(data.total).reduce((a, b) => a + b, 0);
           if (total > 0) {
-            const rounded = Math.floor(total / 100) * 100;
+            const rounded = Math.floor(total / 10) * 10;
             setGithubContributions(rounded);
           }
         }
@@ -125,12 +125,12 @@ export default function About() {
       }
 
       try {
-        const res = await fetch("https://leetcode-api-faisalshohag.vercel.app/Pranjal_1619");
+        const res = await fetch("https://alfa-leetcode-api.onrender.com/Pranjal_1619/profile");
         if (res.ok) {
           const data = await res.json();
           const total = data.totalSolved;
           if (total > 0) {
-            const rounded = Math.floor(total / 100) * 100;
+            const rounded = Math.floor(total / 10) * 10;
             setLeetcodeSolved(rounded);
           }
         }

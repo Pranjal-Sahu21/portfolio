@@ -53,7 +53,7 @@ export default function Certifications() {
       issuer: "GeeksforGeeks",
       date: "June 2026",
       topics: ["Arrays & Strings", "Trees & Graphs", "Dynamic Programming", "Greedy Algorithms"],
-      description: "Demonstrated analytical thinking and complex problem-solving abilities. Validated proficiency in core data structures and algorithms including trees, graphs, greedy methods, sorting, and dynamic programming.",
+      description: "Demonstrated analytical thinking and complex problem-solving abilities. Covered 15+ DSA topics, ranking 215th across 10 contests and 301st by questions solved among 46,900+ students (Top 0.5%).",
       link: "https://drive.google.com/file/d/1QmKNku0u8CmGdIGmbH7Q0vhv2pTB5VLo/view?usp=sharing",
       funnyText: "GFG DSA: Mastered 15+ core data structures and complex algorithms topics!",
       image: dsaGfgImg,
