@@ -2,7 +2,6 @@ import { motion, useInView as realUseInView } from "framer-motion";
 const useInView = () => true;
 import { useRef, useState, useEffect } from "react";
 import StickyTitle from "./components/StickyTitle";
-import { GitHubCalendar } from "react-github-calendar";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useTheme } from "./context/ThemeContext";
 import { useStats } from "./context/StatsContext";
@@ -116,6 +115,7 @@ export default function Activity() {
   // --- SHARE CODING STATS VIA CONTEXT ---
   const {
     githubStats,
+    githubCalendar,
     githubLoading,
     githubError,
     leetcodeData,
@@ -601,12 +601,7 @@ export default function Activity() {
                 <div className="lg:col-span-6 h-56 bg-primary/5 border border-primary/10 rounded-xl"></div>
               </div>
             </div>
-          ) : githubError ? (
-            /* Error Fallback */
-            <div className="text-center py-6 font-space text-red-400 text-sm">
-              Failed to load some GitHub statistics, rendering contribution calendar only.
-            </div>
-          ) : githubStats ? (
+          ) : (
             /* GitHub Stats Summary Grid */
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-4 mb-8">
               {/* Left Panel: Stats Cards */}
@@ -689,7 +684,7 @@ export default function Activity() {
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
 
           {/* GitHub Activity & Growth Charts */}
           {githubStats && (
@@ -746,8 +741,8 @@ export default function Activity() {
             className="calendar-container w-full overflow-x-auto scrollbar-thin select-none flex justify-start md:justify-center text-light-text font-space py-2 mb-8"
             data-hover-text="The denser it gets, the less of a social life I have."
           >
-            <GitHubCalendar
-              username="pranjal-sahu21"
+            <ActivityCalendar
+              data={githubCalendar}
               theme={githubCalendarTheme}
               colorScheme={theme}
               blockSize={14}
@@ -756,6 +751,12 @@ export default function Activity() {
               showColorLegend={true}
             />
           </div>
+
+          {githubError && (
+            <div className="text-center text-[0.8rem] text-yellow-500/90 dark:text-yellow-400/70 font-space mt-2 mb-6 bg-yellow-500/5 border border-yellow-500/10 rounded-xl py-3 px-4 mx-6">
+              ⚠️ Live data cannot be fetched (GitHub API rate-limited or offline). The data shown above is stale fallback data.
+            </div>
+          )}
         </motion.div>
 
         {/* 2. LEETCODE DASHBOARD CARD */}
@@ -814,16 +815,6 @@ export default function Activity() {
                 <div className="h-24 bg-[#181818]/60 rounded-xl"></div>
                 <div className="h-24 bg-[#181818]/60 rounded-xl"></div>
               </div>
-            </div>
-          ) : error ? (
-            /* Error Display */
-            <div className="text-center py-10 font-space">
-              <p className="text-red-400 mb-2">
-                Error loading LeetCode submission data.
-              </p>
-              <p className="text-muted-text text-sm">
-                Please refresh the page or check again later.
-              </p>
             </div>
           ) : (
             /* Content Display */
@@ -955,6 +946,12 @@ export default function Activity() {
                   />
                 </div>
               </div>
+
+              {error && (
+                <div className="text-center text-[0.8rem] text-yellow-500/90 dark:text-yellow-400/70 font-space mt-4 bg-yellow-500/5 border border-yellow-500/10 rounded-xl py-3 px-4">
+                  ⚠️ Live data could not be fetched (Render API rate-limited or offline). The data shown above is stale fallback data.
+                </div>
+              )}
             </div>
           )}
         </motion.div>

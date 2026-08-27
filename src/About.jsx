@@ -105,7 +105,7 @@ export default function About() {
   const contentRef = useRef(null);
   const isContentInView = useInView(contentRef, { once: true, amount: 0.15 });
 
-  const [githubContributions, setGithubContributions] = useState(900);
+  const [githubContributions, setGithubContributions] = useState(1060);
   const [leetcodeSolved, setLeetcodeSolved] = useState(990);
 
   useEffect(() => {
