@@ -113,7 +113,7 @@ export default function Home({ showContent = true }) {
           <div className="relative z-10 w-full flex justify-center items-end select-none pb-0 pt-6 md:pt-10 overflow-visible">
             <h1
               className="w-full flex justify-between sm:justify-around items-end font-caitog text-[clamp(4.2rem,22vw,22rem)] leading-[0.88] tracking-[-0.02em] text-[#898989] uppercase select-none transition-colors duration-300 py-6 md:py-1"
-              data-hover-text="NOW, SAY MY NAME"
+              data-hover-text="That's my name!"
             >
               {nameChars.map((char, i) => (
                 <motion.span

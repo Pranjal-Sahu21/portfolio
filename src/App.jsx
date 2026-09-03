@@ -17,7 +17,7 @@ import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "./context/ThemeContext";
 import { StatsProvider } from "./context/StatsContext";
 import { RESUME_LINK } from "./utils";
-import { playHoverSound, playClickSound, playSpeechSound, playSayMyNameSound } from "./utils/audio";
+import { playHoverSound, playClickSound, playSpeechSound } from "./utils/audio";
 
 
 function InnerApp() {
@@ -76,11 +76,7 @@ function InnerApp() {
         if (speechBubble) {
           if (speechBubble.textContent !== activeText) {
             speechBubble.textContent = activeText;
-            if (activeText === "NOW, SAY MY NAME") {
-              playSayMyNameSound();
-            } else {
-              playSpeechSound();
-            }
+            playSpeechSound();
           }
         }
       } else {
@@ -134,6 +130,8 @@ function InnerApp() {
 
           if (text === "download cv" || href === RESUME_LINK || href.includes("1tKWvaG2YOVkODYJuIEg1eZFmE3GWVSCk") || href.includes("1_KrL-UboRRlkNhiWVrA_wacuLGYufBQm")) {
             currentHoverText = "Check out my resume!";
+          } else if (href.includes("1qTZDh-YNFfYueoBiOvY8lfRyYYu4eUFX") || text.includes("software engineer")) {
+            currentHoverText = "HackerRank Software Engineer: Demonstrated core software engineering skills and algorithmic problem solving!";
           } else if (href.includes("1B_VNAmS_5NawDiHcQus9MqH4Mu9RFziI") || text.includes("react developer")) {
             currentHoverText = "HackerRank React: Validated my frontend skills in JavaScript, React, and CSS!";
           } else if (href.includes("1-_KRuUd5orE4Qv5zhPW9IL7RuWSzPZpc") || text.includes("mongodb architecture")) {
