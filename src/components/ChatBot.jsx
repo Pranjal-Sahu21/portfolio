@@ -122,14 +122,7 @@ const getLanguagesString = (githubState) => {
   return "JavaScript, HTML, CSS, Java";
 };
 
-const PUTER_AUTH_TOKEN = import.meta.env.VITE_PUTER_AUTH_TOKEN;
-
 export default function ChatBot() {
-  useEffect(() => {
-    if (PUTER_AUTH_TOKEN && !localStorage.getItem("puter.auth.token")) {
-      localStorage.setItem("puter.auth.token", PUTER_AUTH_TOKEN);
-    }
-  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const [bottomOffset, setBottomOffset] = useState(24);
@@ -403,19 +396,32 @@ Personality guidelines:
 
       let botReply = "Oops! My communication systems are offline right now. You can reach Pranjal directly at sahupranjal1619@gmail.com.";
 
-      if (window.puter && window.puter.ai) {
-        const response = await window.puter.ai.chat(apiHistory, {
-          model: "gpt-4o-mini"
+      try {
+        let res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: apiHistory })
         });
-        if (response && response.message && response.message.content) {
-          botReply = response.message.content.trim();
-        } else if (typeof response === "string") {
-          botReply = response.trim();
+
+        // Fallback to direct function endpoint if /api/chat is not routed
+        if (res.status === 404) {
+          res = await fetch("/.netlify/functions/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ messages: apiHistory })
+          });
         }
-      } else {
-        // Fallback mock response for local testing or when Puter fails
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        botReply = "Hi! I would love to answer that, but my AI connection is currently initialization-pending. Please feel free to check out Pranjal's GitHub or email him directly!";
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.reply) {
+            botReply = data.reply.trim();
+          }
+        } else {
+          console.error("Chat API error status:", res.status);
+        }
+      } catch (netErr) {
+        console.error("Chat network error:", netErr);
       }
 
       const botMsg = {
