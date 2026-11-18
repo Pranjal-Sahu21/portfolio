@@ -92,8 +92,8 @@ export const StatsProvider = ({ children }) => {
       if (cached) return JSON.parse(cached);
     } catch (e) {}
     return {
-      publicRepos: 23,
-      followers: 20,
+      publicRepos: 26,
+      followers: 21,
       totalStars: 16,
       prsCount: 32,
       languages: [
@@ -105,7 +105,8 @@ export const StatsProvider = ({ children }) => {
       ],
       otherLanguagesCount: 1,
       totalLanguagesCount: 19,
-      contributions: 1020,
+      contributions: 1173,
+      contributionsByYear: { 2025: 255, 2026: 918 },
       repoHistoryLabels: ["Jan 25", "Feb 25", "Mar 25", "Apr 25", "May 25", "Jun 25", "Jul 25", "Aug 25", "Sep 25", "Oct 25", "Nov 25", "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", "Jun 26", "Jul 26", "Aug 26"],
       repoHistoryData: [5, 5, 6, 8, 10, 11, 12, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 22, 23, 23],
       contribHistoryLabels: ["Jan 25", "Feb 25", "Mar 25", "Apr 25", "May 25", "Jun 25", "Jul 25", "Aug 25", "Sep 25", "Oct 25", "Nov 25", "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", "Jun 26", "Jul 26", "Aug 26"],
@@ -140,17 +141,17 @@ export const StatsProvider = ({ children }) => {
       if (cached) return JSON.parse(cached);
     } catch (e) {}
     return {
-      totalSolved: 994,
-      easySolved: 320,
-      mediumSolved: 560,
-      hardSolved: 114,
-      totalQuestions: 4033,
-      totalEasy: 960,
-      totalMedium: 2107,
-      totalHard: 966,
-      ranking: 8078,
-      reputation: 160,
-      contributionPoint: 4383,
+      totalSolved: 1088,
+      easySolved: 329,
+      mediumSolved: 622,
+      hardSolved: 137,
+      totalQuestions: 4115,
+      totalEasy: 976,
+      totalMedium: 2148,
+      totalHard: 991,
+      ranking: 27303,
+      reputation: 169,
+      contributionPoint: 5706,
     };
   });
   const [leetcodeCalendar, setLeetcodeCalendar] = useState(() => {
@@ -247,7 +248,8 @@ export const StatsProvider = ({ children }) => {
         const prsRes = results[2].status === "fulfilled" ? results[2].value : null;
         const contribsRes = results[3].status === "fulfilled" ? results[3].value : null;
 
-        if ((!profileRes || !profileRes.ok) && (!reposRes || !reposRes.ok)) {
+        const githubApiFailed = (!profileRes || !profileRes.ok) && (!reposRes || !reposRes.ok);
+        if (githubApiFailed && (!contribsRes || !contribsRes.ok)) {
           throw new Error("GitHub API rate limit exceeded or network request failed.");
         }
 
@@ -345,12 +347,16 @@ export const StatsProvider = ({ children }) => {
         const cachedStats = cachedStr ? JSON.parse(cachedStr) : null;
 
         let contributionsData = null;
-        let contributions = cachedStats?.contributions || 1020;
+        let contributions = cachedStats?.contributions || 1173;
+        let contributionsByYear = cachedStats?.contributionsByYear || { 2025: 255, 2026: 918 };
         if (contribsRes && contribsRes.ok) {
           try {
             contributionsData = await contribsRes.json();
-            const total = Object.values(contributionsData.total).reduce((a, b) => a + b, 0);
-            if (total > 0) contributions = total;
+            if (contributionsData?.total && typeof contributionsData.total === "object") {
+              contributionsByYear = contributionsData.total;
+              const total = Object.values(contributionsData.total).reduce((a, b) => a + b, 0);
+              if (total > 0) contributions = total;
+            }
           } catch (e) {
             console.error("Error parsing contributions:", e);
           }
@@ -401,8 +407,8 @@ export const StatsProvider = ({ children }) => {
         }
 
         const compiledStats = {
-          publicRepos: (profileRes && profileRes.ok) ? profile.public_repos : (cachedStats?.publicRepos || 23),
-          followers: (profileRes && profileRes.ok) ? profile.followers : (cachedStats?.followers || 20),
+          publicRepos: (profileRes && profileRes.ok) ? profile.public_repos : (cachedStats?.publicRepos || 26),
+          followers: (profileRes && profileRes.ok) ? profile.followers : (cachedStats?.followers || 21),
           totalStars: (reposRes && reposRes.ok) ? totalStars : (cachedStats?.totalStars || 16),
           prsCount: (prsRes && prsRes.ok) ? prs.total_count : (cachedStats?.prsCount || 32),
           languages: sortedLanguages.length > 0 ? sortedLanguages.slice(0, 4) : (cachedStats?.languages || [
@@ -417,6 +423,7 @@ export const StatsProvider = ({ children }) => {
             : (cachedStats?.otherLanguagesCount !== undefined ? cachedStats.otherLanguagesCount : 1),
           totalLanguagesCount: (reposRes && reposRes.ok) ? totalReposWithLang : (cachedStats?.totalLanguagesCount || 19),
           contributions,
+          contributionsByYear,
           repoHistoryLabels: githubHistoryLabels.length > 0 ? githubHistoryLabels : (cachedStats?.repoHistoryLabels || ["Jan 25", "Feb 25", "Mar 25", "Apr 25", "May 25", "Jun 25", "Jul 25", "Aug 25", "Sep 25", "Oct 25", "Nov 25", "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", "Jun 26", "Jul 26", "Aug 26"]),
           repoHistoryData: githubHistoryData.length > 0 ? githubHistoryData : (cachedStats?.repoHistoryData || [5, 5, 6, 8, 10, 11, 12, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 22, 23, 23]),
           contribHistoryLabels,
@@ -439,6 +446,9 @@ export const StatsProvider = ({ children }) => {
           setGithubStats(compiledStats);
           if (contributionsData && Array.isArray(contributionsData.contributions)) {
             setGithubCalendar(formatGithubCalendar(contributionsData.contributions));
+          }
+          if (githubApiFailed) {
+            setGithubError("GitHub API rate limit exceeded; showing cached repo stats with live contribution counts.");
           }
           try {
             localStorage.setItem("stale_githubStats", JSON.stringify(compiledStats));
@@ -527,14 +537,17 @@ export const StatsProvider = ({ children }) => {
 
           // Ensure robust fallbacks for all fields if they are missing from the API response
           const mergedData = {
-            totalSolved: data.totalSolved || 900,
-            easySolved: data.easySolved || 303,
-            mediumSolved: data.mediumSolved || 432,
-            hardSolved: data.hardSolved || 38,
-            totalQuestions: data.totalQuestions || 3962,
-            ranking: data.ranking || 68867,
-            reputation: data.reputation || 26,
-            contributionPoint: data.contributionPoint || data.contributionPoints || 3021,
+            totalSolved: data.totalSolved || 1088,
+            easySolved: data.easySolved || 329,
+            mediumSolved: data.mediumSolved || 622,
+            hardSolved: data.hardSolved || 137,
+            totalQuestions: data.totalQuestions || 4115,
+            totalEasy: data.totalEasy || 976,
+            totalMedium: data.totalMedium || 2148,
+            totalHard: data.totalHard || 991,
+            ranking: data.ranking || 27303,
+            reputation: data.reputation || 169,
+            contributionPoint: data.contributionPoint || data.contributionPoints || 5706,
           };
 
           setLeetcodeData(mergedData);

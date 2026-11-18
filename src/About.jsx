@@ -3,6 +3,7 @@ const useInView = () => true;
 import { useRef, useState, useEffect } from "react";
 import StickyTitle from "./components/StickyTitle";
 import { useTheme } from "./context/ThemeContext";
+import { useStats } from "./context/StatsContext";
 import asciiArtDark from "../assets/ascii_art_dark.txt?raw";
 import asciiArtLight from "../assets/ascii_art_light.txt?raw";
 
@@ -56,13 +57,14 @@ function AsciiCanvas({ asciiText, theme }) {
 // Count Up Animation Component
 function Counter({ value, suffix = "", duration = 1.8 }) {
   const [count, setCount] = useState(0);
+  const countRef = useRef(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
 
   useEffect(() => {
     if (!isInView) return;
 
-    let start = 0;
+    const start = countRef.current;
     const end = parseInt(value, 10);
     if (start === end) return;
 
@@ -74,6 +76,7 @@ function Counter({ value, suffix = "", duration = 1.8 }) {
     const updateCount = (currentTime) => {
       const elapsedTime = currentTime - startTime;
       if (elapsedTime >= totalMilliseconds) {
+        countRef.current = end;
         setCount(end);
         return;
       }
@@ -82,6 +85,7 @@ function Counter({ value, suffix = "", duration = 1.8 }) {
       const easeProgress = progress * (2 - progress); // Ease out quad
       const currentCount = Math.floor(easeProgress * (end - start) + start);
 
+      countRef.current = currentCount;
       setCount(currentCount);
       animationFrameId = requestAnimationFrame(updateCount);
     };
@@ -105,42 +109,14 @@ export default function About() {
   const contentRef = useRef(null);
   const isContentInView = useInView(contentRef, { once: true, amount: 0.15 });
 
-  const [githubContributions, setGithubContributions] = useState(1060);
-  const [leetcodeSolved, setLeetcodeSolved] = useState(990);
+  const { githubStats, leetcodeData } = useStats();
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch("https://github-contributions-api.jogruber.de/v4/pranjal-sahu21");
-        if (res.ok) {
-          const data = await res.json();
-          const total = Object.values(data.total).reduce((a, b) => a + b, 0);
-          if (total > 0) {
-            const rounded = Math.floor(total / 10) * 10;
-            setGithubContributions(rounded);
-          }
-        }
-      } catch (e) {
-        console.error("Error fetching GH contributions:", e);
-      }
-
-      try {
-        const res = await fetch("https://alfa-leetcode-api.onrender.com/Pranjal_1619/profile");
-        if (res.ok) {
-          const data = await res.json();
-          const total = data.totalSolved;
-          if (total > 0) {
-            const rounded = Math.floor(total / 10) * 10;
-            setLeetcodeSolved(rounded);
-          }
-        }
-      } catch (e) {
-        console.error("Error fetching LeetCode solved:", e);
-      }
-    };
-
-    fetchStats();
-  }, []);
+  const githubContributions = githubStats?.contributions > 0
+    ? Math.floor(githubStats.contributions / 10) * 10
+    : 1060;
+  const leetcodeSolved = leetcodeData?.totalSolved > 0
+    ? Math.floor(leetcodeData.totalSolved / 10) * 10
+    : 1080;
 
   const stats = [
     {

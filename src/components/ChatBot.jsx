@@ -185,31 +185,40 @@ export default function ChatBot() {
 
   const stats = {
     github: {
-      publicRepos: githubStats?.publicRepos ?? 22,
-      followers: githubStats?.followers ?? 5,
-      totalStars: githubStats?.totalStars ?? 10,
-      prsCount: githubStats?.prsCount ?? 12,
+      publicRepos: githubStats?.publicRepos ?? 26,
+      followers: githubStats?.followers ?? 21,
+      totalStars: githubStats?.totalStars ?? 16,
+      prsCount: githubStats?.prsCount ?? 32,
       languages: (githubStats?.languages && githubStats.languages.length > 0)
         ? githubStats.languages
         : "JavaScript, HTML, CSS, Java",
-      contributions: githubStats?.contributions ?? 900,
+      contributions: githubStats?.contributions ?? 1173,
+      contributionsByYear: githubStats?.contributionsByYear ?? { 2025: 255, 2026: 918 },
     },
     leetcode: {
-      totalSolved: leetcodeData?.totalSolved ?? 900,
-      easySolved: leetcodeData?.easySolved ?? 303,
-      mediumSolved: leetcodeData?.mediumSolved ?? 432,
-      hardSolved: leetcodeData?.hardSolved ?? 38,
-      totalQuestions: leetcodeData?.totalQuestions ?? 3962,
-      ranking: leetcodeData?.ranking ?? 68867,
+      totalSolved: leetcodeData?.totalSolved ?? 1088,
+      easySolved: leetcodeData?.easySolved ?? 329,
+      mediumSolved: leetcodeData?.mediumSolved ?? 622,
+      hardSolved: leetcodeData?.hardSolved ?? 137,
+      totalQuestions: leetcodeData?.totalQuestions ?? 4115,
+      ranking: leetcodeData?.ranking ?? 27303,
       contestRating: leetcodeContest?.userContestRanking?.rating
         ? Math.round(leetcodeContest.userContestRanking.rating)
-        : 2009,
-      contestTopPercentage: leetcodeContest?.userContestRanking?.topPercentage ?? 1.5,
-      reputation: leetcodeData?.reputation ?? 26,
-      points: leetcodeData?.contributionPoint ?? 3021,
-      badges: leetcodeBadges?.badgesCount ?? 5,
+        : 2191,
+      contestTopPercentage: leetcodeContest?.userContestRanking?.topPercentage ?? 0.97,
+      reputation: leetcodeData?.reputation ?? 169,
+      points: leetcodeData?.contributionPoint ?? 5706,
+      badges: leetcodeBadges?.badgesCount ?? 9,
     }
   };
+
+  const githubContributionsRounded = Math.floor(stats.github.contributions / 10) * 10;
+  const leetcodeSolvedRounded = Math.floor(stats.leetcode.totalSolved / 10) * 10;
+  const githubYearlyBreakdown = stats.github.contributionsByYear
+    ? Object.entries(stats.github.contributionsByYear)
+        .map(([yr, cnt]) => `${yr}: ${cnt}`)
+        .join(", ")
+    : "";
 
   
   const chatEndRef = useRef(null);
@@ -310,18 +319,18 @@ Here is your complete and detailed knowledge base about Pranjal Sahu, derived fr
 - Operating System
 - Computer Networks
 
-## Coding Achievements & Live Stats:
+## Coding Achievements & Live Stats (ALWAYS use these exact live numbers from the portfolio dashboard):
 - **Projects completed**: 15+ featured and utility projects.
-- **GitHub Contributions**: ${stats.github.contributions} contributions.
+- **GitHub Contributions**: ${stats.github.contributions} total contributions (${githubContributionsRounded}+ displayed in the About section${githubYearlyBreakdown ? `; yearly breakdown: ${githubYearlyBreakdown}` : ""}).
 - **GitHub Repositories**: Over 30+ repositories (from which ${stats.github.publicRepos} are public).
 - **GitHub Followers**: ${stats.github.followers} followers.
 - **GitHub Total Stars**: ${stats.github.totalStars} stars earned.
 - **GitHub Pull Requests**: ${stats.github.prsCount} PRs merged/created.
 - **GitHub Top Languages**: ${getLanguagesString(stats.github)}.
 - **LeetCode Username**: @Pranjal_1619
-- **LeetCode Solved**: Solved ${stats.leetcode.totalSolved} questions out of ${stats.leetcode.totalQuestions} total questions (${stats.leetcode.easySolved} Easy, ${stats.leetcode.mediumSolved} Medium, and ${stats.leetcode.hardSolved} Hard).
-- **LeetCode Ranking**: Global rank is #${stats.leetcode.ranking.toLocaleString()} (beats 99.9% of users).
-- **LeetCode Contest Rating**: Contest Rating of ${stats.leetcode.contestRating} (which is over 2000).
+- **LeetCode Solved**: Solved ${stats.leetcode.totalSolved} questions (${leetcodeSolvedRounded}+ displayed in the About section) out of ${stats.leetcode.totalQuestions} total questions (${stats.leetcode.easySolved} Easy, ${stats.leetcode.mediumSolved} Medium, and ${stats.leetcode.hardSolved} Hard).
+- **LeetCode Ranking**: Global rank is #${stats.leetcode.ranking.toLocaleString()}.
+- **LeetCode Contest Rating**: Contest Rating of ${stats.leetcode.contestRating} (Top ${stats.leetcode.contestTopPercentage}% globally).
 - **LeetCode Reputation**: ${stats.leetcode.reputation} reputation points.
 - **LeetCode Points**: ${stats.leetcode.points} contribution points.
 - **LeetCode Badges**: ${stats.leetcode.badges} badges earned.
