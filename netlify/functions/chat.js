@@ -1,5 +1,6 @@
 // Netlify Serverless Function for Portfolio Chatbot
 // Proxies AI chat completions without requiring visitors to create accounts or sign in.
+// Supports Groq (Free), Gemini (Free), OpenAI, or Puter.
 
 export default async (req) => {
   if (req.method !== "POST") {
@@ -11,41 +12,69 @@ export default async (req) => {
 
   try {
     const { messages } = await req.json();
+
+    const groqKey = process.env.GROQ_API_KEY;
+    const geminiKey = process.env.GEMINI_API_KEY;
+    const openaiKey = process.env.OPENAI_API_KEY;
     const puterToken = process.env.PUTER_AUTH_TOKEN || process.env.VITE_PUTER_AUTH_TOKEN;
 
-    if (!puterToken) {
+    let endpoint = "";
+    let headers = { "Content-Type": "application/json" };
+    let body = {};
+
+    if (groqKey) {
+      // Groq: Generous free tier, ultra-fast responses
+      endpoint = "https://api.groq.com/openai/v1/chat/completions";
+      headers["Authorization"] = `Bearer ${groqKey}`;
+      body = {
+        model: "openai/gpt-oss-120b",
+        messages
+      };
+    } else if (geminiKey) {
+      // Google Gemini: Generous free tier
+      endpoint = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
+      headers["Authorization"] = `Bearer ${geminiKey}`;
+      body = {
+        model: "gemini-1.5-flash",
+        messages
+      };
+    } else if (openaiKey) {
+      // OpenAI
+      endpoint = "https://api.openai.com/v1/chat/completions";
+      headers["Authorization"] = `Bearer ${openaiKey}`;
+      body = {
+        model: "gpt-4o-mini",
+        messages
+      };
+    } else if (puterToken) {
+      // Puter (requires paid subscription for server-side API access)
+      endpoint = "https://api.puter.com/puterai/openai/v1/chat/completions";
+      headers["Authorization"] = `Bearer ${puterToken}`;
+      body = {
+        model: "gpt-4o-mini",
+        messages
+      };
+    } else {
       return new Response(
         JSON.stringify({
-          error: "PUTER_AUTH_TOKEN is not configured in Netlify environment variables."
+          error: "No AI API key found. Please set GROQ_API_KEY or GEMINI_API_KEY in environment variables."
         }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" }
-        }
+        { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    // Call Puter's server-side OpenAI-compatible completions endpoint
-    const response = await fetch("https://api.puter.com/puterai/openai/v1/chat/completions", {
+    const response = await fetch(endpoint, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${puterToken}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: messages
-      })
+      headers,
+      body: JSON.stringify(body)
     });
 
     if (!response.ok) {
       const errText = await response.text();
+      console.error("AI provider error:", response.status, errText);
       return new Response(
-        JSON.stringify({ error: "Puter API error", details: errText }),
-        {
-          status: response.status,
-          headers: { "Content-Type": "application/json" }
-        }
+        JSON.stringify({ error: "AI provider error", status: response.status, details: errText }),
+        { status: response.status, headers: { "Content-Type": "application/json" } }
       );
     }
 
@@ -60,12 +89,10 @@ export default async (req) => {
       }
     });
   } catch (error) {
+    console.error("Chat function error:", error);
     return new Response(
       JSON.stringify({ error: error.message || "Internal server error" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      }
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 };

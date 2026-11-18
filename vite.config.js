@@ -22,34 +22,61 @@ export default defineConfig(({ mode }) => {
               req.on('end', async () => {
                 try {
                   const { messages } = JSON.parse(body)
-                  const token = env.PUTER_AUTH_TOKEN || env.VITE_PUTER_AUTH_TOKEN
+                  const groqKey = env.GROQ_API_KEY
+                  const geminiKey = env.GEMINI_API_KEY
+                  const openaiKey = env.OPENAI_API_KEY
+                  const puterToken = env.PUTER_AUTH_TOKEN || env.VITE_PUTER_AUTH_TOKEN
 
-                  if (!token) {
+                  let endpoint = ''
+                  let headers = { 'Content-Type': 'application/json' }
+                  let payload = {}
+
+                  if (groqKey) {
+                    endpoint = 'https://api.groq.com/openai/v1/chat/completions'
+                    headers['Authorization'] = `Bearer ${groqKey}`
+                    payload = { model: 'openai/gpt-oss-120b', messages }
+                  } else if (geminiKey) {
+                    endpoint = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
+                    headers['Authorization'] = `Bearer ${geminiKey}`
+                    payload = { model: 'gemini-1.5-flash', messages }
+                  } else if (openaiKey) {
+                    endpoint = 'https://api.openai.com/v1/chat/completions'
+                    headers['Authorization'] = `Bearer ${openaiKey}`
+                    payload = { model: 'gpt-4o-mini', messages }
+                  } else if (puterToken) {
+                    endpoint = 'https://api.puter.com/puterai/openai/v1/chat/completions'
+                    headers['Authorization'] = `Bearer ${puterToken}`
+                    payload = { model: 'gpt-4o-mini', messages }
+                  } else {
                     res.statusCode = 500
                     res.setHeader('Content-Type', 'application/json')
-                    res.end(JSON.stringify({ error: 'PUTER_AUTH_TOKEN not configured in .env' }))
+                    res.end(JSON.stringify({ error: 'No API key found in .env' }))
                     return
                   }
 
-                  const puterRes = await fetch('https://api.puter.com/puterai/openai/v1/chat/completions', {
+                  const apiRes = await fetch(endpoint, {
                     method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                      model: 'gpt-4o-mini',
-                      messages
-                    })
+                    headers,
+                    body: JSON.stringify(payload)
                   })
 
-                  const data = await puterRes.json()
+                  if (!apiRes.ok) {
+                    const errData = await apiRes.text()
+                    console.error('Local dev AI error:', apiRes.status, errData)
+                    res.statusCode = apiRes.status
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify({ error: errData }))
+                    return
+                  }
+
+                  const data = await apiRes.json()
                   const reply = data.choices?.[0]?.message?.content || ''
 
                   res.statusCode = 200
                   res.setHeader('Content-Type', 'application/json')
                   res.end(JSON.stringify({ reply }))
                 } catch (err) {
+                  console.error('Local dev proxy error:', err)
                   res.statusCode = 500
                   res.setHeader('Content-Type', 'application/json')
                   res.end(JSON.stringify({ error: err.message }))
